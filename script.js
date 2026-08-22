@@ -11,7 +11,7 @@ function toggleMenu() {
     const menu = document.getElementById("menu");
 
     if (menu) {
-        menu.classList.toggle("show");
+        menu.classList.toggle("active");
     }
 
 }
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ===============================
-    // NAVIGATION MENU
+    // MENU LINK CLICK
     // ===============================
 
     const navLinks = document.querySelectorAll("#menu a");
@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const menu = document.getElementById("menu");
 
             if (menu) {
-                menu.classList.remove("show");
+                menu.classList.remove("active");
             }
 
         });
@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", function () {
         link.addEventListener("click", function (event) {
 
             const targetId = this.getAttribute("href");
-
             const target = document.querySelector(targetId);
 
             if (target) {
@@ -82,7 +81,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         noticeBox.addEventListener("click", function () {
 
-            console.log("Notice section selected");
+            console.log("Notice selected");
 
         });
 
@@ -90,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // ===============================
-    // RESULT SECTION
+    // RESULT
     // ===============================
 
     const resultSection = document.querySelector("#results");
@@ -100,6 +99,5 @@ document.addEventListener("DOMContentLoaded", function () {
         console.log("Result section loaded");
 
     }
-
 
 });
