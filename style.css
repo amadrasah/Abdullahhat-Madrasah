@@ -607,3 +607,86 @@ footer hr {
         padding: 7px 4px;
     }
 }
+
+/* ONLINE RESULT */
+
+.result-box {
+    max-width: 950px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0,0,0,.08);
+    text-align: center;
+}
+
+.result-box h3 {
+    color: #075e3a;
+    margin-bottom: 20px;
+}
+
+.result-form {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.result-form select,
+.result-form input {
+    min-width: 180px;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+#resultMessage {
+    margin: 20px 0;
+    font-weight: bold;
+}
+
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.result-table th,
+.result-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.result-table th {
+    background: #075e3a;
+    color: white;
+}
+
+.result-pass {
+    color: #087f4f;
+    font-weight: bold;
+}
+
+.result-fail {
+    color: red;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+
+    .result-box {
+        padding: 20px 10px;
+    }
+
+    .result-form select,
+    .result-form input,
+    .result-form button {
+        width: 100%;
+    }
+
+    .result-table {
+        font-size: 13px;
+    }
+
+}
