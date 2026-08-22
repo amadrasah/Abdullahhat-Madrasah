@@ -18,10 +18,9 @@ function toggleMenu() {
 
 
 // ===============================
-// DEMO RESULT DATABASE
+// RESULT DATABASE
 // ===============================
 
-const students = {
 const students = {
 
     "2026-dakhil10-101": {
@@ -98,8 +97,6 @@ function searchResult() {
     output.innerHTML = "";
 
 
-    // Check input
-
     if (year === "" || className === "" || roll === "") {
 
         message.innerHTML =
@@ -108,11 +105,8 @@ function searchResult() {
         message.style.color = "red";
 
         return;
-
     }
 
-
-    // Search
 
     const key =
         year + "-" + className + "-" + roll;
@@ -129,11 +123,10 @@ function searchResult() {
         message.style.color = "red";
 
         return;
-
     }
 
 
-    // Total
+    // মোট নম্বর
 
     let total = 0;
 
@@ -144,7 +137,7 @@ function searchResult() {
     });
 
 
-    // Average
+    // গড়
 
     const average =
         total / student.subjects.length;
@@ -189,7 +182,7 @@ function searchResult() {
     message.style.color = "#087f4f";
 
 
-    // Build subject rows
+    // বিষয়গুলোর তালিকা
 
     let rows = "";
 
@@ -205,7 +198,7 @@ function searchResult() {
     });
 
 
-    // Display result
+    // ফলাফল দেখানো
 
     output.innerHTML = `
 
