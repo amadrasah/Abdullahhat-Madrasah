@@ -379,20 +379,35 @@
 
 
 <!-- RESULTS -->
+<!-- RESULTS -->
 <section id="results" class="section light">
 
-    <h2 class="section-title">🏆 পরীক্ষার ফলাফল</h2>
+    <h2 class="section-title">🏆 অনলাইন ফলাফল</h2>
 
     <div class="result-box">
 
-        <h3>অনলাইন ফলাফল অনুসন্ধান</h3>
+        <h3>ফলাফল অনুসন্ধান</h3>
 
         <div class="result-form">
+
+            <select id="examYear">
+                <option value="">সন নির্বাচন করুন</option>
+                <option value="2026">2026</option>
+                <option value="2025">2025</option>
+            </select>
+
+            <select id="examClass">
+                <option value="">শ্রেণি নির্বাচন করুন</option>
+                <option value="dakhil10">দাখিল ১০ম শ্রেণি</option>
+                <option value="dakhil9">দাখিল ৯ম শ্রেণি</option>
+                <option value="alim1">আলিম ১ম বর্ষ</option>
+                <option value="fazil1">ফাজিল ১ম বর্ষ</option>
+            </select>
 
             <input
                 type="text"
                 id="rollNumber"
-                placeholder="রোল নম্বর লিখুন"
+                placeholder="রোল নম্বর"
             >
 
             <button onclick="searchResult()">
