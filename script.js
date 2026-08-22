@@ -1,55 +1,105 @@
 // Abdullah Hat Islamia Fazil (Degree) Madrasah
 // Website JavaScript
 
-document.addEventListener("DOMContentLoaded", function () {
 
-    // বর্তমান বছর Footer-এ দেখানো
-    const footerYear = document.querySelector("footer p");
+// ===============================
+// MOBILE MENU
+// ===============================
 
-    if (footerYear) {
-        footerYear.innerHTML =
-            "© " + new Date().getFullYear() +
-            " Abdullah Hat Islamia Fazil (Degree) Madrasah";
+function toggleMenu() {
+
+    const menu = document.getElementById("menu");
+
+    if (menu) {
+        menu.classList.toggle("show");
     }
 
-    // Navigation link click
-    const navLinks = document.querySelectorAll("nav a");
+}
+
+
+// ===============================
+// PAGE LOADED
+// ===============================
+
+document.addEventListener("DOMContentLoaded", function () {
+
+
+    // ===============================
+    // NAVIGATION MENU
+    // ===============================
+
+    const navLinks = document.querySelectorAll("#menu a");
 
     navLinks.forEach(function (link) {
+
+        link.addEventListener("click", function () {
+
+            const menu = document.getElementById("menu");
+
+            if (menu) {
+                menu.classList.remove("show");
+            }
+
+        });
+
+    });
+
+
+    // ===============================
+    // SMOOTH SCROLL
+    // ===============================
+
+    document.querySelectorAll('a[href^="#"]').forEach(function (link) {
+
         link.addEventListener("click", function (event) {
 
             const targetId = this.getAttribute("href");
 
-            if (targetId && targetId.startsWith("#")) {
-                const target = document.querySelector(targetId);
+            const target = document.querySelector(targetId);
 
-                if (target) {
-                    event.preventDefault();
+            if (target) {
 
-                    target.scrollIntoView({
-                        behavior: "smooth"
-                    });
-                }
+                event.preventDefault();
+
+                target.scrollIntoView({
+                    behavior: "smooth"
+                });
+
             }
+
         });
+
     });
 
-    // নোটিশ
+
+    // ===============================
+    // NOTICE
+    // ===============================
+
     const noticeBox = document.querySelector(".notice");
 
     if (noticeBox) {
+
         noticeBox.addEventListener("click", function () {
-            alert("মাদ্রাসার সর্বশেষ নোটিশ এখানে প্রকাশ করা হবে।");
+
+            console.log("Notice section selected");
+
         });
+
     }
 
-    // Result Section
-    const resultSection = document.querySelector("#result");
+
+    // ===============================
+    // RESULT SECTION
+    // ===============================
+
+    const resultSection = document.querySelector("#results");
 
     if (resultSection) {
-        resultSection.addEventListener("click", function () {
-            console.log("Result section selected");
-        });
+
+        console.log("Result section loaded");
+
     }
+
 
 });
