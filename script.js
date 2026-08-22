@@ -1,5 +1,5 @@
 // Abdullah Hat Islamia Fazil (Degree) Madrasah
-// Website JavaScript
+// Online Result System
 
 
 // ===============================
@@ -18,42 +18,62 @@ function toggleMenu() {
 
 
 // ===============================
-// DEMO RESULT DATA
+// DEMO RESULT DATABASE
 // ===============================
 
 const students = {
 
-    "101": {
+    "2026-dakhil10-101": {
+
         name: "আব্দুল্লাহ",
+        roll: "101",
         className: "দাখিল ১০ম শ্রেণি",
         year: "2026",
-        bangla: 82,
-        english: 76,
-        mathematics: 88,
-        islam: 91,
-        science: 79
+
+        subjects: [
+            ["বাংলা", 82],
+            ["ইংরেজি", 76],
+            ["গণিত", 88],
+            ["ইসলাম শিক্ষা", 91],
+            ["বিজ্ঞান", 79]
+        ]
+
     },
 
-    "102": {
+
+    "2026-dakhil10-102": {
+
         name: "মোঃ হাসান",
+        roll: "102",
         className: "দাখিল ১০ম শ্রেণি",
         year: "2026",
-        bangla: 72,
-        english: 68,
-        mathematics: 81,
-        islam: 85,
-        science: 74
+
+        subjects: [
+            ["বাংলা", 72],
+            ["ইংরেজি", 68],
+            ["গণিত", 81],
+            ["ইসলাম শিক্ষা", 85],
+            ["বিজ্ঞান", 74]
+        ]
+
     },
 
-    "103": {
+
+    "2026-dakhil10-103": {
+
         name: "সুমাইয়া আক্তার",
+        roll: "103",
         className: "দাখিল ১০ম শ্রেণি",
         year: "2026",
-        bangla: 95,
-        english: 89,
-        mathematics: 92,
-        islam: 96,
-        science: 90
+
+        subjects: [
+            ["বাংলা", 95],
+            ["ইংরেজি", 89],
+            ["গণিত", 92],
+            ["ইসলাম শিক্ষা", 96],
+            ["বিজ্ঞান", 90]
+        ]
+
     }
 
 };
@@ -65,56 +85,80 @@ const students = {
 
 function searchResult() {
 
-    const roll = document.getElementById("rollNumber").value.trim();
+    const year =
+        document.getElementById("examYear").value;
 
-    const message = document.getElementById("resultMessage");
+    const className =
+        document.getElementById("examClass").value;
 
-    const output = document.getElementById("resultOutput");
+    const roll =
+        document.getElementById("rollNumber").value.trim();
+
+    const message =
+        document.getElementById("resultMessage");
+
+    const output =
+        document.getElementById("resultOutput");
 
 
-    output.innerHTML = "";
     message.innerHTML = "";
+    output.innerHTML = "";
 
 
-    if (roll === "") {
+    // Check input
+
+    if (year === "" || className === "" || roll === "") {
 
         message.innerHTML =
-            "⚠️ অনুগ্রহ করে রোল নম্বর লিখুন।";
+            "⚠️ সন, শ্রেণি ও রোল নম্বর নির্বাচন/লিখুন।";
 
         message.style.color = "red";
 
         return;
+
     }
 
 
-    const student = students[roll];
+    // Search
+
+    const key =
+        year + "-" + className + "-" + roll;
+
+    const student =
+        students[key];
 
 
     if (!student) {
 
         message.innerHTML =
-            "❌ এই রোল নম্বরের কোনো ফলাফল পাওয়া যায়নি।";
+            "❌ এই তথ্যের কোনো ফলাফল পাওয়া যায়নি।";
 
         message.style.color = "red";
 
         return;
+
     }
 
 
-    // মোট নম্বর
-    const total =
-        student.bangla +
-        student.english +
-        student.mathematics +
-        student.islam +
-        student.science;
+    // Total
+
+    let total = 0;
+
+    student.subjects.forEach(function(subject) {
+
+        total += subject[1];
+
+    });
 
 
-    // গড়
-    const average = total / 5;
+    // Average
+
+    const average =
+        total / student.subjects.length;
 
 
     // GPA
+
     let gpa;
 
     if (average >= 80) {
@@ -140,7 +184,8 @@ function searchResult() {
     }
 
 
-    // ফলাফল
+    // Pass / Fail
+
     const result =
         average >= 33 ? "PASS" : "FAIL";
 
@@ -151,15 +196,33 @@ function searchResult() {
     message.style.color = "#087f4f";
 
 
+    // Build subject rows
+
+    let rows = "";
+
+    student.subjects.forEach(function(subject) {
+
+        rows += `
+            <tr>
+                <td>${subject[0]}</td>
+                <td>${subject[1]}</td>
+            </tr>
+        `;
+
+    });
+
+
+    // Display result
+
     output.innerHTML = `
 
         <h3>${student.name}</h3>
 
         <p>
-            <strong>রোল:</strong> ${roll}
-            &nbsp;&nbsp;
+            <strong>রোল:</strong> ${student.roll}
+            &nbsp; | &nbsp;
             <strong>শ্রেণি:</strong> ${student.className}
-            &nbsp;&nbsp;
+            &nbsp; | &nbsp;
             <strong>সন:</strong> ${student.year}
         </p>
 
@@ -171,34 +234,16 @@ function searchResult() {
                 <th>প্রাপ্ত নম্বর</th>
             </tr>
 
-            <tr>
-                <td>বাংলা</td>
-                <td>${student.bangla}</td>
-            </tr>
+            ${rows}
 
             <tr>
-                <td>ইংরেজি</td>
-                <td>${student.english}</td>
-            </tr>
-
-            <tr>
-                <td>গণিত</td>
-                <td>${student.mathematics}</td>
-            </tr>
-
-            <tr>
-                <td>ইসলাম শিক্ষা</td>
-                <td>${student.islam}</td>
-            </tr>
-
-            <tr>
-                <td>বিজ্ঞান</td>
-                <td>${student.science}</td>
-            </tr>
-
-            <tr>
-                <th>মোট</th>
+                <th>মোট নম্বর</th>
                 <th>${total}</th>
+            </tr>
+
+            <tr>
+                <th>গড়</th>
+                <th>${average.toFixed(2)}</th>
             </tr>
 
             <tr>
@@ -208,9 +253,15 @@ function searchResult() {
 
             <tr>
                 <th>ফলাফল</th>
-                <th class="${result === "PASS" ? "result-pass" : "result-fail"}">
+
+                <th class="${result === "PASS"
+                    ? "result-pass"
+                    : "result-fail"}">
+
                     ${result}
+
                 </th>
+
             </tr>
 
         </table>
@@ -224,55 +275,31 @@ function searchResult() {
 // PAGE LOADED
 // ===============================
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const navLinks =
+            document.querySelectorAll("#menu a");
 
 
-    // Navigation
-    const navLinks =
-        document.querySelectorAll("#menu a");
+        navLinks.forEach(function(link) {
 
+            link.addEventListener(
+                "click",
+                function() {
 
-    navLinks.forEach(function (link) {
+                    const menu =
+                        document.getElementById("menu");
 
-        link.addEventListener("click", function () {
+                    if (menu) {
+                        menu.classList.remove("active");
+                    }
 
-            const menu =
-                document.getElementById("menu");
-
-            if (menu) {
-                menu.classList.remove("active");
-            }
-
-        });
-
-    });
-
-
-    // Smooth scrolling
-    document.querySelectorAll('a[href^="#"]')
-        .forEach(function (link) {
-
-        link.addEventListener("click", function (event) {
-
-            const targetId =
-                this.getAttribute("href");
-
-            const target =
-                document.querySelector(targetId);
-
-
-            if (target) {
-
-                event.preventDefault();
-
-                target.scrollIntoView({
-                    behavior: "smooth"
-                });
-
-            }
+                }
+            );
 
         });
 
-    });
-
-});
+    }
+);
