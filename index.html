@@ -381,51 +381,29 @@
 <!-- RESULTS -->
 <section id="results" class="section light">
 
-    <h2 class="section-title">
-        🏆 ফলাফল ও কৃতিত্ব
-    </h2>
+    <h2 class="section-title">🏆 পরীক্ষার ফলাফল</h2>
 
+    <div class="result-box">
 
-    <div class="cards">
+        <h3>অনলাইন ফলাফল অনুসন্ধান</h3>
 
+        <div class="result-form">
 
-        <div class="card">
+            <input
+                type="text"
+                id="rollNumber"
+                placeholder="রোল নম্বর লিখুন"
+            >
 
-            📋
-
-            <h3>
-                পরীক্ষার ফলাফল
-            </h3>
-
-            <p>
-                পরীক্ষার ফলাফল এখানে প্রকাশ করা যাবে।
-            </p>
-
-            <button>
-                ফলাফল দেখুন
+            <button onclick="searchResult()">
+                🔍 ফলাফল দেখুন
             </button>
 
         </div>
 
+        <div id="resultMessage"></div>
 
-        <div class="card">
-
-            🏆
-
-            <h3>
-                ফলাফল ও কৃতিত্ব
-            </h3>
-
-            <p>
-                শিক্ষার্থীদের সাফল্য ও অর্জন এখানে
-                তুলে ধরা যাবে।
-            </p>
-
-            <button>
-                বিস্তারিত
-            </button>
-
-        </div>
+        <div id="resultOutput"></div>
 
     </div>
 
