@@ -20,10 +20,6 @@ function toggleMenu() {
 // ======================================
 // SUBJECT CONFIGURATION
 // ======================================
-//
-// group একই হলে ১ম ও ২য় পত্র একই GPA গ্রুপে থাকবে।
-// কৃষি optional = true
-//
 
 const subjects = [
 
@@ -270,7 +266,6 @@ function getGrade(mark, fullMarks) {
     const percentage =
         (mark / fullMarks) * 100;
 
-
     if (percentage >= 80) {
         return {
             grade: "A+",
@@ -368,6 +363,10 @@ function searchResult() {
     output.innerHTML = "";
 
 
+    // ==================================
+    // CHECK INPUT
+    // ==================================
+
     if (
         year === "" ||
         examName === "" ||
@@ -383,6 +382,10 @@ function searchResult() {
         return;
     }
 
+
+    // ==================================
+    // FIND STUDENT
+    // ==================================
 
     const key =
         year + "|" +
@@ -407,19 +410,27 @@ function searchResult() {
 
 
     // ==================================
-    // RESULT CALCULATION
+    // CALCULATION VARIABLES
     // ==================================
 
     let compulsoryGroups = {};
+
     let hasFail = false;
 
+    let failSubjectCount = 0;
+
     let totalMarks = 0;
+
     let totalFullMarks = 0;
 
     let agricultureBonus = 0;
 
     let rows = "";
 
+
+    // ==================================
+    // SUBJECT CALCULATION
+    // ==================================
 
     subjects.forEach(function(subject) {
 
@@ -444,6 +455,10 @@ function searchResult() {
         const total =
             mcq + cq + practical;
 
+
+        // ------------------------------
+        // SEPARATE PASS CONDITION
+        // ------------------------------
 
         const mcqPass =
             partPassed(
@@ -472,6 +487,10 @@ function searchResult() {
             practicalPass;
 
 
+        // ------------------------------
+        // FAIL COUNT
+        // ------------------------------
+
         if (
             !subject.optional &&
             !subjectPass
@@ -479,8 +498,14 @@ function searchResult() {
 
             hasFail = true;
 
+            failSubjectCount++;
+
         }
 
+
+        // ------------------------------
+        // GRADE
+        // ------------------------------
 
         const gradeInfo =
             getGrade(
@@ -489,15 +514,19 @@ function searchResult() {
             );
 
 
-        // ==============================
-        // AGRICULTURE
-        // ==============================
+        // ------------------------------
+        // AGRICULTURE BONUS
+        // ------------------------------
 
         if (subject.optional) {
 
             const agriculturePercentage =
                 (total / subject.fullMarks) * 100;
 
+
+            // ৪০% এর বেশি হলে
+            // পয়েন্ট থেকে ২ বাদ দিয়ে
+            // অতিরিক্ত GPA
 
             if (agriculturePercentage > 40) {
 
@@ -512,9 +541,9 @@ function searchResult() {
         }
 
 
-        // ==============================
+        // ------------------------------
         // COMPULSORY GROUP
-        // ==============================
+        // ------------------------------
 
         else {
 
@@ -538,9 +567,9 @@ function searchResult() {
             subject.fullMarks;
 
 
-        // ==============================
-        // RESULT TABLE
-        // ==============================
+        // ------------------------------
+        // TABLE ROW
+        // ------------------------------
 
         rows += `
 
@@ -589,13 +618,13 @@ function searchResult() {
     });
 
 
-    // ======================================
+    // ==================================
     // GROUP GPA
-    // ======================================
+    // ==================================
 
     let compulsoryPointTotal = 0;
 
-    let compulsorySubjectCount = 0;
+    let compulsoryGroupCount = 0;
 
 
     Object.keys(compulsoryGroups).forEach(
@@ -604,9 +633,6 @@ function searchResult() {
             const points =
                 compulsoryGroups[group];
 
-
-            // একই গ্রুপের ১ম ও ২য় পত্র
-            // একসঙ্গে GPA-তে গণনা হবে
 
             let groupPoint = 0;
 
@@ -626,36 +652,35 @@ function searchResult() {
                 groupGPA;
 
 
-            compulsorySubjectCount++;
+            compulsoryGroupCount++;
 
         }
     );
 
 
-    // ======================================
+    // ==================================
     // FINAL GPA
-    // ======================================
+    // ==================================
     //
-    // সূত্র:
+    // আবশ্যিক গ্রুপের GPA যোগ
+    // + কৃষির অতিরিক্ত GPA
     //
-    // (আবশ্যিক গ্রুপের GPA যোগ
-    //  + কৃষির অতিরিক্ত GPA)
-    //  ÷ আবশ্যিক গ্রুপ সংখ্যা
+    // তারপর আবশ্যিক গ্রুপ সংখ্যা দিয়ে ভাগ
     //
-    // কৃষি divisor-এ থাকবে না।
-    // ======================================
+    // কৃষি divisor-এর মধ্যে নেই
+    // ==================================
 
     let finalGPA = 0;
 
 
-    if (compulsorySubjectCount > 0) {
+    if (compulsoryGroupCount > 0) {
 
         finalGPA =
             (
                 compulsoryPointTotal +
                 agricultureBonus
             ) /
-            compulsorySubjectCount;
+            compulsoryGroupCount;
 
     }
 
@@ -665,10 +690,18 @@ function searchResult() {
     }
 
 
+    // ফেল থাকলে GPA = 0
+
     if (hasFail) {
+
         finalGPA = 0;
+
     }
 
+
+    // ==================================
+    // RESULT
+    // ==================================
 
     const result =
         hasFail
@@ -676,9 +709,47 @@ function searchResult() {
             : "PASS";
 
 
-    // ======================================
-    // DISPLAY MESSAGE
-    // ======================================
+    // ==================================
+    // REMARKS
+    // ==================================
+
+    let remarks = "";
+
+
+    if (result === "FAIL") {
+
+        remarks =
+            "অনুত্তীর্ণ — " +
+            failSubjectCount +
+            "টি বিষয়ে অকৃতকার্য";
+
+    }
+
+    else if (finalGPA === 5) {
+
+        remarks =
+            "চমৎকার ফলাফল";
+
+    }
+
+    else if (finalGPA >= 4) {
+
+        remarks =
+            "খুব ভালো ফলাফল";
+
+    }
+
+    else {
+
+        remarks =
+            "সন্তোষজনক ফলাফল";
+
+    }
+
+
+    // ==================================
+    // SUCCESS MESSAGE
+    // ==================================
 
     message.innerHTML =
         "✅ ফলাফল পাওয়া গেছে";
@@ -687,9 +758,9 @@ function searchResult() {
         "#087f4f";
 
 
-    // ======================================
+    // ==================================
     // DISPLAY RESULT
-    // ======================================
+    // ==================================
 
     output.innerHTML = `
 
@@ -733,12 +804,19 @@ function searchResult() {
                     <tr>
 
                         <th>বিষয়</th>
+
                         <th>পূর্ণমান</th>
+
                         <th>MCQ</th>
+
                         <th>CQ</th>
+
                         <th>Practical</th>
+
                         <th>মোট</th>
+
                         <th>গ্রেড</th>
+
                         <th>পয়েন্ট</th>
 
                     </tr>
@@ -775,240 +853,93 @@ function searchResult() {
                     <tr>
 
                         <th colspan="7">
-                            আবশ্যিক গ্রুপের সংখ্যা
+                            আবশ্যিক GPA-এর যোগফল
                         </th>
 
                         <th>
-                            ${compulsorySubjectCount}
+                            ${compulsoryPointTotal.toFixed(2)}
                         </th>
 
                     </tr>
 
 
                     <tr>
-// ======================================
-// A+ COUNT
-// ======================================
 
-let aPlusCount = 0;
+                        <th colspan="7">
+                            কৃষির অতিরিক্ত পয়েন্ট
+                        </th>
 
-subjects.forEach(function(subject) {
+                        <th>
+                            ${agricultureBonus.toFixed(2)}
+                        </th>
 
-    // কৃষি A+ গণনায় থাকবে না
-    if (subject.optional) {
-        return;
-    }
+                    </tr>
 
-    const data =
-        student.marks[subject.name] || {
-            mcq: 0,
-            cq: 0,
-            practical: 0
-        };
 
-    const total =
-        Number(data.mcq || 0) +
-        Number(data.cq || 0) +
-        Number(data.practical || 0);
+                    <tr>
 
-    const gradeInfo =
-        getGrade(total, subject.fullMarks);
+                        <th colspan="7">
+                            ফেল বিষয় সংখ্যা
+                        </th>
 
-    if (gradeInfo.grade === "A+") {
-        aPlusCount++;
-    }
+                        <th>
+                            ${failSubjectCount}
+                        </th>
 
-});
+                    </tr>
 
 
-// ======================================
-// DISPLAY RESULT
-// ======================================
+                    <tr>
 
-output.innerHTML = `
+                        <th colspan="7">
+                            চূড়ান্ত GPA
+                        </th>
 
-    <div class="result-summary">
+                        <th>
+                            ${finalGPA.toFixed(2)}
+                        </th>
 
-        <h3>${student.name}</h3>
+                    </tr>
 
-        <p>
 
-            <strong>সন:</strong>
-            ${student.year}
+                    <tr>
 
-            &nbsp; | &nbsp;
+                        <th colspan="7">
+                            ফলাফল
+                        </th>
 
-            <strong>পরীক্ষা:</strong>
-            ${student.examName}
+                        <th class="${
+                            result === "PASS"
+                                ? "result-pass"
+                                : "result-fail"
+                        }">
 
-        </p>
+                            ${result}
 
-        <p>
+                        </th>
 
-            <strong>শ্রেণি:</strong>
-            ${student.className}
+                    </tr>
 
-            &nbsp; | &nbsp;
 
-            <strong>রোল:</strong>
-            ${student.roll}
+                    <tr>
 
-        </p>
+                        <th colspan="7">
+                            Remarks
+                        </th>
 
-    </div>
+                        <th>
+                            ${remarks}
+                        </th>
 
+                    </tr>
 
-    <div style="overflow-x:auto;">
+                </tfoot>
 
-        <table class="result-table">
+            </table>
 
-            <thead>
+        </div>
 
-                <tr>
-
-                    <th>বিষয়</th>
-                    <th>পূর্ণমান</th>
-                    <th>MCQ</th>
-                    <th>CQ</th>
-                    <th>Practical</th>
-                    <th>মোট</th>
-                    <th>গ্রেড</th>
-                    <th>পয়েন্ট</th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody>
-
-                ${rows}
-
-            </tbody>
-
-
-            <tfoot>
-
-                <tr>
-
-                    <th colspan="5">
-                        মোট প্রাপ্ত নম্বর
-                    </th>
-
-                    <th>
-                        ${totalMarks}
-                    </th>
-
-                    <th colspan="2">
-                        ${totalFullMarks}
-                    </th>
-
-                </tr>
-
-
-                <tr>
-
-                    <th colspan="7">
-                        আবশ্যিক গ্রুপের সংখ্যা
-                    </th>
-
-                    <th>
-                        ${compulsorySubjectCount}
-                    </th>
-
-                </tr>
-
-
-                <tr>
-
-                    <th colspan="7">
-                        আবশ্যিক GPA-এর যোগফল
-                    </th>
-
-                    <th>
-                        ${compulsoryPointTotal.toFixed(2)}
-                    </th>
-
-                </tr>
-
-
-                <tr>
-
-                    <th colspan="7">
-                        কৃষির অতিরিক্ত পয়েন্ট
-                    </th>
-
-                    <th>
-                        ${agricultureBonus.toFixed(2)}
-                    </th>
-
-                </tr>
-
-
-                <tr>
-
-                    <th colspan="7">
-                        A+ প্রাপ্ত বিষয়
-                    </th>
-
-                    <th>
-                        ${aPlusCount}
-                    </th>
-
-                </tr>
-
-
-                <tr>
-
-                    <th colspan="7">
-                        চূড়ান্ত GPA
-                    </th>
-
-                    <th>
-                        ${finalGPA.toFixed(2)}
-                    </th>
-
-                </tr>
-
-
-                <tr>
-
-                    <th colspan="7">
-                        মেধাক্রম
-                    </th>
-
-                    <th>
-                        প্রস্তুত হচ্ছে
-                    </th>
-
-                </tr>
-
-
-                <tr>
-
-                    <th colspan="7">
-                        ফলাফল
-                    </th>
-
-                    <th class="${
-                        result === "PASS"
-                            ? "result-pass"
-                            : "result-fail"
-                    }">
-
-                        ${result}
-
-                    </th>
-
-                </tr>
-
-            </tfoot>
-
-        </table>
-
-    </div>
-
-`;
+    `;
 
 }
 
