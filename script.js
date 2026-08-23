@@ -786,69 +786,229 @@ function searchResult() {
 
 
                     <tr>
+// ======================================
+// A+ COUNT
+// ======================================
 
-                        <th colspan="7">
-                            আবশ্যিক GPA-এর যোগফল
-                        </th>
+let aPlusCount = 0;
 
-                        <th>
-                            ${compulsoryPointTotal.toFixed(2)}
-                        </th>
+subjects.forEach(function(subject) {
 
-                    </tr>
+    // কৃষি A+ গণনায় থাকবে না
+    if (subject.optional) {
+        return;
+    }
 
+    const data =
+        student.marks[subject.name] || {
+            mcq: 0,
+            cq: 0,
+            practical: 0
+        };
 
-                    <tr>
+    const total =
+        Number(data.mcq || 0) +
+        Number(data.cq || 0) +
+        Number(data.practical || 0);
 
-                        <th colspan="7">
-                            কৃষির অতিরিক্ত পয়েন্ট
-                        </th>
+    const gradeInfo =
+        getGrade(total, subject.fullMarks);
 
-                        <th>
-                            ${agricultureBonus.toFixed(2)}
-                        </th>
+    if (gradeInfo.grade === "A+") {
+        aPlusCount++;
+    }
 
-                    </tr>
-
-
-                    <tr>
-
-                        <th colspan="7">
-                            চূড়ান্ত GPA
-                        </th>
-
-                        <th>
-                            ${finalGPA.toFixed(2)}
-                        </th>
-
-                    </tr>
+});
 
 
-                    <tr>
+// ======================================
+// DISPLAY RESULT
+// ======================================
 
-                        <th colspan="7">
-                            ফলাফল
-                        </th>
+output.innerHTML = `
 
-                        <th class="${
-                            result === "PASS"
-                                ? "result-pass"
-                                : "result-fail"
-                        }">
+    <div class="result-summary">
 
-                            ${result}
+        <h3>${student.name}</h3>
 
-                        </th>
+        <p>
 
-                    </tr>
+            <strong>সন:</strong>
+            ${student.year}
 
-                </tfoot>
+            &nbsp; | &nbsp;
 
-            </table>
+            <strong>পরীক্ষা:</strong>
+            ${student.examName}
 
-        </div>
+        </p>
 
-    `;
+        <p>
+
+            <strong>শ্রেণি:</strong>
+            ${student.className}
+
+            &nbsp; | &nbsp;
+
+            <strong>রোল:</strong>
+            ${student.roll}
+
+        </p>
+
+    </div>
+
+
+    <div style="overflow-x:auto;">
+
+        <table class="result-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>বিষয়</th>
+                    <th>পূর্ণমান</th>
+                    <th>MCQ</th>
+                    <th>CQ</th>
+                    <th>Practical</th>
+                    <th>মোট</th>
+                    <th>গ্রেড</th>
+                    <th>পয়েন্ট</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                ${rows}
+
+            </tbody>
+
+
+            <tfoot>
+
+                <tr>
+
+                    <th colspan="5">
+                        মোট প্রাপ্ত নম্বর
+                    </th>
+
+                    <th>
+                        ${totalMarks}
+                    </th>
+
+                    <th colspan="2">
+                        ${totalFullMarks}
+                    </th>
+
+                </tr>
+
+
+                <tr>
+
+                    <th colspan="7">
+                        আবশ্যিক গ্রুপের সংখ্যা
+                    </th>
+
+                    <th>
+                        ${compulsorySubjectCount}
+                    </th>
+
+                </tr>
+
+
+                <tr>
+
+                    <th colspan="7">
+                        আবশ্যিক GPA-এর যোগফল
+                    </th>
+
+                    <th>
+                        ${compulsoryPointTotal.toFixed(2)}
+                    </th>
+
+                </tr>
+
+
+                <tr>
+
+                    <th colspan="7">
+                        কৃষির অতিরিক্ত পয়েন্ট
+                    </th>
+
+                    <th>
+                        ${agricultureBonus.toFixed(2)}
+                    </th>
+
+                </tr>
+
+
+                <tr>
+
+                    <th colspan="7">
+                        A+ প্রাপ্ত বিষয়
+                    </th>
+
+                    <th>
+                        ${aPlusCount}
+                    </th>
+
+                </tr>
+
+
+                <tr>
+
+                    <th colspan="7">
+                        চূড়ান্ত GPA
+                    </th>
+
+                    <th>
+                        ${finalGPA.toFixed(2)}
+                    </th>
+
+                </tr>
+
+
+                <tr>
+
+                    <th colspan="7">
+                        মেধাক্রম
+                    </th>
+
+                    <th>
+                        প্রস্তুত হচ্ছে
+                    </th>
+
+                </tr>
+
+
+                <tr>
+
+                    <th colspan="7">
+                        ফলাফল
+                    </th>
+
+                    <th class="${
+                        result === "PASS"
+                            ? "result-pass"
+                            : "result-fail"
+                    }">
+
+                        ${result}
+
+                    </th>
+
+                </tr>
+
+            </tfoot>
+
+        </table>
+
+    </div>
+
+`;
 
 }
 
