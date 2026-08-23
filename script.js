@@ -20,11 +20,16 @@ function toggleMenu() {
 // ======================================
 // SUBJECT CONFIGURATION
 // ======================================
+//
+// group একই হলে ১ম ও ২য় পত্র একই GPA গ্রুপে থাকবে।
+// কৃষি optional = true
+//
 
 const subjects = [
 
     {
         name: "কুরআন মাজিদ",
+        group: "quran-hadith",
         fullMarks: 100,
         mcqFull: 0,
         cqFull: 100,
@@ -34,6 +39,7 @@ const subjects = [
 
     {
         name: "হাদীস শরিফ",
+        group: "quran-hadith",
         fullMarks: 100,
         mcqFull: 0,
         cqFull: 100,
@@ -43,6 +49,7 @@ const subjects = [
 
     {
         name: "আকাইদ ও ফিকহ",
+        group: "aqaid-fiqh",
         fullMarks: 100,
         mcqFull: 0,
         cqFull: 100,
@@ -52,6 +59,7 @@ const subjects = [
 
     {
         name: "আরবী ১ম",
+        group: "arabic",
         fullMarks: 100,
         mcqFull: 0,
         cqFull: 100,
@@ -61,6 +69,7 @@ const subjects = [
 
     {
         name: "আরবী ২য়",
+        group: "arabic",
         fullMarks: 100,
         mcqFull: 0,
         cqFull: 100,
@@ -70,6 +79,7 @@ const subjects = [
 
     {
         name: "ইংরেজি ১ম",
+        group: "english",
         fullMarks: 100,
         mcqFull: 0,
         cqFull: 100,
@@ -79,6 +89,7 @@ const subjects = [
 
     {
         name: "ইংরেজি ২য়",
+        group: "english",
         fullMarks: 100,
         mcqFull: 0,
         cqFull: 100,
@@ -88,6 +99,7 @@ const subjects = [
 
     {
         name: "বাংলা ১ম",
+        group: "bangla",
         fullMarks: 100,
         mcqFull: 30,
         cqFull: 70,
@@ -97,6 +109,7 @@ const subjects = [
 
     {
         name: "বাংলা ২য়",
+        group: "bangla",
         fullMarks: 100,
         mcqFull: 30,
         cqFull: 70,
@@ -106,6 +119,7 @@ const subjects = [
 
     {
         name: "গণিত",
+        group: "math",
         fullMarks: 100,
         mcqFull: 30,
         cqFull: 70,
@@ -115,6 +129,7 @@ const subjects = [
 
     {
         name: "ইসলামের ইতিহাস",
+        group: "islamic-history",
         fullMarks: 100,
         mcqFull: 30,
         cqFull: 70,
@@ -124,6 +139,7 @@ const subjects = [
 
     {
         name: "ICT",
+        group: "ict",
         fullMarks: 100,
         mcqFull: 25,
         cqFull: 50,
@@ -133,6 +149,7 @@ const subjects = [
 
     {
         name: "কৃষি",
+        group: "agriculture",
         fullMarks: 100,
         mcqFull: 0,
         cqFull: 100,
@@ -144,7 +161,7 @@ const subjects = [
 
 
 // ======================================
-// DEMO STUDENT RESULT
+// DEMO RESULT
 // ======================================
 
 const students = {
@@ -245,7 +262,7 @@ const students = {
 
 
 // ======================================
-// GRADE
+// GRADE / GPA
 // ======================================
 
 function getGrade(mark, fullMarks) {
@@ -305,7 +322,7 @@ function getGrade(mark, fullMarks) {
 
 
 // ======================================
-// PART PASS CHECK
+// PASS MARK
 // ======================================
 
 function partPassed(mark, fullMarks) {
@@ -314,7 +331,6 @@ function partPassed(mark, fullMarks) {
         return true;
     }
 
-    // 33% এবং ভগ্নাংশ হলে পরের পূর্ণসংখ্যা
     const passMark =
         Math.ceil(fullMarks * 0.33);
 
@@ -352,8 +368,6 @@ function searchResult() {
     output.innerHTML = "";
 
 
-    // Input check
-
     if (
         year === "" ||
         examName === "" ||
@@ -370,8 +384,6 @@ function searchResult() {
     }
 
 
-    // Search
-
     const key =
         year + "|" +
         examName + "|" +
@@ -386,7 +398,7 @@ function searchResult() {
     if (!student) {
 
         message.innerHTML =
-            "❌ এই পরীক্ষার জন্য এই শিক্ষার্থীর কোনো ফলাফল পাওয়া যায়নি।";
+            "❌ এই তথ্যের কোনো ফলাফল পাওয়া যায়নি।";
 
         message.style.color = "red";
 
@@ -394,17 +406,15 @@ function searchResult() {
     }
 
 
-    // ======================================
-    // CALCULATION
-    // ======================================
+    // ==================================
+    // RESULT CALCULATION
+    // ==================================
 
-    let compulsoryPoint = 0;
-    let compulsoryCount = 0;
+    let compulsoryGroups = {};
+    let hasFail = false;
 
     let totalMarks = 0;
     let totalFullMarks = 0;
-
-    let hasFail = false;
 
     let agricultureBonus = 0;
 
@@ -435,15 +445,19 @@ function searchResult() {
             mcq + cq + practical;
 
 
-        // ----------------------------------
-        // Separate pass checking
-        // ----------------------------------
-
         const mcqPass =
-            partPassed(mcq, subject.mcqFull);
+            partPassed(
+                mcq,
+                subject.mcqFull
+            );
+
 
         const cqPass =
-            partPassed(cq, subject.cqFull);
+            partPassed(
+                cq,
+                subject.cqFull
+            );
+
 
         const practicalPass =
             partPassed(
@@ -458,8 +472,13 @@ function searchResult() {
             practicalPass;
 
 
-        if (!subject.optional && !subjectPass) {
+        if (
+            !subject.optional &&
+            !subjectPass
+        ) {
+
             hasFail = true;
+
         }
 
 
@@ -470,17 +489,17 @@ function searchResult() {
             );
 
 
-        // ----------------------------------
-        // Agriculture bonus
-        // ----------------------------------
+        // ==============================
+        // AGRICULTURE
+        // ==============================
 
         if (subject.optional) {
 
-            const percentage =
+            const agriculturePercentage =
                 (total / subject.fullMarks) * 100;
 
 
-            if (percentage > 40) {
+            if (agriculturePercentage > 40) {
 
                 agricultureBonus =
                     Math.max(
@@ -491,12 +510,24 @@ function searchResult() {
             }
 
         }
+
+
+        // ==============================
+        // COMPULSORY GROUP
+        // ==============================
+
         else {
 
-            compulsoryPoint +=
-                gradeInfo.point;
+            if (!compulsoryGroups[subject.group]) {
 
-            compulsoryCount++;
+                compulsoryGroups[subject.group] = [];
+
+            }
+
+
+            compulsoryGroups[
+                subject.group
+            ].push(gradeInfo.point);
 
         }
 
@@ -507,9 +538,9 @@ function searchResult() {
             subject.fullMarks;
 
 
-        // ----------------------------------
-        // Display row
-        // ----------------------------------
+        // ==============================
+        // RESULT TABLE
+        // ==============================
 
         rows += `
 
@@ -519,17 +550,37 @@ function searchResult() {
 
                 <td>${subject.fullMarks}</td>
 
-                <td>${subject.mcqFull === 0 ? "-" : mcq}</td>
+                <td>
+                    ${
+                        subject.mcqFull === 0
+                            ? "-"
+                            : mcq
+                    }
+                </td>
 
-                <td>${subject.cqFull === 0 ? "-" : cq}</td>
+                <td>
+                    ${
+                        subject.cqFull === 0
+                            ? "-"
+                            : cq
+                    }
+                </td>
 
-                <td>${subject.practicalFull === 0 ? "-" : practical}</td>
+                <td>
+                    ${
+                        subject.practicalFull === 0
+                            ? "-"
+                            : practical
+                    }
+                </td>
 
                 <td>${total}</td>
 
                 <td>${gradeInfo.grade}</td>
 
-                <td>${gradeInfo.point.toFixed(2)}</td>
+                <td>
+                    ${gradeInfo.point.toFixed(2)}
+                </td>
 
             </tr>
 
@@ -539,17 +590,74 @@ function searchResult() {
 
 
     // ======================================
-    // GPA
+    // GROUP GPA
     // ======================================
 
-    let baseGPA =
-        compulsoryCount > 0
-            ? compulsoryPoint / compulsoryCount
-            : 0;
+    let compulsoryPointTotal = 0;
+
+    let compulsorySubjectCount = 0;
 
 
-    let finalGPA =
-        baseGPA + agricultureBonus;
+    Object.keys(compulsoryGroups).forEach(
+        function(group) {
+
+            const points =
+                compulsoryGroups[group];
+
+
+            // একই গ্রুপের ১ম ও ২য় পত্র
+            // একসঙ্গে GPA-তে গণনা হবে
+
+            let groupPoint = 0;
+
+
+            points.forEach(function(point) {
+
+                groupPoint += point;
+
+            });
+
+
+            const groupGPA =
+                groupPoint / points.length;
+
+
+            compulsoryPointTotal +=
+                groupGPA;
+
+
+            compulsorySubjectCount++;
+
+        }
+    );
+
+
+    // ======================================
+    // FINAL GPA
+    // ======================================
+    //
+    // সূত্র:
+    //
+    // (আবশ্যিক গ্রুপের GPA যোগ
+    //  + কৃষির অতিরিক্ত GPA)
+    //  ÷ আবশ্যিক গ্রুপ সংখ্যা
+    //
+    // কৃষি divisor-এ থাকবে না।
+    // ======================================
+
+    let finalGPA = 0;
+
+
+    if (compulsorySubjectCount > 0) {
+
+        finalGPA =
+            (
+                compulsoryPointTotal +
+                agricultureBonus
+            ) /
+            compulsorySubjectCount;
+
+    }
 
 
     if (finalGPA > 5) {
@@ -562,10 +670,6 @@ function searchResult() {
     }
 
 
-    const average =
-        totalMarks / totalFullMarks * 100;
-
-
     const result =
         hasFail
             ? "FAIL"
@@ -573,7 +677,7 @@ function searchResult() {
 
 
     // ======================================
-    // MESSAGE
+    // DISPLAY MESSAGE
     // ======================================
 
     message.innerHTML =
@@ -584,7 +688,7 @@ function searchResult() {
 
 
     // ======================================
-    // OUTPUT
+    // DISPLAY RESULT
     // ======================================
 
     output.innerHTML = `
@@ -594,6 +698,7 @@ function searchResult() {
             <h3>${student.name}</h3>
 
             <p>
+
                 <strong>সন:</strong>
                 ${student.year}
 
@@ -601,6 +706,7 @@ function searchResult() {
 
                 <strong>পরীক্ষা:</strong>
                 ${student.examName}
+
             </p>
 
             <p>
@@ -627,19 +733,12 @@ function searchResult() {
                     <tr>
 
                         <th>বিষয়</th>
-
                         <th>পূর্ণমান</th>
-
                         <th>MCQ</th>
-
                         <th>CQ</th>
-
                         <th>Practical</th>
-
                         <th>মোট</th>
-
                         <th>গ্রেড</th>
-
                         <th>পয়েন্ট</th>
 
                     </tr>
@@ -676,11 +775,11 @@ function searchResult() {
                     <tr>
 
                         <th colspan="7">
-                            মূল GPA
+                            আবশ্যিক গ্রুপের সংখ্যা
                         </th>
 
                         <th>
-                            ${baseGPA.toFixed(2)}
+                            ${compulsorySubjectCount}
                         </th>
 
                     </tr>
@@ -689,7 +788,20 @@ function searchResult() {
                     <tr>
 
                         <th colspan="7">
-                            কৃষি অতিরিক্ত পয়েন্ট
+                            আবশ্যিক GPA-এর যোগফল
+                        </th>
+
+                        <th>
+                            ${compulsoryPointTotal.toFixed(2)}
+                        </th>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <th colspan="7">
+                            কৃষির অতিরিক্ত পয়েন্ট
                         </th>
 
                         <th>
@@ -762,8 +874,13 @@ document.addEventListener(
                     const menu =
                         document.getElementById("menu");
 
+
                     if (menu) {
-                        menu.classList.remove("active");
+
+                        menu.classList.remove(
+                            "active"
+                        );
+
                     }
 
                 }
