@@ -1287,7 +1287,7 @@ function searchResult() {
 
 
 
-                <!-- COMPULSORY GPA AVERAGE -->
+                <!-- COMPULSORY GPA -->
 
                 <tr>
 
