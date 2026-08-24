@@ -1,22 +1,27 @@
+// ==========================================
 // Abdullah Hat Islamia Fazil (Degree) Madrasah
 // Online Result System
+// ==========================================
 
-// ======================================
+
+// ==========================================
 // MOBILE MENU
-// ======================================
+// ==========================================
 
 function toggleMenu() {
+
     const menu = document.getElementById("menu");
 
     if (menu) {
         menu.classList.toggle("active");
     }
+
 }
 
 
-// ======================================
+// ==========================================
 // SUBJECT CONFIGURATION
-// ======================================
+// ==========================================
 
 const subjects = [
 
@@ -153,18 +158,22 @@ const subjects = [
 ];
 
 
-// ======================================
-// DEMO STUDENTS
-// ======================================
+// ==========================================
+// DEMO STUDENT
+// ==========================================
 
 const students = {
 
     "2026|বার্ষিক পরীক্ষা|dakhil10|101": {
 
         name: "আব্দুল্লাহ",
+
         roll: "101",
+
         className: "দাখিল ১০ম শ্রেণি",
+
         year: "2026",
+
         examName: "বার্ষিক পরীক্ষা",
 
         marks: {
@@ -249,480 +258,152 @@ const students = {
 
         }
 
-    },
-
-    "2026|বার্ষিক পরীক্ষা|dakhil10|102": {
-
-        name: "মোঃ হাসান",
-        roll: "102",
-        className: "দাখিল ১০ম শ্রেণি",
-        year: "2026",
-        examName: "বার্ষিক পরীক্ষা",
-
-        marks: {
-
-            "কুরআন মাজিদ": { mcq: 0, cq: 72, practical: 0 },
-            "হাদীস শরিফ": { mcq: 0, cq: 68, practical: 0 },
-            "আকাইদ ও ফিকহ": { mcq: 0, cq: 81, practical: 0 },
-            "আরবী ১ম": { mcq: 0, cq: 85, practical: 0 },
-            "আরবী ২য়": { mcq: 0, cq: 74, practical: 0 },
-            "ইংরেজি ১ম": { mcq: 0, cq: 70, practical: 0 },
-            "ইংরেজি ২য়": { mcq: 0, cq: 68, practical: 0 },
-
-            "বাংলা ১ম": { mcq: 22, cq: 50, practical: 0 },
-            "বাংলা ২য়": { mcq: 20, cq: 48, practical: 0 },
-
-            "গণিত": { mcq: 24, cq: 55, practical: 0 },
-
-            "ইসলামের ইতিহাস": {
-                mcq: 23,
-                cq: 52,
-                practical: 0
-            },
-
-            "ICT": {
-                mcq: 20,
-                cq: 38,
-                practical: 22
-            },
-
-            "কৃষি": {
-                mcq: 0,
-                cq: 72,
-                practical: 0
-            }
-
-        }
-
-    },
-
-    "2026|বার্ষিক পরীক্ষা|dakhil10|103": {
-
-        name: "সুমাইয়া আক্তার",
-        roll: "103",
-        className: "দাখিল ১০ম শ্রেণি",
-        year: "2026",
-        examName: "বার্ষিক পরীক্ষা",
-
-        marks: {
-
-            "কুরআন মাজিদ": { mcq: 0, cq: 95, practical: 0 },
-            "হাদীস শরিফ": { mcq: 0, cq: 89, practical: 0 },
-            "আকাইদ ও ফিকহ": { mcq: 0, cq: 92, practical: 0 },
-            "আরবী ১ম": { mcq: 0, cq: 96, practical: 0 },
-            "আরবী ২য়": { mcq: 0, cq: 90, practical: 0 },
-            "ইংরেজি ১ম": { mcq: 0, cq: 91, practical: 0 },
-            "ইংরেজি ২য়": { mcq: 0, cq: 88, practical: 0 },
-
-            "বাংলা ১ম": { mcq: 28, cq: 65, practical: 0 },
-            "বাংলা ২য়": { mcq: 27, cq: 63, practical: 0 },
-
-            "গণিত": { mcq: 29, cq: 66, practical: 0 },
-
-            "ইসলামের ইতিহাস": {
-                mcq: 28,
-                cq: 65,
-                practical: 0
-            },
-
-            "ICT": {
-                mcq: 24,
-                cq: 47,
-                practical: 24
-            },
-
-            "কৃষি": {
-                mcq: 0,
-                cq: 94,
-                practical: 0
-            }
-
-        }
-
     }
 
 };
 
 
-// ======================================
-// GRADE
-// ======================================
+// ==========================================
+// GRADE / GPA
+// ==========================================
 
 function getGrade(mark, fullMarks) {
 
     const percentage =
         (mark / fullMarks) * 100;
 
-    if (percentage >= 80)
-        return { grade: "A+", point: 5.00 };
 
-    if (percentage >= 70)
-        return { grade: "A", point: 4.00 };
+    if (percentage >= 80) {
 
-    if (percentage >= 60)
-        return { grade: "A-", point: 3.50 };
-
-    if (percentage >= 50)
-        return { grade: "B", point: 3.00 };
-
-    if (percentage >= 40)
-        return { grade: "C", point: 2.00 };
-
-    if (percentage >= 33)
-        return { grade: "D", point: 1.00 };
-
-    return { grade: "F", point: 0.00 };
-}
-
-
-// ======================================
-// PART PASS
-// ======================================
-
-function partPassed(mark, fullMarks) {
-
-    if (fullMarks === 0)
-        return true;
-
-    return mark >= Math.ceil(fullMarks * 0.33);
-}
-
-
-// ======================================
-// CALCULATE STUDENT
-// ======================================
-
-function calculateStudent(student) {
-
-    let groups = {};
-    let hasFail = false;
-    let failSubjects = 0;
-
-    let totalMarks = 0;
-    let totalFullMarks = 0;
-
-    let agricultureBonus = 0;
-
-    let rows = "";
-
-    subjects.forEach(function(subject) {
-
-        const data =
-            student.marks[subject.name] || {
-                mcq: 0,
-                cq: 0,
-                practical: 0
-            };
-
-        const mcq = Number(data.mcq || 0);
-        const cq = Number(data.cq || 0);
-        const practical = Number(data.practical || 0);
-
-        const total =
-            mcq + cq + practical;
-
-        const mcqPass =
-            partPassed(mcq, subject.mcqFull);
-
-        const cqPass =
-            partPassed(cq, subject.cqFull);
-
-        const practicalPass =
-            partPassed(
-                practical,
-                subject.practicalFull
-            );
-
-        const subjectPass =
-            mcqPass &&
-            cqPass &&
-            practicalPass;
-
-        if (!subject.optional && !subjectPass) {
-
-            hasFail = true;
-            failSubjects++;
-
-        }
-
-        const gradeInfo =
-            getGrade(
-                total,
-                subject.fullMarks
-            );
-
-
-        // কৃষি
-        if (subject.optional) {
-
-            const percentage =
-                (total / subject.fullMarks) * 100;
-
-            if (percentage > 40) {
-
-                agricultureBonus =
-                    Math.max(
-                        0,
-                        gradeInfo.point - 2
-                    );
-
-            }
-
-        }
-
-
-        // আবশ্যিক বিষয়
-        else {
-
-            if (!groups[subject.group]) {
-                groups[subject.group] = [];
-            }
-
-            groups[subject.group].push(
-                gradeInfo.point
-            );
-
-        }
-
-
-        totalMarks += total;
-        totalFullMarks += subject.fullMarks;
-
-
-        rows += `
-            <tr>
-                <td>${subject.name}</td>
-
-                <td>${subject.fullMarks}</td>
-
-                <td>
-                    ${
-                        subject.mcqFull === 0
-                            ? "-"
-                            : mcq
-                    }
-                </td>
-
-                <td>
-                    ${
-                        subject.cqFull === 0
-                            ? "-"
-                            : cq
-                    }
-                </td>
-
-                <td>
-                    ${
-                        subject.practicalFull === 0
-                            ? "-"
-                            : practical
-                    }
-                </td>
-
-                <td>${total}</td>
-
-                <td>${gradeInfo.grade}</td>
-
-                <td>${gradeInfo.point.toFixed(2)}</td>
-
-            </tr>
-        `;
-
-    });
-
-
-    // ======================================
-    // GROUP GPA
-    // ======================================
-
-    let compulsoryGPA = 0;
-    let compulsoryGroupCount = 0;
-
-    Object.keys(groups).forEach(function(group) {
-
-        const points = groups[group];
-
-        let sum = 0;
-
-        points.forEach(function(point) {
-            sum += point;
-        });
-
-        const groupGPA =
-            sum / points.length;
-
-        compulsoryGPA += groupGPA;
-
-        compulsoryGroupCount++;
-
-    });
-
-
-    // ======================================
-    // FINAL GPA
-    // ======================================
-
-    let finalGPA = 0;
-
-    if (compulsoryGroupCount > 0) {
-
-        finalGPA =
-            (
-                compulsoryGPA +
-                agricultureBonus
-            ) /
-            compulsoryGroupCount;
+        return {
+            grade: "A+",
+            point: 5.00
+        };
 
     }
 
-    if (finalGPA > 5)
-        finalGPA = 5;
 
-    if (hasFail)
-        finalGPA = 0;
+    if (percentage >= 70) {
 
-
-    const result =
-        hasFail ? "FAIL" : "PASS";
-
-
-    // ======================================
-    // REMARKS
-    // ======================================
-
-    let remarks = "";
-
-    if (result === "FAIL") {
-
-        remarks =
-            "দুঃখিত, " +
-            failSubjects +
-            "টি বিষয়ে অকৃতকার্য।";
+        return {
+            grade: "A",
+            point: 4.00
+        };
 
     }
-    else if (finalGPA >= 5) {
 
-        remarks = "অসাধারণ ফলাফল।";
 
-    }
-    else if (finalGPA >= 4) {
+    if (percentage >= 60) {
 
-        remarks = "খুব ভালো ফলাফল।";
-
-    }
-    else if (finalGPA >= 3) {
-
-        remarks = "ভালো ফলাফল।";
+        return {
+            grade: "A-",
+            point: 3.50
+        };
 
     }
-    else {
 
-        remarks = "উত্তীর্ণ।";
+
+    if (percentage >= 50) {
+
+        return {
+            grade: "B",
+            point: 3.00
+        };
+
+    }
+
+
+    if (percentage >= 40) {
+
+        return {
+            grade: "C",
+            point: 2.00
+        };
+
+    }
+
+
+    if (percentage >= 33) {
+
+        return {
+            grade: "D",
+            point: 1.00
+        };
 
     }
 
 
     return {
 
-        rows,
-        totalMarks,
-        totalFullMarks,
-        compulsoryGPA,
-        agricultureBonus,
-        finalGPA,
-        result,
-        failSubjects,
-        remarks
+        grade: "F",
+
+        point: 0.00
 
     };
 
 }
 
 
-// ======================================
-// MERIT POSITION
-// ======================================
+// ==========================================
+// PART PASS
+// ==========================================
 
-function getMeritList(year, examName, className) {
+function partPassed(mark, fullMarks) {
 
-    const list = [];
+    if (fullMarks === 0) {
 
-    Object.keys(students).forEach(function(key) {
+        return true;
 
-        const student = students[key];
-
-        if (
-            student.year === year &&
-            student.examName === examName &&
-            key.includes("|" + className + "|")
-        ) {
-
-            const calculation =
-                calculateStudent(student);
-
-            if (calculation.result === "PASS") {
-
-                list.push({
-
-                    roll: student.roll,
-
-                    gpa: calculation.finalGPA,
-
-                    total: calculation.totalMarks
-
-                });
-
-            }
-
-        }
-
-    });
+    }
 
 
-    list.sort(function(a, b) {
-
-        if (b.gpa !== a.gpa) {
-            return b.gpa - a.gpa;
-        }
-
-        return b.total - a.total;
-
-    });
+    const passMark =
+        Math.ceil(fullMarks * 0.33);
 
 
-    return list;
+    return mark >= passMark;
 
 }
 
 
-// ======================================
-// SEARCH RESULT
-// ======================================
+// ==========================================
+// RESULT SEARCH
+// ==========================================
 
 function searchResult() {
 
     const year =
         document.getElementById("examYear").value;
 
+
     const examName =
         document.getElementById("examName").value;
+
 
     const className =
         document.getElementById("examClass").value;
 
+
     const roll =
         document.getElementById("rollNumber").value.trim();
 
+
     const message =
         document.getElementById("resultMessage");
+
 
     const output =
         document.getElementById("resultOutput");
 
 
     message.innerHTML = "";
+
     output.innerHTML = "";
 
+
+    // ======================================
+    // VALIDATION
+    // ======================================
 
     if (
         year === "" ||
@@ -741,10 +422,17 @@ function searchResult() {
     }
 
 
+    // ======================================
+    // SEARCH KEY
+    // ======================================
+
     const key =
-        year + "|" +
-        examName + "|" +
-        className + "|" +
+        year +
+        "|" +
+        examName +
+        "|" +
+        className +
+        "|" +
         roll;
 
 
@@ -764,243 +452,1042 @@ function searchResult() {
     }
 
 
-    const calculation =
-        calculateStudent(student);
+    // ======================================
+    // VARIABLES
+    // ======================================
+
+    let compulsoryGroups = {};
+
+    let hasFail = false;
+
+    let totalMarks = 0;
+
+    let totalFullMarks = 0;
+
+    let agricultureBonus = 0;
+
+    let rows = "";
 
 
     // ======================================
-    // MERIT
+    // SUBJECT CALCULATION
     // ======================================
 
-    const meritList =
-        getMeritList(
-            year,
-            examName,
-            className
-        );
+    subjects.forEach(function(subject) {
 
 
-    let meritPosition = "-";
+        const data =
+            student.marks[subject.name] || {
 
-    const index =
-        meritList.findIndex(function(item) {
+                mcq: 0,
 
-            return item.roll === student.roll;
+                cq: 0,
 
-        });
+                practical: 0
+
+            };
 
 
-    if (index !== -1) {
+        const mcq =
+            Number(data.mcq || 0);
 
-        meritPosition =
-            index + 1;
+
+        const cq =
+            Number(data.cq || 0);
+
+
+        const practical =
+            Number(data.practical || 0);
+
+
+        const total =
+            mcq +
+            cq +
+            practical;
+
+
+        // ==================================
+        // PASS CHECK
+        // ==================================
+
+        const mcqPass =
+            partPassed(
+                mcq,
+                subject.mcqFull
+            );
+
+
+        const cqPass =
+            partPassed(
+                cq,
+                subject.cqFull
+            );
+
+
+        const practicalPass =
+            partPassed(
+                practical,
+                subject.practicalFull
+            );
+
+
+        const subjectPass =
+            mcqPass &&
+            cqPass &&
+            practicalPass;
+
+
+        // ==================================
+        // FAIL SUBJECT
+        // ==================================
+
+        if (
+            !subject.optional &&
+            !subjectPass
+        ) {
+
+            hasFail = true;
+
+        }
+
+
+        // ==================================
+        // GRADE
+        // ==================================
+
+        const gradeInfo =
+            getGrade(
+                total,
+                subject.fullMarks
+            );
+
+
+        // ==================================
+        // AGRICULTURE BONUS
+        // ==================================
+
+        if (subject.optional) {
+
+
+            const agriculturePercentage =
+                (total / subject.fullMarks) * 100;
+
+
+            if (agriculturePercentage > 40) {
+
+                agricultureBonus =
+                    Math.max(
+                        0,
+                        gradeInfo.point - 2
+                    );
+
+            }
+
+        }
+
+
+        // ==================================
+        // COMPULSORY GROUP
+        // ==================================
+
+        else {
+
+
+            if (!compulsoryGroups[subject.group]) {
+
+                compulsoryGroups[
+                    subject.group
+                ] = [];
+
+            }
+
+
+            compulsoryGroups[
+                subject.group
+            ].push(
+                gradeInfo.point
+            );
+
+        }
+
+
+        totalMarks += total;
+
+
+        totalFullMarks +=
+            subject.fullMarks;
+
+
+        // ==================================
+        // RESULT TABLE ROW
+        // ==================================
+
+        rows += `
+
+        <tr>
+
+            <td>
+                ${subject.name}
+            </td>
+
+            <td>
+                ${subject.fullMarks}
+            </td>
+
+            <td>
+                ${
+                    subject.mcqFull === 0
+                        ? "-"
+                        : mcq
+                }
+            </td>
+
+            <td>
+                ${
+                    subject.cqFull === 0
+                        ? "-"
+                        : cq
+                }
+            </td>
+
+            <td>
+                ${
+                    subject.practicalFull === 0
+                        ? "-"
+                        : practical
+                }
+            </td>
+
+            <td>
+                ${total}
+            </td>
+
+            <td>
+                ${gradeInfo.grade}
+            </td>
+
+            <td>
+                ${gradeInfo.point.toFixed(2)}
+            </td>
+
+        </tr>
+
+        `;
+
+    });
+
+
+    // ==========================================
+    // COMPULSORY GPA
+    // ==========================================
+
+    let compulsoryPointTotal = 0;
+
+    let compulsorySubjectCount = 0;
+
+
+    Object.keys(compulsoryGroups).forEach(
+        function(group) {
+
+
+            const points =
+                compulsoryGroups[group];
+
+
+            let groupPoint = 0;
+
+
+            points.forEach(function(point) {
+
+                groupPoint += point;
+
+            });
+
+
+            const groupGPA =
+                groupPoint / points.length;
+
+
+            compulsoryPointTotal +=
+                groupGPA;
+
+
+            compulsorySubjectCount++;
+
+        }
+    );
+
+
+    // ==========================================
+    // COMPULSORY GPA AVERAGE
+    // ==========================================
+
+    let compulsoryGPAAverage = 0;
+
+
+    if (compulsorySubjectCount > 0) {
+
+        compulsoryGPAAverage =
+            compulsoryPointTotal /
+            compulsorySubjectCount;
 
     }
 
 
+    // ==========================================
+    // FINAL GPA
+    // ==========================================
+
+    let finalGPA = 0;
+
+
+    if (compulsorySubjectCount > 0) {
+
+        finalGPA =
+            (
+                compulsoryPointTotal +
+                agricultureBonus
+            ) /
+            compulsorySubjectCount;
+
+    }
+
+
+    if (finalGPA > 5) {
+
+        finalGPA = 5;
+
+    }
+
+
+    // ফেল থাকলে GPA 0
+    if (hasFail) {
+
+        finalGPA = 0;
+
+    }
+
+
+    // ==========================================
+    // FAIL SUBJECT COUNT
+    // ==========================================
+
+    let failSubjectCount = 0;
+
+
+    subjects.forEach(function(subject) {
+
+
+        if (subject.optional) {
+
+            return;
+
+        }
+
+
+        const data =
+            student.marks[subject.name] || {
+
+                mcq: 0,
+
+                cq: 0,
+
+                practical: 0
+
+            };
+
+
+        const mcq =
+            Number(data.mcq || 0);
+
+
+        const cq =
+            Number(data.cq || 0);
+
+
+        const practical =
+            Number(data.practical || 0);
+
+
+        const mcqPass =
+            partPassed(
+                mcq,
+                subject.mcqFull
+            );
+
+
+        const cqPass =
+            partPassed(
+                cq,
+                subject.cqFull
+            );
+
+
+        const practicalPass =
+            partPassed(
+                practical,
+                subject.practicalFull
+            );
+
+
+        if (
+            !(
+                mcqPass &&
+                cqPass &&
+                practicalPass
+            )
+        ) {
+
+            failSubjectCount++;
+
+        }
+
+    });
+
+
+    // ==========================================
+    // RESULT
+    // ==========================================
+
+    const result =
+        hasFail
+            ? "FAIL"
+            : "PASS";
+
+
+    // ==========================================
+    // REMARKS
+    // ==========================================
+
+    let remarks = "";
+
+
+    if (hasFail) {
+
+        remarks =
+            "ফেল বিষয় রয়েছে।";
+
+    }
+
+    else if (finalGPA >= 5) {
+
+        remarks =
+            "অসাধারণ ফলাফল।";
+
+    }
+
+    else if (finalGPA >= 4) {
+
+        remarks =
+            "খুব ভালো ফলাফল।";
+
+    }
+
+    else if (finalGPA >= 3) {
+
+        remarks =
+            "ভালো ফলাফল।";
+
+    }
+
+    else {
+
+        remarks =
+            "আরও ভালো করার চেষ্টা করুন।";
+
+    }
+
+
+    // ==========================================
+    // MERIT POSITION
+    // ==========================================
+
+    let meritPosition = "প্রস্তুত হচ্ছে";
+
+
+    const currentStudents = [];
+
+
+    Object.keys(students).forEach(
+        function(studentKey) {
+
+
+            const s =
+                students[studentKey];
+
+
+            if (
+                s.year !== year ||
+                s.examName !== examName ||
+                s.className !== student.className
+            ) {
+
+                return;
+
+            }
+
+
+            let sGroups = {};
+
+            let sAgricultureBonus = 0;
+
+            let sFail = false;
+
+            let sTotalMarks = 0;
+
+
+            subjects.forEach(function(subject) {
+
+
+                const d =
+                    s.marks[subject.name] || {
+
+                        mcq: 0,
+                        cq: 0,
+                        practical: 0
+
+                    };
+
+
+                const mcq =
+                    Number(d.mcq || 0);
+
+
+                const cq =
+                    Number(d.cq || 0);
+
+
+                const practical =
+                    Number(d.practical || 0);
+
+
+                const total =
+                    mcq +
+                    cq +
+                    practical;
+
+
+                sTotalMarks += total;
+
+
+                const mcqPass =
+                    partPassed(
+                        mcq,
+                        subject.mcqFull
+                    );
+
+
+                const cqPass =
+                    partPassed(
+                        cq,
+                        subject.cqFull
+                    );
+
+
+                const practicalPass =
+                    partPassed(
+                        practical,
+                        subject.practicalFull
+                    );
+
+
+                if (
+                    !subject.optional &&
+                    !(
+                        mcqPass &&
+                        cqPass &&
+                        practicalPass
+                    )
+                ) {
+
+                    sFail = true;
+
+                }
+
+
+                const g =
+                    getGrade(
+                        total,
+                        subject.fullMarks
+                    );
+
+
+                if (subject.optional) {
+
+
+                    const p =
+                        (total / subject.fullMarks) *
+                        100;
+
+
+                    if (p > 40) {
+
+                        sAgricultureBonus =
+                            Math.max(
+                                0,
+                                g.point - 2
+                            );
+
+                    }
+
+                }
+
+                else {
+
+
+                    if (!sGroups[subject.group]) {
+
+                        sGroups[subject.group] = [];
+
+                    }
+
+
+                    sGroups[subject.group].push(
+                        g.point
+                    );
+
+                }
+
+            });
+
+
+            let sPointTotal = 0;
+
+            let sGroupCount = 0;
+
+
+            Object.keys(sGroups).forEach(
+                function(group) {
+
+
+                    const points =
+                        sGroups[group];
+
+
+                    let gp = 0;
+
+
+                    points.forEach(function(p) {
+
+                        gp += p;
+
+                    });
+
+
+                    sPointTotal +=
+                        gp / points.length;
+
+
+                    sGroupCount++;
+
+                }
+            );
+
+
+            let sFinalGPA = 0;
+
+
+            if (sGroupCount > 0) {
+
+                sFinalGPA =
+                    (
+                        sPointTotal +
+                        sAgricultureBonus
+                    ) /
+                    sGroupCount;
+
+            }
+
+
+            if (sFinalGPA > 5) {
+
+                sFinalGPA = 5;
+
+            }
+
+
+            if (sFail) {
+
+                sFinalGPA = 0;
+
+            }
+
+
+            currentStudents.push({
+
+                key: studentKey,
+
+                gpa: sFinalGPA,
+
+                total: sTotalMarks
+
+            });
+
+        }
+    );
+
+
+    // ==========================================
+    // SORT MERIT
+    // ==========================================
+
+    currentStudents.sort(
+        function(a, b) {
+
+
+            if (b.gpa !== a.gpa) {
+
+                return b.gpa - a.gpa;
+
+            }
+
+
+            return b.total - a.total;
+
+        }
+    );
+
+
+    const currentIndex =
+        currentStudents.findIndex(
+            function(item) {
+
+                return item.key === key;
+
+            }
+        );
+
+
+    if (currentIndex !== -1) {
+
+        meritPosition =
+            currentIndex + 1;
+
+    }
+
+
+    // ==========================================
+    // SUCCESS MESSAGE
+    // ==========================================
+
     message.innerHTML =
         "✅ ফলাফল পাওয়া গেছে";
+
 
     message.style.color =
         "#087f4f";
 
 
-    // ======================================
-    // DISPLAY
-    // ======================================
+    // ==========================================
+    // DISPLAY RESULT
+    // ==========================================
 
     output.innerHTML = `
 
-        <div class="result-summary">
+    <div class="result-summary">
 
-            <h3>${student.name}</h3>
-
-            <p>
-                <strong>সন:</strong>
-                ${student.year}
-
-                &nbsp; | &nbsp;
-
-                <strong>পরীক্ষা:</strong>
-                ${student.examName}
-            </p>
-
-            <p>
-                <strong>শ্রেণি:</strong>
-                ${student.className}
-
-                &nbsp; | &nbsp;
-
-                <strong>রোল:</strong>
-                ${student.roll}
-            </p>
-
-        </div>
+        <h3>
+            ${student.name}
+        </h3>
 
 
-        <div style="overflow-x:auto;">
+        <p>
 
-            <table class="result-table">
+            <strong>সন:</strong>
+            ${student.year}
 
-                <thead>
+            &nbsp; | &nbsp;
 
-                    <tr>
-                        <th>বিষয়</th>
-                        <th>পূর্ণমান</th>
-                        <th>MCQ</th>
-                        <th>CQ</th>
-                        <th>Practical</th>
-                        <th>মোট</th>
-                        <th>গ্রেড</th>
-                        <th>পয়েন্ট</th>
-                    </tr>
+            <strong>পরীক্ষা:</strong>
+            ${student.examName}
 
-                </thead>
-
-                <tbody>
-
-                    ${calculation.rows}
-
-                </tbody>
-
-                <tfoot>
-
-                    <tr>
-                        <th colspan="5">
-                            মোট প্রাপ্ত নম্বর
-                        </th>
-
-                        <th>
-                            ${calculation.totalMarks}
-                        </th>
-
-                        <th colspan="2">
-                            ${calculation.totalFullMarks}
-                        </th>
-                    </tr>
+        </p>
 
 
-                    <tr>
-                        <th colspan="7">
-                            আবশ্যিক বিষয়ের GPA
-                        </th>
+        <p>
 
-                        <th>
-                            ${calculation.compulsoryGPA.toFixed(2)}
-                        </th>
-                    </tr>
+            <strong>শ্রেণি:</strong>
+            ${student.className}
 
+            &nbsp; | &nbsp;
 
-                    <tr>
-                        <th colspan="7">
-                            কৃষির অতিরিক্ত GPA
-                        </th>
+            <strong>রোল:</strong>
+            ${student.roll}
 
-                        <th>
-                            ${calculation.agricultureBonus.toFixed(2)}
-                        </th>
-                    </tr>
+        </p>
+
+    </div>
 
 
-                    <tr>
-                        <th colspan="7">
-                            ফেল বিষয় সংখ্যা
-                        </th>
+    <div style="overflow-x:auto;">
 
-                        <th>
-                            ${calculation.failSubjects}
-                        </th>
-                    </tr>
+        <table class="result-table">
 
 
-                    <tr>
-                        <th colspan="7">
-                            চূড়ান্ত GPA
-                        </th>
+            <thead>
 
-                        <th>
-                            ${calculation.finalGPA.toFixed(2)}
-                        </th>
-                    </tr>
+                <tr>
 
+                    <th>বিষয়</th>
 
-                    <tr>
-                        <th colspan="7">
-                            মেধাক্রম
-                        </th>
+                    <th>পূর্ণমান</th>
 
-                        <th>
-                            ${meritPosition}
-                        </th>
-                    </tr>
+                    <th>MCQ</th>
 
+                    <th>CQ</th>
 
-                    <tr>
-                        <th colspan="7">
-                            ফলাফল
-                        </th>
+                    <th>Practical</th>
 
-                        <th class="${
-                            calculation.result === "PASS"
-                                ? "result-pass"
-                                : "result-fail"
-                        }">
+                    <th>মোট</th>
 
-                            ${calculation.result}
+                    <th>গ্রেড</th>
 
-                        </th>
-                    </tr>
+                    <th>পয়েন্ট</th>
+
+                </tr>
+
+            </thead>
 
 
-                    <tr>
-                        <th colspan="7">
-                            মন্তব্য
-                        </th>
+            <tbody>
 
-                        <th>
-                            ${calculation.remarks}
-                        </th>
-                    </tr>
+                ${rows}
 
-                </tfoot>
+            </tbody>
 
-            </table>
 
-        </div>
+            <tfoot>
+
+
+                <!-- TOTAL MARKS -->
+
+                <tr>
+
+                    <th colspan="5">
+
+                        মোট প্রাপ্ত নম্বর
+
+                    </th>
+
+
+                    <th>
+
+                        ${totalMarks}
+
+                    </th>
+
+
+                    <th colspan="2">
+
+                        ${totalFullMarks}
+
+                    </th>
+
+                </tr>
+
+
+
+                <!-- COMPULSORY GPA AVERAGE -->
+
+                <tr>
+
+                    <th colspan="7">
+
+                        আবশ্যিক বিষয়ের GPA-এর গড়
+
+                    </th>
+
+
+                    <th>
+
+                        ${compulsoryGPAAverage.toFixed(2)}
+
+                    </th>
+
+                </tr>
+
+
+
+                <!-- AGRICULTURE BONUS -->
+
+                <tr>
+
+                    <th colspan="7">
+
+                        কৃষির অতিরিক্ত GPA
+
+                    </th>
+
+
+                    <th>
+
+                        ${agricultureBonus.toFixed(2)}
+
+                    </th>
+
+                </tr>
+
+
+
+                <!-- FAIL SUBJECT COUNT -->
+
+                <tr>
+
+                    <th colspan="7">
+
+                        ফেল বিষয় সংখ্যা
+
+                    </th>
+
+
+                    <th>
+
+                        ${failSubjectCount}
+
+                    </th>
+
+                </tr>
+
+
+
+                <!-- FINAL GPA -->
+
+                <tr>
+
+                    <th colspan="7">
+
+                        চূড়ান্ত GPA
+
+                    </th>
+
+
+                    <th>
+
+                        ${finalGPA.toFixed(2)}
+
+                    </th>
+
+                </tr>
+
+
+
+                <!-- MERIT -->
+
+                <tr>
+
+                    <th colspan="7">
+
+                        মেধাক্রম
+
+                    </th>
+
+
+                    <th>
+
+                        ${meritPosition}
+
+                    </th>
+
+                </tr>
+
+
+
+                <!-- RESULT -->
+
+                <tr>
+
+                    <th colspan="7">
+
+                        ফলাফল
+
+                    </th>
+
+
+                    <th class="${
+                        result === "PASS"
+                            ? "result-pass"
+                            : "result-fail"
+                    }">
+
+                        ${result}
+
+                    </th>
+
+                </tr>
+
+
+
+                <!-- REMARKS -->
+
+                <tr>
+
+                    <th colspan="7">
+
+                        মন্তব্য
+
+                    </th>
+
+
+                    <th>
+
+                        ${remarks}
+
+                    </th>
+
+                </tr>
+
+
+            </tfoot>
+
+
+        </table>
+
+    </div>
 
     `;
 
 }
 
 
-// ======================================
+// ==========================================
 // PAGE LOADED
-// ======================================
+// ==========================================
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
+
         const navLinks =
             document.querySelectorAll("#menu a");
 
-        navLinks.forEach(function(link) {
 
-            link.addEventListener(
-                "click",
-                function () {
+        navLinks.forEach(
+            function(link) {
 
-                    const menu =
-                        document.getElementById("menu");
 
-                    if (menu) {
-                        menu.classList.remove("active");
+                link.addEventListener(
+                    "click",
+                    function () {
+
+
+                        const menu =
+                            document.getElementById("menu");
+
+
+                        if (menu) {
+
+                            menu.classList.remove(
+                                "active"
+                            );
+
+                        }
+
                     }
+                );
 
-                }
-            );
-
-        });
+            }
+        );
 
     }
 );
