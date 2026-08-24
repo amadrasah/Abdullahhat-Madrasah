@@ -1291,20 +1291,15 @@ function searchResult() {
 
                 <tr>
 
-                    <th colspan="7">
+    <th colspan="7">
+        আবশ্যিক বিষয়ের GPA
+    </th>
 
-                        আবশ্যিক বিষয়ের GPA-এর গড়
+    <th>
+        ${compulsoryGPAAverage.toFixed(2)}
+    </th>
 
-                    </th>
-
-
-                    <th>
-
-                        ${compulsoryGPAAverage.toFixed(2)}
-
-                    </th>
-
-                </tr>
+</tr>
 
 
 
