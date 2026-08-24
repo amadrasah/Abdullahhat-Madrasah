@@ -157,7 +157,7 @@ const subjects = [
 
 
 // ======================================
-// DEMO RESULT
+// DEMO STUDENT
 // ======================================
 
 const students = {
@@ -364,7 +364,7 @@ function searchResult() {
 
 
     // ==================================
-    // CHECK INPUT
+    // INPUT CHECK
     // ==================================
 
     if (
@@ -384,7 +384,7 @@ function searchResult() {
 
 
     // ==================================
-    // FIND STUDENT
+    // SEARCH STUDENT
     // ==================================
 
     const key =
@@ -410,14 +410,10 @@ function searchResult() {
 
 
     // ==================================
-    // CALCULATION VARIABLES
+    // CALCULATION
     // ==================================
 
     let compulsoryGroups = {};
-
-    let hasFail = false;
-
-    let failSubjectCount = 0;
 
     let totalMarks = 0;
 
@@ -425,11 +421,13 @@ function searchResult() {
 
     let agricultureBonus = 0;
 
+    let failSubjectCount = 0;
+
     let rows = "";
 
 
     // ==================================
-    // SUBJECT CALCULATION
+    // SUBJECT LOOP
     // ==================================
 
     subjects.forEach(function(subject) {
@@ -457,7 +455,7 @@ function searchResult() {
 
 
         // ------------------------------
-        // SEPARATE PASS CONDITION
+        // PASS CONDITION
         // ------------------------------
 
         const mcqPass =
@@ -466,13 +464,11 @@ function searchResult() {
                 subject.mcqFull
             );
 
-
         const cqPass =
             partPassed(
                 cq,
                 subject.cqFull
             );
-
 
         const practicalPass =
             partPassed(
@@ -487,16 +483,10 @@ function searchResult() {
             practicalPass;
 
 
-        // ------------------------------
-        // FAIL COUNT
-        // ------------------------------
-
         if (
             !subject.optional &&
             !subjectPass
         ) {
-
-            hasFail = true;
 
             failSubjectCount++;
 
@@ -515,20 +505,35 @@ function searchResult() {
 
 
         // ------------------------------
+        // COMPULSORY GPA
+        // ------------------------------
+
+        if (!subject.optional) {
+
+            if (!compulsoryGroups[subject.group]) {
+
+                compulsoryGroups[subject.group] = [];
+
+            }
+
+            compulsoryGroups[
+                subject.group
+            ].push(gradeInfo.point);
+
+        }
+
+
+        // ------------------------------
         // AGRICULTURE BONUS
         // ------------------------------
 
         if (subject.optional) {
 
-            const agriculturePercentage =
+            const percentage =
                 (total / subject.fullMarks) * 100;
 
 
-            // ৪০% এর বেশি হলে
-            // পয়েন্ট থেকে ২ বাদ দিয়ে
-            // অতিরিক্ত GPA
-
-            if (agriculturePercentage > 40) {
+            if (percentage > 40) {
 
                 agricultureBonus =
                     Math.max(
@@ -541,35 +546,15 @@ function searchResult() {
         }
 
 
-        // ------------------------------
-        // COMPULSORY GROUP
-        // ------------------------------
-
-        else {
-
-            if (!compulsoryGroups[subject.group]) {
-
-                compulsoryGroups[subject.group] = [];
-
-            }
-
-
-            compulsoryGroups[
-                subject.group
-            ].push(gradeInfo.point);
-
-        }
-
-
         totalMarks += total;
 
         totalFullMarks +=
             subject.fullMarks;
 
 
-        // ------------------------------
-        // TABLE ROW
-        // ------------------------------
+        // ==================================
+        // RESULT TABLE
+        // ==================================
 
         rows += `
 
@@ -619,7 +604,7 @@ function searchResult() {
 
 
     // ==================================
-    // GROUP GPA
+    // COMPULSORY GPA
     // ==================================
 
     let compulsoryPointTotal = 0;
@@ -661,19 +646,18 @@ function searchResult() {
     // ==================================
     // FINAL GPA
     // ==================================
-    //
-    // আবশ্যিক গ্রুপের GPA যোগ
-    // + কৃষির অতিরিক্ত GPA
-    //
-    // তারপর আবশ্যিক গ্রুপ সংখ্যা দিয়ে ভাগ
-    //
-    // কৃষি divisor-এর মধ্যে নেই
-    // ==================================
+
+    let compulsoryGPA = 0;
 
     let finalGPA = 0;
 
 
     if (compulsoryGroupCount > 0) {
+
+        compulsoryGPA =
+            compulsoryPointTotal /
+            compulsoryGroupCount;
+
 
         finalGPA =
             (
@@ -686,15 +670,8 @@ function searchResult() {
 
 
     if (finalGPA > 5) {
+
         finalGPA = 5;
-    }
-
-
-    // ফেল থাকলে GPA = 0
-
-    if (hasFail) {
-
-        finalGPA = 0;
 
     }
 
@@ -702,6 +679,17 @@ function searchResult() {
     // ==================================
     // RESULT
     // ==================================
+
+    const hasFail =
+        failSubjectCount > 0;
+
+
+    if (hasFail) {
+
+        finalGPA = 0;
+
+    }
+
 
     const result =
         hasFail
@@ -745,6 +733,19 @@ function searchResult() {
             "সন্তোষজনক ফলাফল";
 
     }
+
+
+    // ==================================
+    // MERIT POSITION
+    // ==================================
+    //
+    // একাধিক শিক্ষার্থী যুক্ত হলে এখানে
+    // GPA + মোট নম্বর দিয়ে মেধাক্রম
+    // স্বয়ংক্রিয় করা হবে।
+    //
+
+    let meritPosition =
+        "প্রস্তুত হচ্ছে";
 
 
     // ==================================
@@ -804,20 +805,13 @@ function searchResult() {
                     <tr>
 
                         <th>বিষয়</th>
-
                         <th>পূর্ণমান</th>
-
                         <th>MCQ</th>
-
                         <th>CQ</th>
-
                         <th>Practical</th>
-
                         <th>মোট</th>
-
                         <th>গ্রেড</th>
-
-                        <th>পয়েন্ট</th>
+                        <th>GPA</th>
 
                     </tr>
 
@@ -853,11 +847,11 @@ function searchResult() {
                     <tr>
 
                         <th colspan="7">
-                            আবশ্যিক GPA-এর যোগফল
+                            আবশ্যিক বিষয়ের GPA
                         </th>
 
                         <th>
-                            ${compulsoryPointTotal.toFixed(2)}
+                            ${compulsoryGPA.toFixed(2)}
                         </th>
 
                     </tr>
@@ -897,6 +891,19 @@ function searchResult() {
 
                         <th>
                             ${finalGPA.toFixed(2)}
+                        </th>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <th colspan="7">
+                            মেধাক্রম
+                        </th>
+
+                        <th>
+                            ${meritPosition}
                         </th>
 
                     </tr>
