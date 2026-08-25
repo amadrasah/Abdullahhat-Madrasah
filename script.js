@@ -1590,3 +1590,309 @@ document.addEventListener(
 
     }
 );
+
+/* ==========================================
+   MARKSHEET PRINT SYSTEM
+========================================== */
+
+function showMarksheet() {
+
+    const output = document.getElementById("resultOutput");
+
+    if (!output || output.innerHTML.trim() === "") {
+
+        alert("আগে শিক্ষার্থীর ফলাফল অনুসন্ধান করুন।");
+
+        return;
+
+    }
+
+
+    /* RESULT TABLE COPY */
+
+    const printTable =
+        document.getElementById("printResultTable");
+
+    printTable.innerHTML = output.innerHTML;
+
+
+    /* YEAR */
+
+    const year =
+        document.getElementById("examYear").value;
+
+    document.getElementById("printYear").innerText =
+        year || "—";
+
+
+    /* EXAM */
+
+    const exam =
+        document.getElementById("examName").value;
+
+    document.getElementById("printExam").innerText =
+        exam || "—";
+
+
+    /* CLASS */
+
+    const classSelect =
+        document.getElementById("examClass");
+
+    const classText =
+        classSelect.options[classSelect.selectedIndex]
+        ?.text || "—";
+
+    document.getElementById("printClass").innerText =
+        classText;
+
+
+    /* ROLL */
+
+    const roll =
+        document.getElementById("rollNumber").value;
+
+    document.getElementById("printRoll").innerText =
+        roll || "—";
+
+
+    /* ------------------------------------------
+       RESULT DATA থেকে তথ্য নেওয়া
+    ------------------------------------------ */
+
+    const text = output.innerText;
+
+
+    /*
+       শিক্ষার্থীর নাম
+    */
+
+    let studentName = "—";
+
+    const nameMatch =
+        text.match(/নাম\s*[:：-]?\s*([^\n]+)/);
+
+    if (nameMatch) {
+
+        studentName =
+            nameMatch[1].trim();
+
+    }
+
+    document.getElementById("printStudentName")
+        .innerText = studentName;
+
+
+    /*
+       মোট নম্বর
+    */
+
+    let total = "—";
+
+    const totalMatch =
+        text.match(/মোট প্রাপ্ত নম্বর\s*[:：]?\s*([0-9.]+)/);
+
+    if (totalMatch) {
+
+        total =
+            totalMatch[1];
+
+    }
+
+    document.getElementById("printTotal")
+        .innerText = total;
+
+
+    /*
+       আবশ্যিক বিষয়ের GPA
+
+       এখানে GPA-এর যোগফল নয়,
+       GPA-এর গড়/মান দেখানো হবে।
+    */
+
+    let compulsoryGPA = "—";
+
+    const compulsoryMatch =
+        text.match(
+            /আবশ্যিক বিষয়ের GPA\s*[:：]?\s*([0-9.]+)/
+        );
+
+    if (compulsoryMatch) {
+
+        compulsoryGPA =
+            compulsoryMatch[1];
+
+    }
+
+    document.getElementById("printCompulsoryGPA")
+        .innerText = compulsoryGPA;
+
+
+    /*
+       কৃষির অতিরিক্ত GPA
+    */
+
+    let additionalGPA = "—";
+
+    const additionalMatch =
+        text.match(
+            /কৃষির অতিরিক্ত GPA\s*[:：]?\s*([0-9.]+)/
+        );
+
+    if (additionalMatch) {
+
+        additionalGPA =
+            additionalMatch[1];
+
+    }
+
+    document.getElementById("printAdditionalGPA")
+        .innerText = additionalGPA;
+
+
+    /*
+       ফেল বিষয় সংখ্যা
+    */
+
+    let fail = "—";
+
+    const failMatch =
+        text.match(
+            /ফেল বিষয় সংখ্যা\s*[:：]?\s*([0-9]+)/
+        );
+
+    if (failMatch) {
+
+        fail =
+            failMatch[1];
+
+    }
+
+    document.getElementById("printFail")
+        .innerText = fail;
+
+
+    /*
+       চূড়ান্ত GPA
+    */
+
+    let finalGPA = "—";
+
+    const gpaMatch =
+        text.match(
+            /চূড়ান্ত GPA\s*[:：]?\s*([0-9.]+)/
+        );
+
+    if (gpaMatch) {
+
+        finalGPA =
+            gpaMatch[1];
+
+    }
+
+    document.getElementById("printFinalGPA")
+        .innerText = finalGPA;
+
+
+    /*
+       মেধাক্রম
+    */
+
+    let merit = "—";
+
+    const meritMatch =
+        text.match(
+            /মেধাক্রম\s*[:：]?\s*([0-9]+)/ 
+        );
+
+    if (meritMatch) {
+
+        merit =
+            meritMatch[1];
+
+    }
+
+    document.getElementById("printMerit")
+        .innerText = merit;
+
+
+    /*
+       ফলাফল
+    */
+
+    let result = "—";
+
+    if (
+        text.includes("PASS") ||
+        text.includes("PASS")
+    ) {
+
+        result = "PASS";
+
+    }
+
+    if (
+        text.includes("FAIL") ||
+        text.includes("ফেল")
+    ) {
+
+        result = "FAIL";
+
+    }
+
+    document.getElementById("printResult")
+        .innerText = result;
+
+
+    /*
+       মন্তব্য
+    */
+
+    let remarks = "—";
+
+    const remarksMatch =
+        text.match(
+            /মন্তব্য\s*[:：]?\s*([^\n]+)/
+        );
+
+    if (remarksMatch) {
+
+        remarks =
+            remarksMatch[1].trim();
+
+    }
+
+    document.getElementById("printRemarks")
+        .innerText = remarks;
+
+
+    /* SHOW MARKSHEET */
+
+    const sheet =
+        document.getElementById("marksheetPrintArea");
+
+    sheet.style.display = "block";
+
+
+    /*
+       নতুন উইন্ডোতে না নিয়ে
+       একই পেজে মার্কশিট দেখানো হবে
+    */
+
+    sheet.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
+
+/* ==========================================
+   PRINT BUTTON
+========================================== */
+
+function printMarksheet() {
+
+    window.print();
+
+}
