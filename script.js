@@ -1285,3 +1285,958 @@ document.addEventListener(
 
     }
 );
+
+// ==========================================
+// MERIT LIST
+// ==========================================
+
+function generateMeritList() {
+
+    const year =
+        document.getElementById("examYear")?.value || "";
+
+    const examName =
+        document.getElementById("examName")?.value || "";
+
+    const className =
+        document.getElementById("examClass")?.value || "";
+
+
+    const tableBody =
+        document.getElementById("meritTableBody");
+
+    const meritYear =
+        document.getElementById("meritYear");
+
+    const meritExamName =
+        document.getElementById("meritExamName");
+
+    const meritClass =
+        document.getElementById("meritClass");
+
+
+    if (!tableBody) {
+        return;
+    }
+
+
+    if (
+        year === "" ||
+        examName === "" ||
+        className === ""
+    ) {
+
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="9">
+                    ⚠️ সন, পরীক্ষা ও শ্রেণি নির্বাচন করুন।
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    // ======================================
+    // HEADING
+    // ======================================
+
+    meritYear.textContent =
+        year;
+
+    meritExamName.textContent =
+        examName;
+
+    meritClass.textContent =
+        className;
+
+
+    // ======================================
+    // STUDENT FILTER
+    // ======================================
+
+    const list = [];
+
+
+    Object.keys(students).forEach(function(key) {
+
+        const student =
+            students[key];
+
+
+        if (
+            String(student.year) !== String(year)
+        ) {
+            return;
+        }
+
+
+        if (
+            student.examName !== examName
+        ) {
+            return;
+        }
+
+
+        // className-এর প্রকৃত value
+        // যেমন dakhil10
+
+        const studentClass =
+            student.className;
+
+
+        if (
+            className !==
+            getClassCode(studentClass)
+        ) {
+            return;
+        }
+
+
+        // ==================================
+        // STUDENT CALCULATION
+        // ==================================
+
+        let totalMarks = 0;
+
+        let failSubjects = 0;
+
+        let absent = false;
+
+        let hasFail = false;
+
+        let compulsoryGroups = {};
+
+        let agricultureBonus = 0;
+
+
+        subjects.forEach(function(subject) {
+
+            const data =
+                student.marks[subject.name];
+
+
+            // ==============================
+            // ABSENT
+            // ==============================
+
+            if (!data) {
+
+                absent = true;
+
+                return;
+
+            }
+
+
+            const mcq =
+                Number(data.mcq || 0);
+
+            const cq =
+                Number(data.cq || 0);
+
+            const practical =
+                Number(data.practical || 0);
+
+
+            const total =
+                mcq +
+                cq +
+                practical;
+
+
+            totalMarks += total;
+
+
+            const mcqPass =
+                partPassed(
+                    mcq,
+                    subject.mcqFull
+                );
+
+
+            const cqPass =
+                partPassed(
+                    cq,
+                    subject.cqFull
+                );
+
+
+            const practicalPass =
+                partPassed(
+                    practical,
+                    subject.practicalFull
+                );
+
+
+            const subjectPass =
+                mcqPass &&
+                cqPass &&
+                practicalPass;
+
+
+            if (
+                !subject.optional &&
+                !subjectPass
+            ) {
+
+                failSubjects++;
+
+                hasFail = true;
+
+            }
+
+
+            const gradeInfo =
+                getGrade(
+                    total,
+                    subject.fullMarks
+                );
+
+
+            // ==============================
+            // AGRICULTURE BONUS
+            // ==============================
+
+            if (subject.optional) {
+
+                const percentage =
+                    (total /
+                    subject.fullMarks) *
+                    100;
+
+
+                if (percentage > 40) {
+
+                    agricultureBonus =
+                        Math.max(
+                            0,
+                            gradeInfo.point - 2
+                        );
+
+                }
+
+            }
+
+
+            // ==============================
+            // COMPULSORY GROUP
+            // ==============================
+
+            else {
+
+                if (
+                    !compulsoryGroups[
+                        subject.group
+                    ]
+                ) {
+
+                    compulsoryGroups[
+                        subject.group
+                    ] = [];
+
+                }
+
+
+                compulsoryGroups[
+                    subject.group
+                ].push(
+                    gradeInfo.point
+                );
+
+            }
+
+        });
+
+
+        // ==================================
+        // ABSENT
+        // ==================================
+
+        if (absent) {
+
+            list.push({
+
+                student: student,
+
+                totalMarks: totalMarks,
+
+                finalGPA: 0,
+
+                result: "ABSENT",
+
+                failSubjects: 0,
+
+                absent: true
+
+            });
+
+            return;
+
+        }
+
+
+        // ==================================
+        // GPA
+        // ==================================
+
+        let compulsoryPointTotal = 0;
+
+        let compulsoryGroupCount = 0;
+
+
+        Object.keys(
+            compulsoryGroups
+        ).forEach(function(group) {
+
+            const points =
+                compulsoryGroups[group];
+
+
+            let groupPoint = 0;
+
+
+            points.forEach(function(point) {
+
+                groupPoint += point;
+
+            });
+
+
+            const groupGPA =
+                groupPoint /
+                points.length;
+
+
+            compulsoryPointTotal +=
+                groupGPA;
+
+
+            compulsoryGroupCount++;
+
+        });
+
+
+        let finalGPA = 0;
+
+
+        if (
+            compulsoryGroupCount > 0
+        ) {
+
+            finalGPA =
+                (
+                    compulsoryPointTotal +
+                    agricultureBonus
+                ) /
+                compulsoryGroupCount;
+
+        }
+
+
+        if (finalGPA > 5) {
+            finalGPA = 5;
+        }
+
+
+        if (hasFail) {
+            finalGPA = 0;
+        }
+
+
+        const result =
+            hasFail
+                ? "FAIL"
+                : "PASS";
+
+
+        // ==================================
+        // PUSH STUDENT
+        // ==================================
+
+        list.push({
+
+            student: student,
+
+            totalMarks: totalMarks,
+
+            finalGPA: finalGPA,
+
+            result: result,
+
+            failSubjects: failSubjects,
+
+            absent: false
+
+        });
+
+    });
+
+
+    // ======================================
+    // SORT
+    // ======================================
+
+    list.sort(function(a, b) {
+
+        // PASS আগে
+        if (
+            a.result === "PASS" &&
+            b.result !== "PASS"
+        ) {
+            return -1;
+        }
+
+
+        if (
+            a.result !== "PASS" &&
+            b.result === "PASS"
+        ) {
+            return 1;
+        }
+
+
+        // GPA
+        if (
+            b.finalGPA !== a.finalGPA
+        ) {
+
+            return (
+                b.finalGPA -
+                a.finalGPA
+            );
+
+        }
+
+
+        // নম্বর
+        if (
+            b.totalMarks !==
+            a.totalMarks
+        ) {
+
+            return (
+                b.totalMarks -
+                a.totalMarks
+            );
+
+        }
+
+
+        // Roll
+        return String(
+            a.student.roll
+        ).localeCompare(
+            String(b.student.roll),
+            undefined,
+            {
+                numeric: true
+            }
+        );
+
+    });
+
+
+    // ======================================
+    // SUMMARY
+    // ======================================
+
+    const totalStudents =
+        list.length;
+
+
+    const totalPassed =
+        list.filter(function(item) {
+
+            return item.result === "PASS";
+
+        }).length;
+
+
+    const totalAbsent =
+        list.filter(function(item) {
+
+            return item.result === "ABSENT";
+
+        }).length;
+
+
+    const totalFailed =
+        list.filter(function(item) {
+
+            return item.result === "FAIL";
+
+        }).length;
+
+
+    document.getElementById(
+        "totalStudents"
+    ).textContent =
+        totalStudents;
+
+
+    document.getElementById(
+        "totalPassed"
+    ).textContent =
+        totalPassed;
+
+
+    document.getElementById(
+        "totalAbsent"
+    ).textContent =
+        totalAbsent;
+
+
+    document.getElementById(
+        "totalFailed"
+    ).textContent =
+        totalFailed;
+
+
+    // ======================================
+    // MERIT
+    // ======================================
+
+    let meritPosition = 0;
+
+    let previousGPA = null;
+
+    let previousMarks = null;
+
+
+    let html = "";
+
+
+    list.forEach(function(item, index) {
+
+        const student =
+            item.student;
+
+
+        let merit = "—";
+
+
+        if (
+            item.result === "PASS"
+        ) {
+
+            if (
+                item.finalGPA !==
+                previousGPA ||
+                item.totalMarks !==
+                previousMarks
+            ) {
+
+                meritPosition =
+                    index + 1;
+
+            }
+
+
+            merit =
+                meritPosition;
+
+
+            previousGPA =
+                item.finalGPA;
+
+            previousMarks =
+                item.totalMarks;
+
+        }
+
+
+        // ==================================
+        // REMARKS
+        // ==================================
+
+        let remarks = "";
+
+
+        if (
+            item.result === "ABSENT"
+        ) {
+
+            remarks =
+                "অনুপস্থিত";
+
+        }
+
+        else if (
+            item.result === "FAIL"
+        ) {
+
+            remarks =
+                "ফেল — " +
+                item.failSubjects +
+                "টি বিষয়ে";
+
+        }
+
+        else if (
+            item.finalGPA >= 5
+        ) {
+
+            remarks =
+                "Excellent";
+
+        }
+
+        else if (
+            item.finalGPA >= 4
+        ) {
+
+            remarks =
+                "Very Good";
+
+        }
+
+        else if (
+            item.finalGPA >= 3
+        ) {
+
+            remarks =
+                "Good";
+
+        }
+
+        else {
+
+            remarks =
+                "Passed";
+
+        }
+
+
+        html += `
+
+            <tr>
+
+                <td>
+                    ${index + 1}
+                </td>
+
+                <td>
+                    ${student.studentId || "—"}
+                </td>
+
+                <td>
+                    ${student.roll}
+                </td>
+
+                <td>
+                    ${
+                        item.result === "ABSENT"
+                            ? "—"
+                            : item.finalGPA.toFixed(2)
+                    }
+                </td>
+
+                <td>
+                    ${item.totalMarks}
+                </td>
+
+                <td class="${
+                    item.result === "PASS"
+                        ? "result-pass"
+                        : "result-fail"
+                }">
+
+                    ${item.result}
+
+                </td>
+
+                <td>
+                    ${item.failSubjects}
+                </td>
+
+                <td>
+                    ${merit}
+                </td>
+
+                <td>
+                    ${remarks}
+                </td>
+
+            </tr>
+
+        `;
+
+    });
+
+
+    tableBody.innerHTML =
+        html ||
+        `
+            <tr>
+                <td colspan="9">
+                    কোনো শিক্ষার্থী পাওয়া যায়নি।
+                </td>
+            </tr>
+        `;
+
+}
+
+
+// ==========================================
+// CLASS CODE
+// ==========================================
+
+function getClassCode(className) {
+
+    const map = {
+
+        "নূরানী ১ম শ্রেণি":
+            "nurani1",
+
+        "নূরানী ২য় শ্রেণি":
+            "nurani2",
+
+        "নূরানী ৩য় শ্রেণি":
+            "nurani3",
+
+        "ইবতেদায়ী ৪র্থ শ্রেণি":
+            "ebtedayi4",
+
+        "ইবতেদায়ী ৫ম শ্রেণি":
+            "ebtedayi5",
+
+        "দাখিল ৬ষ্ঠ শ্রেণি":
+            "dakhil6",
+
+        "দাখিল ৭ম শ্রেণি":
+            "dakhil7",
+
+        "দাখিল ৮ম শ্রেণি":
+            "dakhil8",
+
+        "দাখিল ৯ম শ্রেণি":
+            "dakhil9",
+
+        "দাখিল ১০ম শ্রেণি":
+            "dakhil10",
+
+        "আলিম ১ম বর্ষ":
+            "alim1",
+
+        "আলিম ২য় বর্ষ":
+            "alim2",
+
+        "ফাজিল ১ম বর্ষ":
+            "fazil1",
+
+        "ফাজিল ২য় বর্ষ":
+            "fazil2",
+
+        "ফাজিল ৩য় বর্ষ":
+            "fazil3"
+
+    };
+
+
+    return map[className] || className;
+
+}
+
+
+// ==========================================
+// PRINT MERIT LIST
+// ==========================================
+
+function printMeritList() {
+
+    const content =
+        document.getElementById(
+            "meritList"
+        );
+
+
+    if (!content) {
+        return;
+    }
+
+
+    const printWindow =
+        window.open(
+            "",
+            "_blank"
+        );
+
+
+    printWindow.document.write(`
+
+        <!DOCTYPE html>
+
+        <html lang="bn">
+
+        <head>
+
+            <meta charset="UTF-8">
+
+            <title>
+                Merit List
+            </title>
+
+            <style>
+
+                body {
+
+                    font-family:
+                        Arial,
+                        "Noto Sans Bengali",
+                        sans-serif;
+
+                    margin: 20px;
+
+                }
+
+                h2,
+                h3,
+                p {
+
+                    text-align: center;
+
+                    margin: 5px;
+
+                }
+
+                table {
+
+                    width: 100%;
+
+                    border-collapse:
+                        collapse;
+
+                    margin-top: 20px;
+
+                }
+
+                th,
+                td {
+
+                    border:
+                        1px solid #000;
+
+                    padding: 7px;
+
+                    text-align: center;
+
+                }
+
+                th {
+
+                    background:
+                        #eeeeee;
+
+                }
+
+                .result-pass {
+
+                    font-weight: bold;
+
+                }
+
+                .result-fail {
+
+                    font-weight: bold;
+
+                }
+
+                @media print {
+
+                    body {
+
+                        margin: 10mm;
+
+                    }
+
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            ${content.innerHTML}
+
+        </body>
+
+        </html>
+
+    `);
+
+
+    printWindow.document.close();
+
+
+    printWindow.focus();
+
+
+    setTimeout(function() {
+
+        printWindow.print();
+
+        printWindow.close();
+
+    }, 500);
+
+}
+
+
+// ==========================================
+// AUTO GENERATE
+// ==========================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        const year =
+            document.getElementById(
+                "examYear"
+            );
+
+        const exam =
+            document.getElementById(
+                "examName"
+            );
+
+        const classSelect =
+            document.getElementById(
+                "examClass"
+            );
+
+
+        if (year) {
+
+            year.addEventListener(
+                "change",
+                generateMeritList
+            );
+
+        }
+
+
+        if (exam) {
+
+            exam.addEventListener(
+                "change",
+                generateMeritList
+            );
+
+        }
+
+
+        if (classSelect) {
+
+            classSelect.addEventListener(
+                "change",
+                generateMeritList
+            );
+
+        }
+
+    }
+);
