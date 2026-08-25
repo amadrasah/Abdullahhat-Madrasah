@@ -1,10 +1,12 @@
+// ==========================================================
 // Abdullah Hat Islamia Fazil (Degree) Madrasah
-// Online Result System
+// ONLINE RESULT SYSTEM
+// ==========================================================
 
 
-// ======================================
+// ==========================================================
 // MOBILE MENU
-// ======================================
+// ==========================================================
 
 function toggleMenu() {
 
@@ -17,9 +19,68 @@ function toggleMenu() {
 }
 
 
-// ======================================
+// ==========================================================
+// EXAMINATION LIST
+// অর্ধবার্ষিক থেকে শুরু হবে
+// Tutorial সবশেষে
+// ==========================================================
+
+const examList = [
+    "অর্ধবার্ষিক পরীক্ষা",
+    "প্রাক নির্বাচনী পরীক্ষা",
+    "নির্বাচনী পরীক্ষা",
+    "বার্ষিক পরীক্ষা",
+    "১ম টিউটোরিয়াল",
+    "২য় টিউটোরিয়াল",
+    "৩য় টিউটোরিয়াল"
+];
+
+
+// ==========================================================
+// EXAM DROPDOWN AUTO SET
+// ==========================================================
+
+function setupExamDropdown() {
+
+    const examSelect =
+        document.getElementById("examName");
+
+    if (!examSelect) {
+        return;
+    }
+
+    examSelect.innerHTML = `
+        <option value="">
+            পরীক্ষার নাম নির্বাচন করুন
+        </option>
+    `;
+
+    examList.forEach(function(exam) {
+
+        const option =
+            document.createElement("option");
+
+        option.value = exam;
+        option.textContent = exam;
+
+        examSelect.appendChild(option);
+
+    });
+
+}
+
+
+// ==========================================================
 // SUBJECT CONFIGURATION
-// ======================================
+// ==========================================================
+//
+// group একই হলে ১ম ও ২য় পত্র একই GPA গ্রুপে থাকবে
+//
+// কৃষি optional = true
+//
+// পূর্ণমান / MCQ / CQ / Practical
+// প্রয়োজন অনুযায়ী এখান থেকে পরিবর্তন করা যাবে
+// ==========================================================
 
 const subjects = [
 
@@ -156,24 +217,51 @@ const subjects = [
 ];
 
 
-// ======================================
-// DEMO STUDENTS
-// ======================================
-// একই শ্রেণির একাধিক শিক্ষার্থী রাখা হয়েছে
-// মেধাক্রম পরীক্ষা করার জন্য।
+// ==========================================================
+// STUDENTS DATABASE
+// ==========================================================
 //
-// পরে এখানে আসল শিক্ষার্থীদের তথ্য বসবে।
-// ======================================
+// নতুন শিক্ষার্থী যোগ করার নিয়ম:
+//
+// "2026|বার্ষিক পরীক্ষা|dakhil10|101": {
+//
+//     name: "আব্দুল্লাহ",
+//     roll: "101",
+//     className: "দাখিল ১০ম শ্রেণি",
+//     classCode: "dakhil10",
+//     year: "2026",
+//     examName: "বার্ষিক পরীক্ষা",
+//
+//     marks: {
+//         "কুরআন মাজিদ": {
+//             mcq: 0,
+//             cq: 82,
+//             practical: 0
+//         }
+//     }
+//
+// }
+//
+// ==========================================================
 
 const students = {
+
+    // ======================================================
+    // STUDENT 1
+    // ======================================================
 
     "2026|বার্ষিক পরীক্ষা|dakhil10|101": {
 
         name: "আব্দুল্লাহ",
+
         roll: "101",
+
         className: "দাখিল ১০ম শ্রেণি",
+
         classCode: "dakhil10",
+
         year: "2026",
+
         examName: "বার্ষিক পরীক্ষা",
 
         marks: {
@@ -258,214 +346,18 @@ const students = {
 
         }
 
-    },
-
-
-    // --------------------------------------
-    // DEMO STUDENT 102
-    // --------------------------------------
-
-    "2026|বার্ষিক পরীক্ষা|dakhil10|102": {
-
-        name: "মুহাম্মদ হাসান",
-        roll: "102",
-        className: "দাখিল ১০ম শ্রেণি",
-        classCode: "dakhil10",
-        year: "2026",
-        examName: "বার্ষিক পরীক্ষা",
-
-        marks: {
-
-            "কুরআন মাজিদ": {
-                mcq: 0,
-                cq: 78,
-                practical: 0
-            },
-
-            "হাদীস শরিফ": {
-                mcq: 0,
-                cq: 81,
-                practical: 0
-            },
-
-            "আকাইদ ও ফিকহ": {
-                mcq: 0,
-                cq: 85,
-                practical: 0
-            },
-
-            "আরবী ১ম": {
-                mcq: 0,
-                cq: 86,
-                practical: 0
-            },
-
-            "আরবী ২য়": {
-                mcq: 0,
-                cq: 83,
-                practical: 0
-            },
-
-            "ইংরেজি ১ম": {
-                mcq: 0,
-                cq: 78,
-                practical: 0
-            },
-
-            "ইংরেজি ২য়": {
-                mcq: 0,
-                cq: 77,
-                practical: 0
-            },
-
-            "বাংলা ১ম": {
-                mcq: 24,
-                cq: 58,
-                practical: 0
-            },
-
-            "বাংলা ২য়": {
-                mcq: 25,
-                cq: 56,
-                practical: 0
-            },
-
-            "গণিত": {
-                mcq: 26,
-                cq: 63,
-                practical: 0
-            },
-
-            "ইসলামের ইতিহাস": {
-                mcq: 25,
-                cq: 60,
-                practical: 0
-            },
-
-            "ICT": {
-                mcq: 23,
-                cq: 43,
-                practical: 24
-            },
-
-            "কৃষি": {
-                mcq: 0,
-                cq: 82,
-                practical: 0
-            }
-
-        }
-
-    },
-
-
-    // --------------------------------------
-    // DEMO STUDENT 103
-    // --------------------------------------
-
-    "2026|বার্ষিক পরীক্ষা|dakhil10|103": {
-
-        name: "আবু বকর",
-        roll: "103",
-        className: "দাখিল ১০ম শ্রেণি",
-        classCode: "dakhil10",
-        year: "2026",
-        examName: "বার্ষিক পরীক্ষা",
-
-        marks: {
-
-            "কুরআন মাজিদ": {
-                mcq: 0,
-                cq: 72,
-                practical: 0
-            },
-
-            "হাদীস শরিফ": {
-                mcq: 0,
-                cq: 74,
-                practical: 0
-            },
-
-            "আকাইদ ও ফিকহ": {
-                mcq: 0,
-                cq: 79,
-                practical: 0
-            },
-
-            "আরবী ১ম": {
-                mcq: 0,
-                cq: 82,
-                practical: 0
-            },
-
-            "আরবী ২য়": {
-                mcq: 0,
-                cq: 76,
-                practical: 0
-            },
-
-            "ইংরেজি ১ম": {
-                mcq: 0,
-                cq: 74,
-                practical: 0
-            },
-
-            "ইংরেজি ২য়": {
-                mcq: 0,
-                cq: 72,
-                practical: 0
-            },
-
-            "বাংলা ১ম": {
-                mcq: 22,
-                cq: 55,
-                practical: 0
-            },
-
-            "বাংলা ২য়": {
-                mcq: 23,
-                cq: 52,
-                practical: 0
-            },
-
-            "গণিত": {
-                mcq: 24,
-                cq: 57,
-                practical: 0
-            },
-
-            "ইসলামের ইতিহাস": {
-                mcq: 24,
-                cq: 55,
-                practical: 0
-            },
-
-            "ICT": {
-                mcq: 21,
-                cq: 40,
-                practical: 22
-            },
-
-            "কৃষি": {
-                mcq: 0,
-                cq: 75,
-                practical: 0
-            }
-
-        }
-
     }
 
 };
 
 
-// ======================================
+// ==========================================================
 // GRADE / GPA
-// ======================================
+// ==========================================================
 
 function getGrade(mark, fullMarks) {
 
-    if (fullMarks === 0) {
+    if (!fullMarks || fullMarks <= 0) {
 
         return {
             grade: "-",
@@ -473,7 +365,6 @@ function getGrade(mark, fullMarks) {
         };
 
     }
-
 
     const percentage =
         (mark / fullMarks) * 100;
@@ -547,14 +438,17 @@ function getGrade(mark, fullMarks) {
 }
 
 
-// ======================================
+// ==========================================================
 // PASS MARK
-// ======================================
+// 33%
+// ==========================================================
 
 function partPassed(mark, fullMarks) {
 
-    if (fullMarks === 0) {
+    if (!fullMarks || fullMarks === 0) {
+
         return true;
+
     }
 
 
@@ -567,9 +461,9 @@ function partPassed(mark, fullMarks) {
 }
 
 
-// ======================================
-// CALCULATE STUDENT RESULT
-// ======================================
+// ==========================================================
+// CALCULATE ONE STUDENT
+// ==========================================================
 
 function calculateStudentResult(student) {
 
@@ -577,7 +471,7 @@ function calculateStudentResult(student) {
 
     let hasFail = false;
 
-    let failSubjectCount = 0;
+    let failedSubjectCount = 0;
 
     let totalMarks = 0;
 
@@ -585,6 +479,12 @@ function calculateStudentResult(student) {
 
     let agricultureBonus = 0;
 
+    let rows = "";
+
+
+    // ======================================================
+    // SUBJECT CALCULATION
+    // ======================================================
 
     subjects.forEach(function(subject) {
 
@@ -601,8 +501,10 @@ function calculateStudentResult(student) {
         const mcq =
             Number(data.mcq || 0);
 
+
         const cq =
             Number(data.cq || 0);
+
 
         const practical =
             Number(data.practical || 0);
@@ -612,9 +514,9 @@ function calculateStudentResult(student) {
             mcq + cq + practical;
 
 
-        // -------------------------------
+        // ==================================================
         // PART PASS
-        // -------------------------------
+        // ==================================================
 
         const mcqPass =
             partPassed(
@@ -643,9 +545,11 @@ function calculateStudentResult(student) {
             practicalPass;
 
 
-        // -------------------------------
-        // FAIL COUNT
-        // -------------------------------
+        // ==================================================
+        // FAIL
+        // কৃষি optional হওয়ায় কৃষিতে ফেল হলেও
+        // compulsory fail হবে না
+        // ==================================================
 
         if (
             !subject.optional &&
@@ -654,14 +558,14 @@ function calculateStudentResult(student) {
 
             hasFail = true;
 
-            failSubjectCount++;
+            failedSubjectCount++;
 
         }
 
 
-        // -------------------------------
+        // ==================================================
         // GRADE
-        // -------------------------------
+        // ==================================================
 
         const gradeInfo =
             getGrade(
@@ -670,9 +574,12 @@ function calculateStudentResult(student) {
             );
 
 
-        // -------------------------------
+        // ==================================================
         // AGRICULTURE BONUS
-        // -------------------------------
+        //
+        // 40%-এর বেশি হলে
+        // Point - 2 = অতিরিক্ত GPA
+        // ==================================================
 
         if (subject.optional) {
 
@@ -693,83 +600,164 @@ function calculateStudentResult(student) {
         }
 
 
-        // -------------------------------
-        // COMPULSORY GROUP
-        // -------------------------------
+        // ==================================================
+        // COMPULSORY GPA GROUP
+        // ==================================================
 
         else {
 
-            if (!compulsoryGroups[subject.group]) {
+            if (
+                !compulsoryGroups[
+                    subject.group
+                ]
+            ) {
 
-                compulsoryGroups[subject.group] = [];
+                compulsoryGroups[
+                    subject.group
+                ] = [];
 
             }
 
 
             compulsoryGroups[
                 subject.group
-            ].push({
-
-                point: gradeInfo.point,
-                passed: subjectPass
-
-            });
+            ].push(
+                gradeInfo.point
+            );
 
         }
 
+
+        // ==================================================
+        // TOTAL MARKS
+        // ==================================================
 
         totalMarks += total;
 
         totalFullMarks +=
             subject.fullMarks;
 
+
+        // ==================================================
+        // RESULT TABLE
+        // ==================================================
+
+        rows += `
+
+            <tr>
+
+                <td>
+                    ${subject.name}
+                </td>
+
+                <td>
+                    ${subject.fullMarks}
+                </td>
+
+                <td>
+                    ${
+                        subject.mcqFull === 0
+                            ? "-"
+                            : mcq
+                    }
+                </td>
+
+                <td>
+                    ${
+                        subject.cqFull === 0
+                            ? "-"
+                            : cq
+                    }
+                </td>
+
+                <td>
+                    ${
+                        subject.practicalFull === 0
+                            ? "-"
+                            : practical
+                    }
+                </td>
+
+                <td>
+                    ${total}
+                </td>
+
+                <td>
+                    ${gradeInfo.grade}
+                </td>
+
+                <td>
+                    ${gradeInfo.point.toFixed(2)}
+                </td>
+
+            </tr>
+
+        `;
+
     });
 
 
-    // ======================================
+    // ======================================================
     // COMPULSORY GPA
-    // ======================================
+    //
+    // একই group-এর ১ম ও ২য় পত্রের GPA গড় হবে।
+    //
+    // যেমন:
+    // Arabic 1st = 5
+    // Arabic 2nd = 4
+    // Group GPA = 4.50
+    // ======================================================
 
     let compulsoryPointTotal = 0;
 
     let compulsorySubjectCount = 0;
 
 
-    Object.keys(compulsoryGroups).forEach(
-        function(group) {
+    Object.keys(
+        compulsoryGroups
+    ).forEach(function(group) {
 
-            const papers =
-                compulsoryGroups[group];
-
-
-            let groupPoint = 0;
+        const points =
+            compulsoryGroups[group];
 
 
-            papers.forEach(function(item) {
-
-                groupPoint += item.point;
-
-            });
+        let groupPoint = 0;
 
 
-            const groupGPA =
-                groupPoint / papers.length;
+        points.forEach(function(point) {
+
+            groupPoint += point;
+
+        });
 
 
-            compulsoryPointTotal +=
-                groupGPA;
+        const groupGPA =
+            groupPoint /
+            points.length;
 
 
-            compulsorySubjectCount++;
+        compulsoryPointTotal +=
+            groupGPA;
 
-        }
-    );
 
+        compulsorySubjectCount++;
+
+    });
+
+
+    // ======================================================
+    // COMPULSORY SUBJECT GPA
+    //
+    // যোগফল দেখানো হবে না।
+    // গড় GPA দেখানো হবে।
+    // ======================================================
 
     let compulsoryGPA = 0;
 
 
-    if (compulsorySubjectCount > 0) {
+    if (
+        compulsorySubjectCount > 0
+    ) {
 
         compulsoryGPA =
             compulsoryPointTotal /
@@ -778,31 +766,61 @@ function calculateStudentResult(student) {
     }
 
 
-    // ======================================
+    // ======================================================
     // FINAL GPA
-    // ======================================
+    //
+    // কৃষির অতিরিক্ত GPA যোগ হবে।
+    // কিন্তু কৃষি divisor-এ থাকবে না।
+    //
+    // উদাহরণ:
+    //
+    // Compulsory GPA = 4.20
+    // Agriculture Bonus = 1.00
+    // Compulsory Subject Count = 10
+    //
+    // Final GPA =
+    // 4.20 + (1.00 / 10)
+    //
+    // ======================================================
 
-    let finalGPA =
-        compulsoryGPA +
-        (
-            agricultureBonus /
-            compulsorySubjectCount
-        );
+    let finalGPA = 0;
+
+
+    if (
+        compulsorySubjectCount > 0
+    ) {
+
+        finalGPA =
+            compulsoryGPA +
+            (
+                agricultureBonus /
+                compulsorySubjectCount
+            );
+
+    }
 
 
     if (finalGPA > 5) {
+
         finalGPA = 5;
+
     }
 
+
+    // ======================================================
+    // FAIL হলে GPA = 0
+    // ======================================================
 
     if (hasFail) {
+
         finalGPA = 0;
+
     }
 
 
-    // ======================================
+    // ======================================================
     // RESULT
-    // ======================================
+    // ======================================================
 
     const result =
         hasFail
@@ -810,234 +828,288 @@ function calculateStudentResult(student) {
             : "PASS";
 
 
-    // ======================================
+    // ======================================================
     // REMARKS
-    // ======================================
+    // ======================================================
 
     let remarks = "";
 
 
-    if (result === "FAIL") {
+    if (hasFail) {
 
-        remarks =
-            "ফেল";
+        if (failedSubjectCount === 1) {
 
-    }
+            remarks =
+                "১টি বিষয়ে অকৃতকার্য";
 
-    else if (finalGPA >= 5) {
+        }
 
-        remarks =
-            "অতি উত্তম";
+        else {
 
-    }
+            remarks =
+                failedSubjectCount +
+                "টি বিষয়ে অকৃতকার্য";
 
-    else if (finalGPA >= 4) {
-
-        remarks =
-            "উত্তম";
-
-    }
-
-    else if (finalGPA >= 3) {
-
-        remarks =
-            "ভালো";
-
-    }
-
-    else if (finalGPA >= 2) {
-
-        remarks =
-            "সন্তোষজনক";
+        }
 
     }
 
     else {
 
-        remarks =
-            "উত্তীর্ণ";
+        if (finalGPA >= 5) {
+
+            remarks =
+                "অতি উত্তম";
+
+        }
+
+        else if (finalGPA >= 4) {
+
+            remarks =
+                "উত্তম";
+
+        }
+
+        else if (finalGPA >= 3) {
+
+            remarks =
+                "ভালো";
+
+        }
+
+        else if (finalGPA >= 2) {
+
+            remarks =
+                "সন্তোষজনক";
+
+        }
+
+        else {
+
+            remarks =
+                "উত্তীর্ণ";
+
+        }
 
     }
 
 
     return {
 
-        totalMarks,
-        totalFullMarks,
-        compulsoryGPA,
-        agricultureBonus,
-        finalGPA,
-        result,
-        failSubjectCount,
-        remarks
+        rows: rows,
+
+        totalMarks: totalMarks,
+
+        totalFullMarks: totalFullMarks,
+
+        compulsoryGPA: compulsoryGPA,
+
+        agricultureBonus: agricultureBonus,
+
+        finalGPA: finalGPA,
+
+        hasFail: hasFail,
+
+        failedSubjectCount: failedSubjectCount,
+
+        result: result,
+
+        remarks: remarks
 
     };
 
 }
 
 
-// ======================================
-// MERIT POSITION
-// ======================================
+// ==========================================================
+// GET CLASS STUDENTS
+// একই সন + পরীক্ষা + শ্রেণির শিক্ষার্থী
+// ==========================================================
 
-function getMeritPosition(student) {
+function getClassStudents(
+    year,
+    examName,
+    classCode
+) {
 
-    const targetYear =
-        student.year;
-
-    const targetExam =
-        student.examName;
-
-    const targetClass =
-        student.classCode ||
-        student.className;
+    const list = [];
 
 
-    const candidates = [];
+    Object.keys(
+        students
+    ).forEach(function(key) {
 
+        const student =
+            students[key];
 
-    Object.keys(students).forEach(
-        function(key) {
-
-            const other =
-                students[key];
-
-
-            const otherClass =
-                other.classCode ||
-                other.className;
-
-
-            if (
-                other.year === targetYear &&
-                other.examName === targetExam &&
-                otherClass === targetClass
-            ) {
-
-                const calculated =
-                    calculateStudentResult(
-                        other
-                    );
-
-
-                // শুধু PASS শিক্ষার্থী
-                // মেধাক্রমে থাকবে
-
-                if (
-                    calculated.result === "PASS"
-                ) {
-
-                    candidates.push({
-
-                        roll: other.roll,
-
-                        finalGPA:
-                            calculated.finalGPA,
-
-                        totalMarks:
-                            calculated.totalMarks
-
-                    });
-
-                }
-
-            }
-
-        }
-    );
-
-
-    // ==================================
-    // SORT
-    // ==================================
-
-    candidates.sort(function(a, b) {
-
-        // প্রথমে GPA বেশি
 
         if (
-            b.finalGPA !==
-            a.finalGPA
+            String(student.year) ===
+                String(year) &&
+
+            student.examName ===
+                examName &&
+
+            student.classCode ===
+                classCode
+        ) {
+
+            const calculation =
+                calculateStudentResult(
+                    student
+                );
+
+
+            list.push({
+
+                student: student,
+
+                calculation:
+                    calculation
+
+            });
+
+        }
+
+    });
+
+
+    return list;
+
+}
+
+
+// ==========================================================
+// MERIT POSITION
+//
+// 1. PASS আগে
+// 2. Final GPA বেশি আগে
+// 3. GPA সমান হলে মোট নম্বর বেশি আগে
+// 4. মোট নম্বর সমান হলে Roll ছোট আগে
+//
+// FAIL শিক্ষার্থী মেধাক্রম পাবে না
+// ==========================================================
+
+function getMeritPosition(
+    student,
+    calculation
+) {
+
+    if (
+        calculation.hasFail
+    ) {
+
+        return "-";
+
+    }
+
+
+    const list =
+        getClassStudents(
+            student.year,
+            student.examName,
+            student.classCode
+        );
+
+
+    const passed =
+        list.filter(function(item) {
+
+            return !item.calculation.hasFail;
+
+        });
+
+
+    passed.sort(function(a, b) {
+
+        // GPA
+        if (
+            b.calculation.finalGPA !==
+            a.calculation.finalGPA
         ) {
 
             return (
-                b.finalGPA -
-                a.finalGPA
+                b.calculation.finalGPA -
+                a.calculation.finalGPA
             );
 
         }
 
 
-        // GPA সমান হলে মোট নম্বর বেশি
+        // Total Marks
+        if (
+            b.calculation.totalMarks !==
+            a.calculation.totalMarks
+        ) {
 
+            return (
+                b.calculation.totalMarks -
+                a.calculation.totalMarks
+            );
+
+        }
+
+
+        // Roll
         return (
-            b.totalMarks -
-            a.totalMarks
+            Number(a.student.roll) -
+            Number(b.student.roll)
         );
 
     });
 
 
-    // ==================================
-    // RANK
-    // ==================================
+    const index =
+        passed.findIndex(function(item) {
 
-    let position = null;
+            return (
+                item.student.roll ===
+                student.roll
+            );
+
+        });
 
 
-    for (
-        let i = 0;
-        i < candidates.length;
-        i++
-    ) {
+    if (index === -1) {
 
-        if (
-            candidates[i].roll ===
-            student.roll
-        ) {
-
-            position = i + 1;
-
-            break;
-
-        }
+        return "-";
 
     }
 
 
-    return position;
+    return index + 1;
 
 }
 
 
-// ======================================
-// RESULT SEARCH
-// ======================================
+// ==========================================================
+// SEARCH RESULT
+// ==========================================================
 
 function searchResult() {
 
-    const year =
+    const yearElement =
         document.getElementById(
             "examYear"
-        ).value;
+        );
 
 
-    const examName =
+    const examNameElement =
         document.getElementById(
             "examName"
-        ).value;
+        );
 
 
-    const className =
+    const classElement =
         document.getElementById(
             "examClass"
-        ).value;
+        );
 
 
-    const roll =
+    const rollElement =
         document.getElementById(
             "rollNumber"
-        ).value.trim();
+        );
 
 
     const message =
@@ -1052,42 +1124,77 @@ function searchResult() {
         );
 
 
-    message.innerHTML = "";
-
-    output.innerHTML = "";
-
-
-    // ==================================
-    // VALIDATION
-    // ==================================
-
     if (
-        year === "" ||
-        examName === "" ||
-        className === "" ||
-        roll === ""
+        !yearElement ||
+        !examNameElement ||
+        !classElement ||
+        !rollElement ||
+        !message ||
+        !output
     ) {
 
-        message.innerHTML =
-            "⚠️ সন, পরীক্ষার নাম, শ্রেণি ও রোল নম্বর পূরণ করুন।";
-
-        message.style.color = "red";
+        alert(
+            "ফলাফল ফর্মের প্রয়োজনীয় HTML অংশ পাওয়া যায়নি।"
+        );
 
         return;
 
     }
 
 
-    // ==================================
+    const year =
+        yearElement.value;
+
+
+    const examName =
+        examNameElement.value;
+
+
+    const classCode =
+        classElement.value;
+
+
+    const roll =
+        rollElement.value.trim();
+
+
+    message.innerHTML = "";
+
+    output.innerHTML = "";
+
+
+    // ======================================================
+    // VALIDATION
+    // ======================================================
+
+    if (
+        year === "" ||
+        examName === "" ||
+        classCode === "" ||
+        roll === ""
+    ) {
+
+        message.innerHTML =
+            "⚠️ সন, পরীক্ষার নাম, শ্রেণি ও রোল নম্বর পূরণ করুন।";
+
+        message.style.color =
+            "red";
+
+        return;
+
+    }
+
+
+    // ======================================================
     // KEY
-    // ==================================
+    // ======================================================
 
     const key =
         year +
         "|" +
         examName +
         "|" +
-        className +
+        classCode +
         "|" +
         roll;
 
@@ -1095,6 +1202,10 @@ function searchResult() {
     const student =
         students[key];
 
+
+    // ======================================================
+    // STUDENT NOT FOUND
+    // ======================================================
 
     if (!student) {
 
@@ -1109,201 +1220,51 @@ function searchResult() {
     }
 
 
-    // ==================================
-    // CALCULATE
-    // ==================================
+    // ======================================================
+    // CALCULATION
+    // ======================================================
 
-    const calculated =
+    const calculation =
         calculateStudentResult(
             student
         );
 
 
-    // ==================================
+    // ======================================================
     // MERIT
-    // ==================================
+    // ======================================================
 
     const meritPosition =
-        calculated.result === "PASS"
-            ? getMeritPosition(student)
-            : null;
+        getMeritPosition(
+            student,
+            calculation
+        );
 
 
-    // ==================================
-    // RESULT TABLE ROWS
-    // ==================================
-
-    let rows = "";
-
-
-    subjects.forEach(
-        function(subject) {
-
-            const data =
-                student.marks[
-                    subject.name
-                ] || {
-
-                    mcq: 0,
-                    cq: 0,
-                    practical: 0
-
-                };
-
-
-            const mcq =
-                Number(data.mcq || 0);
-
-
-            const cq =
-                Number(data.cq || 0);
-
-
-            const practical =
-                Number(
-                    data.practical || 0
-                );
-
-
-            const total =
-                mcq +
-                cq +
-                practical;
-
-
-            const gradeInfo =
-                getGrade(
-                    total,
-                    subject.fullMarks
-                );
-
-
-            const mcqPass =
-                partPassed(
-                    mcq,
-                    subject.mcqFull
-                );
-
-
-            const cqPass =
-                partPassed(
-                    cq,
-                    subject.cqFull
-                );
-
-
-            const practicalPass =
-                partPassed(
-                    practical,
-                    subject.practicalFull
-                );
-
-
-            const subjectPass =
-                mcqPass &&
-                cqPass &&
-                practicalPass;
-
-
-            const grade =
-                subjectPass
-                    ? gradeInfo.grade
-                    : "F";
-
-
-            const point =
-                subjectPass
-                    ? gradeInfo.point
-                    : 0;
-
-
-            rows += `
-
-                <tr>
-
-                    <td>
-                        ${subject.name}
-                    </td>
-
-                    <td>
-                        ${subject.fullMarks}
-                    </td>
-
-                    <td>
-                        ${
-                            subject.mcqFull === 0
-                                ? "-"
-                                : mcq
-                        }
-                    </td>
-
-                    <td>
-                        ${
-                            subject.cqFull === 0
-                                ? "-"
-                                : cq
-                        }
-                    </td>
-
-                    <td>
-                        ${
-                            subject.practicalFull === 0
-                                ? "-"
-                                : practical
-                        }
-                    </td>
-
-                    <td>
-                        ${total}
-                    </td>
-
-                    <td>
-                        ${grade}
-                    </td>
-
-                    <td>
-                        ${point.toFixed(2)}
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-    );
-
-
-    // ======================================
+    // ======================================================
     // MESSAGE
-    // ======================================
+    // ======================================================
 
     message.innerHTML =
         "✅ ফলাফল পাওয়া গেছে";
-
 
     message.style.color =
         "#087f4f";
 
 
-    // ======================================
-    // MERIT TEXT
-    // ======================================
+    // ======================================================
+    // RESULT STATUS CLASS
+    // ======================================================
 
-    let meritText =
-        "নির্ধারিত নয়";
-
-
-    if (meritPosition !== null) {
-
-        meritText =
-            meritPosition;
-
-    }
+    const resultClass =
+        calculation.result === "PASS"
+            ? "result-pass"
+            : "result-fail";
 
 
-    // ======================================
-    // DISPLAY
-    // ======================================
+    // ======================================================
+    // OUTPUT
+    // ======================================================
 
     output.innerHTML = `
 
@@ -1316,18 +1277,12 @@ function searchResult() {
 
             <p>
 
-                <strong>
-                    সন:
-                </strong>
-
+                <strong>সন:</strong>
                 ${student.year}
 
                 &nbsp; | &nbsp;
 
-                <strong>
-                    পরীক্ষা:
-                </strong>
-
+                <strong>পরীক্ষা:</strong>
                 ${student.examName}
 
             </p>
@@ -1335,18 +1290,12 @@ function searchResult() {
 
             <p>
 
-                <strong>
-                    শ্রেণি:
-                </strong>
-
+                <strong>শ্রেণি:</strong>
                 ${student.className}
 
                 &nbsp; | &nbsp;
 
-                <strong>
-                    রোল:
-                </strong>
-
+                <strong>রোল:</strong>
                 ${student.roll}
 
             </p>
@@ -1402,7 +1351,7 @@ function searchResult() {
 
                 <tbody>
 
-                    ${rows}
+                    ${calculation.rows}
 
                 </tbody>
 
@@ -1416,15 +1365,19 @@ function searchResult() {
                         </th>
 
                         <th>
-                            ${calculated.totalMarks}
+                            ${calculation.totalMarks}
                         </th>
 
                         <th colspan="2">
-                            ${calculated.totalFullMarks}
+                            ${calculation.totalFullMarks}
                         </th>
 
                     </tr>
 
+
+                    <!-- ==========================
+                         COMPULSORY GPA
+                         ========================== -->
 
                     <tr>
 
@@ -1433,37 +1386,32 @@ function searchResult() {
                         </th>
 
                         <th>
-                            ${calculated.compulsoryGPA.toFixed(2)}
+                            ${calculation.compulsoryGPA.toFixed(2)}
                         </th>
 
                     </tr>
 
+
+                    <!-- ==========================
+                         AGRICULTURE BONUS
+                         ========================== -->
 
                     <tr>
 
                         <th colspan="7">
-                            কৃষির অতিরিক্ত পয়েন্ট
+                            কৃষির অতিরিক্ত GPA
                         </th>
 
                         <th>
-                            ${calculated.agricultureBonus.toFixed(2)}
+                            ${calculation.agricultureBonus.toFixed(2)}
                         </th>
 
                     </tr>
 
 
-                    <tr>
-
-                        <th colspan="7">
-                            চূড়ান্ত GPA
-                        </th>
-
-                        <th>
-                            ${calculated.finalGPA.toFixed(2)}
-                        </th>
-
-                    </tr>
-
+                    <!-- ==========================
+                         FAIL SUBJECT COUNT
+                         ========================== -->
 
                     <tr>
 
@@ -1472,11 +1420,32 @@ function searchResult() {
                         </th>
 
                         <th>
-                            ${calculated.failSubjectCount}
+                            ${calculation.failedSubjectCount}
                         </th>
 
                     </tr>
 
+
+                    <!-- ==========================
+                         FINAL GPA
+                         ========================== -->
+
+                    <tr>
+
+                        <th colspan="7">
+                            চূড়ান্ত GPA
+                        </th>
+
+                        <th>
+                            ${calculation.finalGPA.toFixed(2)}
+                        </th>
+
+                    </tr>
+
+
+                    <!-- ==========================
+                         MERIT POSITION
+                         ========================== -->
 
                     <tr>
 
@@ -1485,11 +1454,15 @@ function searchResult() {
                         </th>
 
                         <th>
-                            ${meritText}
+                            ${meritPosition}
                         </th>
 
                     </tr>
 
+
+                    <!-- ==========================
+                         RESULT
+                         ========================== -->
 
                     <tr>
 
@@ -1497,18 +1470,16 @@ function searchResult() {
                             ফলাফল
                         </th>
 
-                        <th class="${
-                            calculated.result === "PASS"
-                                ? "result-pass"
-                                : "result-fail"
-                        }">
-
-                            ${calculated.result}
-
+                        <th class="${resultClass}">
+                            ${calculation.result}
                         </th>
 
                     </tr>
 
+
+                    <!-- ==========================
+                         REMARKS
+                         ========================== -->
 
                     <tr>
 
@@ -1517,7 +1488,7 @@ function searchResult() {
                         </th>
 
                         <th>
-                            ${calculated.remarks}
+                            ${calculation.remarks}
                         </th>
 
                     </tr>
@@ -1533,13 +1504,25 @@ function searchResult() {
 }
 
 
-// ======================================
+// ==========================================================
 // PAGE LOADED
-// ======================================
+// ==========================================================
 
 document.addEventListener(
     "DOMContentLoaded",
     function() {
+
+
+        // ==================================================
+        // EXAM DROPDOWN
+        // ==================================================
+
+        setupExamDropdown();
+
+
+        // ==================================================
+        // MOBILE MENU
+        // ==================================================
 
         const navLinks =
             document.querySelectorAll(
@@ -1573,6 +1556,37 @@ document.addEventListener(
 
             }
         );
+
+
+        // ==================================================
+        // ENTER KEY
+        // রোল নম্বরে Enter চাপলে ফলাফল দেখাবে
+        // ==================================================
+
+        const rollInput =
+            document.getElementById(
+                "rollNumber"
+            );
+
+
+        if (rollInput) {
+
+            rollInput.addEventListener(
+                "keydown",
+                function(event) {
+
+                    if (
+                        event.key === "Enter"
+                    ) {
+
+                        searchResult();
+
+                    }
+
+                }
+            );
+
+        }
 
     }
 );
