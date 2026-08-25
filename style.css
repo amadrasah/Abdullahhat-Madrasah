@@ -690,3 +690,352 @@ footer hr {
     }
 
 }
+
+/* ==========================================
+   MARKSHEET
+========================================== */
+
+.marksheet-page {
+
+    width: 210mm;
+    min-height: 297mm;
+
+    margin: 0 auto;
+
+    padding: 18mm;
+
+    box-sizing: border-box;
+
+    position: relative;
+
+    background-color: #fff;
+
+    border: 5px double #b8860b;
+
+    overflow: hidden;
+
+}
+
+
+/* WATERMARK */
+
+.marksheet-watermark {
+
+    position: absolute;
+
+    top: 50%;
+
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    width: 430px;
+
+    opacity: 0.13;
+
+    z-index: 0;
+
+    pointer-events: none;
+
+}
+
+
+.marksheet-watermark img {
+
+    width: 100%;
+
+    height: auto;
+
+}
+
+
+/* CONTENT ABOVE WATERMARK */
+
+.marksheet-header,
+.student-info,
+#printResultTable,
+.marksheet-summary,
+.signature-area {
+
+    position: relative;
+
+    z-index: 2;
+
+}
+
+
+/* HEADER */
+
+.marksheet-header {
+
+    text-align: center;
+
+    border-bottom: 2px solid #b8860b;
+
+    padding-bottom: 12px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.marksheet-header h1 {
+
+    margin: 0;
+
+    color: #075f3e;
+
+    font-size: 25px;
+
+}
+
+
+.marksheet-header p {
+
+    margin: 4px 0;
+
+    font-size: 14px;
+
+}
+
+
+.marksheet-header h2 {
+
+    margin-top: 12px;
+
+    color: #075f3e;
+
+    font-size: 22px;
+
+}
+
+
+/* STUDENT INFO */
+
+.student-info {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-bottom: 15px;
+
+}
+
+
+.student-info td {
+
+    border: 1px solid #777;
+
+    padding: 8px;
+
+    font-size: 14px;
+
+}
+
+
+.student-info td:nth-child(odd) {
+
+    background: #f1f7f4;
+
+}
+
+
+/* RESULT TABLE */
+
+#printResultTable table {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 10px;
+
+}
+
+
+#printResultTable th,
+#printResultTable td {
+
+    border: 1px solid #777;
+
+    padding: 7px;
+
+    text-align: center;
+
+    font-size: 13px;
+
+}
+
+
+#printResultTable th {
+
+    background: #075f3e;
+
+    color: white;
+
+}
+
+
+/* SUMMARY */
+
+.marksheet-summary {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    margin-top: 15px;
+
+}
+
+
+.marksheet-summary td {
+
+    border: 1px solid #777;
+
+    padding: 8px;
+
+    font-size: 14px;
+
+}
+
+
+.marksheet-summary td:first-child {
+
+    width: 65%;
+
+    font-weight: bold;
+
+    background: #075f3e;
+
+    color: white;
+
+}
+
+
+.marksheet-summary td:last-child {
+
+    text-align: center;
+
+    font-weight: bold;
+
+}
+
+
+/* SIGNATURE */
+
+.signature-area {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    margin-top: 60px;
+
+    text-align: center;
+
+    font-size: 14px;
+
+}
+
+
+/* PRINT */
+
+@media print {
+
+    body * {
+
+        visibility: hidden;
+
+    }
+
+
+    #marksheetPrintArea,
+    #marksheetPrintArea * {
+
+        visibility: visible;
+
+    }
+
+
+    #marksheetPrintArea {
+
+        display: block !important;
+
+        position: absolute;
+
+        left: 0;
+
+        top: 0;
+
+        width: 100%;
+
+    }
+
+
+    .marksheet-page {
+
+        width: 210mm;
+
+        min-height: 297mm;
+
+        margin: 0;
+
+        border: 5px double #b8860b;
+
+        box-shadow: none;
+
+    }
+
+
+    @page {
+
+        size: A4 portrait;
+
+        margin: 0;
+
+    }
+
+}
+
+
+/* MOBILE */
+
+@media screen and (max-width: 600px) {
+
+    .marksheet-page {
+
+        width: 100%;
+
+        padding: 10px;
+
+        border-width: 3px;
+
+    }
+
+
+    .marksheet-header h1 {
+
+        font-size: 18px;
+
+    }
+
+
+    .marksheet-header h2 {
+
+        font-size: 17px;
+
+    }
+
+
+    .student-info td,
+    .marksheet-summary td {
+
+        font-size: 11px;
+
+        padding: 5px;
+
+    }
+
+}
