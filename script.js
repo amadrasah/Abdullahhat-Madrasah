@@ -1,29 +1,14 @@
 /* =========================================================
    ABDULLAH HAT ISLAMIA FAZIL (DEGREE) MADRASAH
-   COMPLETE ONLINE MANAGEMENT & RESULT SYSTEM
+   COMPLETE SCHOOL MANAGEMENT / RESULT SYSTEM
    ========================================================= */
 
 
 /* =========================================================
-   1. MOBILE MENU
+   1. BASIC CONFIGURATION
    ========================================================= */
 
-function toggleMenu() {
-
-    const menu = document.getElementById("menu");
-
-    if (menu) {
-        menu.classList.toggle("active");
-    }
-
-}
-
-
-/* =========================================================
-   2. CLASS CONFIGURATION
-   ========================================================= */
-
-const admissionClasses = {
+const CLASS_LIST = {
 
     nurani1: "নূরানী ১ম জামাত",
     nurani2: "নূরানী ২য় জামাত",
@@ -48,139 +33,148 @@ const admissionClasses = {
 };
 
 
-/* =========================================================
-   3. SUBJECT CONFIGURATION
-   ========================================================= */
+const EXAMS = [
 
-const subjects = [
+    "অর্ধবার্ষিক পরীক্ষা",
+    "প্রাক-নির্বাচনী পরীক্ষা",
+    "নির্বাচনী পরীক্ষা",
+    "১ম টিউটোরিয়াল",
+    "২য় টিউটোরিয়াল",
+    "৩য় টিউটোরিয়াল",
+    "বার্ষিক পরীক্ষা"
+
+];
+
+
+const SUBJECTS = [
 
     {
         name: "কুরআন মাজিদ",
         group: "quran-hadith",
-        fullMarks: 100,
-        mcqFull: 0,
-        cqFull: 100,
-        practicalFull: 0,
+        full: 100,
+        mcq: 0,
+        cq: 100,
+        practical: 0,
         optional: false
     },
 
     {
         name: "হাদীস শরিফ",
         group: "quran-hadith",
-        fullMarks: 100,
-        mcqFull: 0,
-        cqFull: 100,
-        practicalFull: 0,
+        full: 100,
+        mcq: 0,
+        cq: 100,
+        practical: 0,
         optional: false
     },
 
     {
         name: "আকাইদ ও ফিকহ",
         group: "aqaid-fiqh",
-        fullMarks: 100,
-        mcqFull: 0,
-        cqFull: 100,
-        practicalFull: 0,
+        full: 100,
+        mcq: 0,
+        cq: 100,
+        practical: 0,
         optional: false
     },
 
     {
         name: "আরবী ১ম",
         group: "arabic",
-        fullMarks: 100,
-        mcqFull: 0,
-        cqFull: 100,
-        practicalFull: 0,
+        full: 100,
+        mcq: 0,
+        cq: 100,
+        practical: 0,
         optional: false
     },
 
     {
         name: "আরবী ২য়",
         group: "arabic",
-        fullMarks: 100,
-        mcqFull: 0,
-        cqFull: 100,
-        practicalFull: 0,
+        full: 100,
+        mcq: 0,
+        cq: 100,
+        practical: 0,
         optional: false
     },
 
     {
         name: "ইংরেজি ১ম",
         group: "english",
-        fullMarks: 100,
-        mcqFull: 0,
-        cqFull: 100,
-        practicalFull: 0,
+        full: 100,
+        mcq: 0,
+        cq: 100,
+        practical: 0,
         optional: false
     },
 
     {
         name: "ইংরেজি ২য়",
         group: "english",
-        fullMarks: 100,
-        mcqFull: 0,
-        cqFull: 100,
-        practicalFull: 0,
+        full: 100,
+        mcq: 0,
+        cq: 100,
+        practical: 0,
         optional: false
     },
 
     {
         name: "বাংলা ১ম",
         group: "bangla",
-        fullMarks: 100,
-        mcqFull: 30,
-        cqFull: 70,
-        practicalFull: 0,
+        full: 100,
+        mcq: 30,
+        cq: 70,
+        practical: 0,
         optional: false
     },
 
     {
         name: "বাংলা ২য়",
         group: "bangla",
-        fullMarks: 100,
-        mcqFull: 30,
-        cqFull: 70,
-        practicalFull: 0,
+        full: 100,
+        mcq: 30,
+        cq: 70,
+        practical: 0,
         optional: false
     },
 
     {
         name: "গণিত",
         group: "math",
-        fullMarks: 100,
-        mcqFull: 30,
-        cqFull: 70,
-        practicalFull: 0,
+        full: 100,
+        mcq: 30,
+        cq: 70,
+        practical: 0,
         optional: false
     },
 
     {
         name: "ইসলামের ইতিহাস",
         group: "islamic-history",
-        fullMarks: 100,
-        mcqFull: 30,
-        cqFull: 70,
-        practicalFull: 0,
+        full: 100,
+        mcq: 30,
+        cq: 70,
+        practical: 0,
         optional: false
     },
 
     {
         name: "ICT",
         group: "ict",
-        fullMarks: 100,
-        mcqFull: 25,
-        cqFull: 50,
-        practicalFull: 25,
+        full: 100,
+        mcq: 25,
+        cq: 50,
+        practical: 25,
         optional: false
     },
 
     {
         name: "কৃষি",
         group: "agriculture",
-        fullMarks: 100,
-        mcqFull: 0,
-        cqFull: 100,
-        practicalFull: 0,
+        full: 100,
+        mcq: 0,
+        cq: 100,
+        practical: 0,
         optional: true
     }
 
@@ -188,200 +182,275 @@ const subjects = [
 
 
 /* =========================================================
-   4. LOCAL STORAGE
+   2. LOCAL STORAGE
    ========================================================= */
 
 let admissionStudents =
     JSON.parse(
-        localStorage.getItem("admissionStudents") || "[]"
+        localStorage.getItem("madrasah_students") || "[]"
     );
 
 
-let examMarks =
+let marksData =
     JSON.parse(
-        localStorage.getItem("examMarks") || "[]"
+        localStorage.getItem("madrasah_marks") || "[]"
     );
 
 
 /* =========================================================
-   5. STORAGE SAVE
+   3. SAVE STORAGE
    ========================================================= */
 
-function saveAdmissionStorage() {
+function saveStudents() {
 
     localStorage.setItem(
-        "admissionStudents",
+        "madrasah_students",
         JSON.stringify(admissionStudents)
     );
 
 }
 
 
-function saveExamStorage() {
+function saveMarksData() {
 
     localStorage.setItem(
-        "examMarks",
-        JSON.stringify(examMarks)
+        "madrasah_marks",
+        JSON.stringify(marksData)
     );
 
 }
 
 
 /* =========================================================
-   6. CLASS CODE
+   4. MOBILE MENU
    ========================================================= */
 
-function getClassCode(className) {
+function toggleMenu() {
 
-    const map = {
+    const menu =
+        document.getElementById("menu");
 
-        "নূরানী ১ম জামাত": "nurani1",
-        "নূরানী ১ম শ্রেণি": "nurani1",
+    if (menu) {
 
-        "নূরানী ২য় জামাত": "nurani2",
-        "নূরানী ২য় শ্রেণি": "nurani2",
+        menu.classList.toggle("active");
 
-        "নূরানী ৩য় জামাত": "nurani3",
-        "নূরানী ৩য় শ্রেণি": "nurani3",
-
-        "ইবতেদায়ী ৪র্থ শ্রেণি": "ebtedayi4",
-        "ইবতেদায়ী ৫ম শ্রেণি": "ebtedayi5",
-
-        "দাখিল ৬ষ্ঠ শ্রেণি": "dakhil6",
-        "দাখিল ৭ম শ্রেণি": "dakhil7",
-        "দাখিল ৮ম শ্রেণি": "dakhil8",
-        "দাখিল ৯ম শ্রেণি": "dakhil9",
-        "দাখিল ১০ম শ্রেণি": "dakhil10",
-
-        "আলিম ১ম বর্ষ": "alim1",
-        "আলিম ২য় বর্ষ": "alim2",
-
-        "ফাজিল ১ম বর্ষ": "fazil1",
-        "ফাজিল ২য় বর্ষ": "fazil2",
-        "ফাজিল ৩য় বর্ষ": "fazil3"
-
-    };
-
-    return map[className] || className;
+    }
 
 }
 
 
 /* =========================================================
-   7. GRADE / GPA
+   5. CLASS SELECT OPTION
    ========================================================= */
 
-function getGrade(mark, fullMarks) {
+function fillClassSelect(id, firstText) {
 
-    if (fullMarks === 0) {
+    const select =
+        document.getElementById(id);
 
-        return {
-            grade: "-",
-            point: 0
-        };
-
-    }
-
-    const percentage =
-        (Number(mark) / Number(fullMarks)) * 100;
+    if (!select) return;
 
 
-    if (percentage >= 80) {
+    const oldValue =
+        select.value;
 
-        return {
-            grade: "A+",
-            point: 5
-        };
 
-    }
+    select.innerHTML =
+        `<option value="">${firstText}</option>`;
 
-    if (percentage >= 70) {
 
-        return {
-            grade: "A",
-            point: 4
-        };
+    Object.keys(CLASS_LIST).forEach(
+        function(code) {
 
-    }
+            const option =
+                document.createElement("option");
 
-    if (percentage >= 60) {
+            option.value =
+                code;
 
-        return {
-            grade: "A-",
-            point: 3.5
-        };
+            option.textContent =
+                CLASS_LIST[code];
 
-    }
+            select.appendChild(option);
 
-    if (percentage >= 50) {
+        }
+    );
 
-        return {
-            grade: "B",
-            point: 3
-        };
+
+    if (
+        Object.keys(CLASS_LIST)
+            .includes(oldValue)
+    ) {
+
+        select.value =
+            oldValue;
 
     }
-
-    if (percentage >= 40) {
-
-        return {
-            grade: "C",
-            point: 2
-        };
-
-    }
-
-    if (percentage >= 33) {
-
-        return {
-            grade: "D",
-            point: 1
-        };
-
-    }
-
-    return {
-        grade: "F",
-        point: 0
-    };
 
 }
 
 
 /* =========================================================
-   8. 33% PASS SYSTEM
+   6. YEAR SELECT OPTION
    ========================================================= */
 
-function partPassed(mark, fullMarks) {
+function fillYearSelect(id, firstText) {
 
-    if (Number(fullMarks) === 0) {
+    const select =
+        document.getElementById(id);
 
-        return true;
+    if (!select) return;
+
+
+    const oldValue =
+        select.value;
+
+
+    select.innerHTML =
+        `<option value="">${firstText}</option>`;
+
+
+    const currentYear =
+        new Date().getFullYear();
+
+
+    for (
+        let year = currentYear - 5;
+        year <= currentYear + 2;
+        year++
+    ) {
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            year;
+
+        option.textContent =
+            year;
+
+        select.appendChild(option);
 
     }
 
-    return (
-        Number(mark) >=
-        Math.ceil(Number(fullMarks) * 0.33)
+
+    if (oldValue) {
+
+        select.value =
+            oldValue;
+
+    }
+
+}
+
+
+/* =========================================================
+   7. INITIALIZE ALL DROPDOWNS
+   ========================================================= */
+
+function initializeDropdowns() {
+
+    fillYearSelect(
+        "admissionYear",
+        "সন নির্বাচন করুন"
+    );
+
+    fillClassSelect(
+        "admissionClass",
+        "শ্রেণি নির্বাচন করুন"
+    );
+
+
+    fillYearSelect(
+        "studentSearchYear",
+        "সব সন"
+    );
+
+    fillClassSelect(
+        "studentSearchClass",
+        "সব শ্রেণি"
+    );
+
+
+    fillYearSelect(
+        "studentListYear",
+        "সব সন"
+    );
+
+    fillClassSelect(
+        "studentListClass",
+        "সব শ্রেণি"
+    );
+
+
+    fillYearSelect(
+        "dashboardYear",
+        "সন নির্বাচন করুন"
+    );
+
+    fillClassSelect(
+        "dashboardClass",
+        "শ্রেণি নির্বাচন করুন"
+    );
+
+
+    fillYearSelect(
+        "marksYear",
+        "সন নির্বাচন করুন"
+    );
+
+    fillClassSelect(
+        "marksClass",
+        "শ্রেণি নির্বাচন করুন"
+    );
+
+
+    fillYearSelect(
+        "examYear",
+        "সন নির্বাচন করুন"
+    );
+
+    fillClassSelect(
+        "examClass",
+        "শ্রেণি নির্বাচন করুন"
+    );
+
+
+    fillYearSelect(
+        "meritYear",
+        "সন নির্বাচন করুন"
+    );
+
+    fillClassSelect(
+        "meritClass",
+        "শ্রেণি নির্বাচন করুন"
     );
 
 }
 
 
 /* =========================================================
-   9. ADMISSION - AUTO STUDENT ID
+   8. ADMISSION - STUDENT ID
    ========================================================= */
 
 function generateStudentId() {
 
     const year =
-        document.getElementById("admissionYear")?.value || "";
+        document.getElementById(
+            "admissionYear"
+        )?.value || "";
+
 
     const classCode =
-        document.getElementById("admissionClass")?.value || "";
+        document.getElementById(
+            "admissionClass"
+        )?.value || "";
 
 
-    if (!year || !classCode) {
+    if (
+        !year ||
+        !classCode
+    ) {
 
         return;
 
@@ -389,39 +458,53 @@ function generateStudentId() {
 
 
     const students =
-        admissionStudents.filter(function(student) {
+        admissionStudents.filter(
+            function(student) {
 
-            return (
-                String(student.year) === String(year) &&
-                student.classCode === classCode
+                return (
+                    String(student.year) ===
+                    String(year) &&
+                    student.classCode ===
+                    classCode
+                );
+
+            }
+        );
+
+
+    let number =
+        students.length + 1;
+
+
+    let id;
+
+
+    do {
+
+        id =
+            String(year) +
+            classCode.replace(
+                /\D/g,
+                ""
+            ) +
+            String(number).padStart(
+                3,
+                "0"
             );
-
-        });
-
-
-    let number = students.length + 1;
-
-
-    let studentId =
-        String(year) +
-        String(number).padStart(3, "0");
-
-
-    while (
-        admissionStudents.some(function(student) {
-
-            return student.studentId === studentId;
-
-        })
-    ) {
 
         number++;
 
-        studentId =
-            String(year) +
-            String(number).padStart(3, "0");
+    } while (
+        admissionStudents.some(
+            function(student) {
 
-    }
+                return (
+                    student.studentId === id
+                );
+
+            }
+        )
+    );
 
 
     const input =
@@ -432,7 +515,8 @@ function generateStudentId() {
 
     if (input) {
 
-        input.value = studentId;
+        input.value =
+            id;
 
     }
 
@@ -443,51 +527,71 @@ function generateStudentId() {
 
 
 /* =========================================================
-   10. AUTO ROLL
+   9. ADMISSION - AUTO ROLL
    ========================================================= */
 
 function generateAdmissionRoll() {
 
     const year =
-        document.getElementById("admissionYear")?.value || "";
+        document.getElementById(
+            "admissionYear"
+        )?.value || "";
+
 
     const classCode =
-        document.getElementById("admissionClass")?.value || "";
+        document.getElementById(
+            "admissionClass"
+        )?.value || "";
 
 
-    if (!year || !classCode) {
+    if (
+        !year ||
+        !classCode
+    ) {
 
         return;
 
     }
 
 
-    const students =
-        admissionStudents.filter(function(student) {
+    const list =
+        admissionStudents.filter(
+            function(student) {
 
-            return (
-                String(student.year) === String(year) &&
-                student.classCode === classCode
-            );
+                return (
+                    String(student.year) ===
+                    String(year) &&
+                    student.classCode ===
+                    classCode
+                );
 
-        });
+            }
+        );
 
 
-    let maxRoll = 0;
+    let maxRoll =
+        0;
 
 
-    students.forEach(function(student) {
+    list.forEach(
+        function(student) {
 
-        const roll =
-            Number(student.roll || 0);
+            const roll =
+                parseInt(
+                    student.roll,
+                    10
+                ) || 0;
 
-        if (roll > maxRoll) {
 
-            maxRoll = roll;
+            if (roll > maxRoll) {
+
+                maxRoll =
+                    roll;
+
+            }
 
         }
-
-    });
+    );
 
 
     const input =
@@ -507,85 +611,169 @@ function generateAdmissionRoll() {
 
 
 /* =========================================================
-   11. SAVE ADMISSION
+   10. ADMISSION FORM SAVE
    ========================================================= */
 
 function saveAdmissionData() {
 
     const year =
-        document.getElementById("admissionYear")?.value || "";
+        document.getElementById(
+            "admissionYear"
+        )?.value || "";
+
 
     const classCode =
-        document.getElementById("admissionClass")?.value || "";
+        document.getElementById(
+            "admissionClass"
+        )?.value || "";
+
 
     const studentId =
-        document.getElementById("admissionStudentId")?.value.trim() || "";
+        document.getElementById(
+            "admissionStudentId"
+        )?.value || "";
+
 
     const name =
-        document.getElementById("admissionName")?.value.trim() || "";
+        document.getElementById(
+            "admissionName"
+        )?.value.trim() || "";
+
 
     const roll =
-        document.getElementById("admissionRoll")?.value.trim() || "";
+        document.getElementById(
+            "admissionRoll"
+        )?.value || "";
 
-    const fatherName =
-        document.getElementById("admissionFather")?.value.trim() || "";
 
-    const motherName =
-        document.getElementById("admissionMother")?.value.trim() || "";
+    const father =
+        document.getElementById(
+            "admissionFather"
+        )?.value.trim() || "";
 
-    const birthDate =
-        document.getElementById("admissionBirthDate")?.value || "";
+
+    const mother =
+        document.getElementById(
+            "admissionMother"
+        )?.value.trim() || "";
+
+
+    const dob =
+        document.getElementById(
+            "admissionDob"
+        )?.value || "";
+
 
     const gender =
-        document.getElementById("admissionGender")?.value || "";
+        document.getElementById(
+            "admissionGender"
+        )?.value || "";
+
 
     const mobile =
-        document.getElementById("admissionMobile")?.value.trim() || "";
+        document.getElementById(
+            "admissionMobile"
+        )?.value.trim() || "";
+
 
     const address =
-        document.getElementById("admissionAddress")?.value.trim() || "";
+        document.getElementById(
+            "admissionAddress"
+        )?.value.trim() || "";
+
 
     const admissionDate =
-        document.getElementById("admissionDate")?.value || "";
-
-    const photo =
-        document.getElementById("admissionPhotoData")?.value || "";
-
-    const editId =
-        document.getElementById("admissionEditId")?.value || "";
+        document.getElementById(
+            "admissionDate"
+        )?.value || "";
 
 
     if (
         !year ||
         !classCode ||
-        !name ||
-        !fatherName ||
-        !motherName ||
-        !birthDate ||
-        !gender ||
-        !mobile ||
-        !address ||
-        !admissionDate
+        !name
     ) {
 
-        alert(
-            "⚠️ প্রয়োজনীয় সব তথ্য পূরণ করুন।"
+        showAdmissionMessage(
+            "⚠️ সন, শ্রেণি ও শিক্ষার্থীর নাম অবশ্যই দিতে হবে।",
+            "red"
         );
 
-        return;
+        return false;
 
     }
 
 
-    /* EDIT */
+    const editId =
+        document.getElementById(
+            "admissionEditId"
+        )?.value || "";
+
+
+    const photo =
+        document.getElementById(
+            "admissionPhotoData"
+        )?.value || "";
+
+
+    const student = {
+
+        id:
+            editId ||
+            Date.now().toString(),
+
+        year:
+            year,
+
+        classCode:
+            classCode,
+
+        className:
+            CLASS_LIST[classCode],
+
+        studentId:
+            studentId,
+
+        name:
+            name,
+
+        roll:
+            roll,
+
+        fatherName:
+            father,
+
+        motherName:
+            mother,
+
+        birthDate:
+            dob,
+
+        gender:
+            gender,
+
+        mobile:
+            mobile,
+
+        address:
+            address,
+
+        admissionDate:
+            admissionDate,
+
+        photo:
+            photo
+
+    };
+
 
     if (editId) {
 
         const index =
             admissionStudents.findIndex(
-                function(student) {
+                function(item) {
 
-                    return student.id === editId;
+                    return item.id === editId;
 
                 }
             );
@@ -593,116 +781,111 @@ function saveAdmissionData() {
 
         if (index !== -1) {
 
-            admissionStudents[index] = {
+            admissionStudents[index] =
+                student;
 
-                ...admissionStudents[index],
+        }
 
-                year,
-                classCode,
+        showAdmissionMessage(
+            "✅ শিক্ষার্থীর তথ্য Update হয়েছে।",
+            "green"
+        );
 
-                className:
-                    admissionClasses[classCode],
+    }
 
-                studentId,
-                name,
-                roll,
-                fatherName,
-                motherName,
-                birthDate,
-                gender,
-                mobile,
-                address,
-                admissionDate,
-                photo
+    else {
 
-            };
+        const duplicate =
+            admissionStudents.some(
+                function(item) {
+
+                    return (
+                        item.studentId &&
+                        item.studentId ===
+                        studentId
+                    );
+
+                }
+            );
+
+
+        if (
+            studentId &&
+            duplicate
+        ) {
+
+            showAdmissionMessage(
+                "⚠️ এই Student ID ইতোমধ্যে আছে।",
+                "red"
+            );
+
+            return false;
 
         }
 
 
-        saveAdmissionStorage();
-
-        alert(
-            "✅ শিক্ষার্থীর তথ্য Update হয়েছে।"
+        admissionStudents.push(
+            student
         );
 
-        clearAdmissionForm();
 
-        displayAdmissionStudents();
-
-        return;
+        showAdmissionMessage(
+            "✅ শিক্ষার্থীর তথ্য সফলভাবে Save হয়েছে।",
+            "green"
+        );
 
     }
 
 
-    /* DUPLICATE ID */
-
-    if (
-        admissionStudents.some(function(student) {
-
-            return (
-                String(student.studentId) ===
-                String(studentId)
-            );
-
-        })
-    ) {
-
-        alert(
-            "⚠️ এই Student ID ইতোমধ্যে ব্যবহার করা হয়েছে।"
-        );
-
-        return;
-
-    }
-
-
-    /* ADD */
-
-    admissionStudents.push({
-
-        id:
-            Date.now().toString(),
-
-        year,
-
-        classCode,
-
-        className:
-            admissionClasses[classCode],
-
-        studentId,
-        name,
-        roll,
-        fatherName,
-        motherName,
-        birthDate,
-        gender,
-        mobile,
-        address,
-        admissionDate,
-        photo
-
-    });
-
-
-    saveAdmissionStorage();
-
-
-    alert(
-        "✅ শিক্ষার্থীর তথ্য সফলভাবে Save হয়েছে।"
-    );
-
+    saveStudents();
 
     clearAdmissionForm();
 
     displayAdmissionStudents();
 
+    showAdmissionStudents();
+
+    updateMarksStudentList();
+
+    updateDashboard();
+
+    return false;
+
 }
 
 
 /* =========================================================
-   12. CLEAR ADMISSION FORM
+   11. ADMISSION MESSAGE
+   ========================================================= */
+
+function showAdmissionMessage(
+    text,
+    color
+) {
+
+    const box =
+        document.getElementById(
+            "admissionMessage"
+        );
+
+
+    if (!box) return;
+
+
+    box.textContent =
+        text;
+
+    box.style.color =
+        color;
+
+    box.style.fontWeight =
+        "bold";
+
+}
+
+
+/* =========================================================
+   12. CLEAR ADMISSION
    ========================================================= */
 
 function clearAdmissionForm() {
@@ -720,23 +903,29 @@ function clearAdmissionForm() {
     }
 
 
-    [
-        "admissionStudentId",
-        "admissionRoll",
-        "admissionEditId",
-        "admissionPhotoData"
-    ].forEach(function(id) {
+    const id =
+        document.getElementById(
+            "admissionStudentId"
+        );
 
-        const element =
-            document.getElementById(id);
 
-        if (element) {
+    const roll =
+        document.getElementById(
+            "admissionRoll"
+        );
 
-            element.value = "";
 
-        }
+    const edit =
+        document.getElementById(
+            "admissionEditId"
+        );
 
-    });
+
+    if (id) id.value = "";
+
+    if (roll) roll.value = "";
+
+    if (edit) edit.value = "";
 
 
     const button =
@@ -753,15 +942,16 @@ function clearAdmissionForm() {
     }
 
 
-    const preview =
+    const cancel =
         document.getElementById(
-            "admissionPhotoPreview"
+            "admissionCancelButton"
         );
 
 
-    if (preview) {
+    if (cancel) {
 
-        preview.innerHTML = "";
+        cancel.style.display =
+            "none";
 
     }
 
@@ -769,86 +959,140 @@ function clearAdmissionForm() {
 
 
 /* =========================================================
-   13. EDIT ADMISSION
+   13. CANCEL ADMISSION EDIT
+   ========================================================= */
+
+function cancelAdmissionEdit() {
+
+    clearAdmissionForm();
+
+    showAdmissionMessage(
+        "",
+        ""
+    );
+
+}
+
+
+/* =========================================================
+   14. EDIT STUDENT
    ========================================================= */
 
 function editAdmissionStudent(id) {
 
     const student =
-        admissionStudents.find(function(item) {
+        admissionStudents.find(
+            function(item) {
 
-            return item.id === id;
+                return item.id === id;
 
-        });
+            }
+        );
 
 
-    if (!student) {
+    if (!student) return;
 
-        return;
+
+    document.getElementById(
+        "admissionYear"
+    ).value =
+        student.year;
+
+
+    document.getElementById(
+        "admissionClass"
+    ).value =
+        student.classCode;
+
+
+    document.getElementById(
+        "admissionStudentId"
+    ).value =
+        student.studentId || "";
+
+
+    document.getElementById(
+        "admissionName"
+    ).value =
+        student.name || "";
+
+
+    document.getElementById(
+        "admissionRoll"
+    ).value =
+        student.roll || "";
+
+
+    document.getElementById(
+        "admissionFather"
+    ).value =
+        student.fatherName || "";
+
+
+    document.getElementById(
+        "admissionMother"
+    ).value =
+        student.motherName || "";
+
+
+    document.getElementById(
+        "admissionDob"
+    ).value =
+        student.birthDate || "";
+
+
+    document.getElementById(
+        "admissionGender"
+    ).value =
+        student.gender || "";
+
+
+    document.getElementById(
+        "admissionMobile"
+    ).value =
+        student.mobile || "";
+
+
+    document.getElementById(
+        "admissionAddress"
+    ).value =
+        student.address || "";
+
+
+    document.getElementById(
+        "admissionDate"
+    ).value =
+        student.admissionDate || "";
+
+
+    let edit =
+        document.getElementById(
+            "admissionEditId"
+        );
+
+
+    if (!edit) {
+
+        edit =
+            document.createElement(
+                "input"
+            );
+
+        edit.type =
+            "hidden";
+
+        edit.id =
+            "admissionEditId";
+
+        document.getElementById(
+            "admissionForm"
+        ).appendChild(edit);
 
     }
 
 
-    const fields = {
-
-        admissionYear:
-            student.year,
-
-        admissionClass:
-            student.classCode,
-
-        admissionStudentId:
-            student.studentId,
-
-        admissionName:
-            student.name,
-
-        admissionRoll:
-            student.roll,
-
-        admissionFather:
-            student.fatherName,
-
-        admissionMother:
-            student.motherName,
-
-        admissionBirthDate:
-            student.birthDate,
-
-        admissionGender:
-            student.gender,
-
-        admissionMobile:
-            student.mobile,
-
-        admissionAddress:
-            student.address,
-
-        admissionDate:
-            student.admissionDate,
-
-        admissionPhotoData:
-            student.photo || "",
-
-        admissionEditId:
-            student.id
-
-    };
-
-
-    Object.keys(fields).forEach(function(id) {
-
-        const element =
-            document.getElementById(id);
-
-        if (element) {
-
-            element.value =
-                fields[id];
-
-        }
-
-    });
+    edit.value =
+        student.id;
 
 
     const button =
@@ -860,55 +1104,40 @@ function editAdmissionStudent(id) {
     if (button) {
 
         button.textContent =
-            "✏️ Update করুন";
+            "✏️ Update";
 
     }
 
 
-    const preview =
+    const cancel =
         document.getElementById(
-            "admissionPhotoPreview"
+            "admissionCancelButton"
         );
 
 
-    if (
-        preview &&
-        student.photo
-    ) {
+    if (cancel) {
 
-        preview.innerHTML = `
-
-            <img
-                src="${student.photo}"
-                style="
-                    width:100px;
-                    height:120px;
-                    object-fit:cover;
-                    border:1px solid #777;
-                    border-radius:5px;
-                "
-            >
-
-        `;
+        cancel.style.display =
+            "inline-block";
 
     }
 
 
-    window.location.hash =
+    location.hash =
         "admission";
 
 }
 
 
 /* =========================================================
-   14. DELETE ADMISSION
+   15. DELETE STUDENT
    ========================================================= */
 
 function deleteAdmissionStudent(id) {
 
     if (
         !confirm(
-            "⚠️ আপনি কি এই শিক্ষার্থীর তথ্য Delete করতে চান?"
+            "⚠️ এই শিক্ষার্থীর তথ্য Delete করবেন?"
         )
     ) {
 
@@ -917,18 +1146,58 @@ function deleteAdmissionStudent(id) {
     }
 
 
+    const student =
+        admissionStudents.find(
+            function(item) {
+
+                return item.id === id;
+
+            }
+        );
+
+
     admissionStudents =
-        admissionStudents.filter(function(student) {
+        admissionStudents.filter(
+            function(item) {
 
-            return student.id !== id;
+                return item.id !== id;
 
-        });
+            }
+        );
 
 
-    saveAdmissionStorage();
+    /* Delete student's marks too */
+
+    if (student) {
+
+        marksData =
+            marksData.filter(
+                function(mark) {
+
+                    return (
+                        mark.studentId !==
+                        student.studentId
+                    );
+
+                }
+            );
+
+    }
+
+
+    saveStudents();
+
+    saveMarksData();
 
     displayAdmissionStudents();
 
+    showAdmissionStudents();
+
+    updateMarksStudentList();
+
+    renderMarksTable();
+
+    updateDashboard();
 
     alert(
         "✅ শিক্ষার্থীর তথ্য Delete হয়েছে।"
@@ -938,108 +1207,30 @@ function deleteAdmissionStudent(id) {
 
 
 /* =========================================================
-   15. ADMISSION PHOTO
-   ========================================================= */
-
-function admissionPhotoUpload(event) {
-
-    const file =
-        event.target.files?.[0];
-
-
-    if (!file) {
-
-        return;
-
-    }
-
-
-    const reader =
-        new FileReader();
-
-
-    reader.onload =
-        function(e) {
-
-            const data =
-                e.target.result;
-
-
-            const hidden =
-                document.getElementById(
-                    "admissionPhotoData"
-                );
-
-
-            const preview =
-                document.getElementById(
-                    "admissionPhotoPreview"
-                );
-
-
-            if (hidden) {
-
-                hidden.value = data;
-
-            }
-
-
-            if (preview) {
-
-                preview.innerHTML = `
-
-                    <img
-                        src="${data}"
-                        style="
-                            width:100px;
-                            height:120px;
-                            object-fit:cover;
-                            border:1px solid #777;
-                            border-radius:5px;
-                        "
-                    >
-
-                `;
-
-            }
-
-        };
-
-
-    reader.readAsDataURL(file);
-
-}
-
-
-/* =========================================================
-   16. DISPLAY ADMISSION STUDENTS
+   16. ADMISSION LIST
    ========================================================= */
 
 function displayAdmissionStudents() {
 
-    const body =
-        document.getElementById(
-            "admissionTableBody"
-        );
-
-
-    if (!body) {
-
-        return;
-
-    }
-
-
     const year =
         document.getElementById(
-            "admissionListYear"
+            "studentListYear"
         )?.value || "";
 
 
     const classCode =
         document.getElementById(
-            "admissionListClass"
+            "studentListClass"
         )?.value || "";
+
+
+    const body =
+        document.getElementById(
+            "admissionStudentTable"
+        );
+
+
+    if (!body) return;
 
 
     let list =
@@ -1049,14 +1240,16 @@ function displayAdmissionStudents() {
     if (year) {
 
         list =
-            list.filter(function(student) {
+            list.filter(
+                function(student) {
 
-                return (
-                    String(student.year) ===
-                    String(year)
-                );
+                    return (
+                        String(student.year) ===
+                        String(year)
+                    );
 
-            });
+                }
+            );
 
     }
 
@@ -1064,14 +1257,16 @@ function displayAdmissionStudents() {
     if (classCode) {
 
         list =
-            list.filter(function(student) {
+            list.filter(
+                function(student) {
 
-                return (
-                    student.classCode ===
-                    classCode
-                );
+                    return (
+                        student.classCode ===
+                        classCode
+                    );
 
-            });
+                }
+            );
 
     }
 
@@ -1085,9 +1280,83 @@ function displayAdmissionStudents() {
     if (total) {
 
         total.textContent =
-            list.length;
+            "মোট শিক্ষার্থী: " +
+            list.length +
+            " জন";
 
     }
+
+
+    body.innerHTML =
+        "";
+
+
+    list.forEach(
+        function(student) {
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${escapeHTML(student.studentId || "—")}
+                </td>
+
+                <td>
+                    ${escapeHTML(student.roll || "—")}
+                </td>
+
+                <td>
+                    ${escapeHTML(student.name || "—")}
+                </td>
+
+                <td>
+                    ${escapeHTML(student.className || "—")}
+                </td>
+
+                <td>
+                    ${escapeHTML(student.fatherName || "—")}
+                </td>
+
+                <td>
+                    ${escapeHTML(student.mobile || "—")}
+                </td>
+
+                <td>
+                    ${escapeHTML(student.admissionDate || "—")}
+                </td>
+
+                <td>
+
+                    <button
+                        type="button"
+                        onclick="editAdmissionStudent('${student.id}')">
+
+                        ✏️ Edit
+
+                    </button>
+
+                    <button
+                        type="button"
+                        onclick="deleteAdmissionStudent('${student.id}')">
+
+                        🗑️ Delete
+
+                    </button>
+
+                </td>
+
+            `;
+
+
+            body.appendChild(tr);
+
+        }
+    );
 
 
     if (!list.length) {
@@ -1096,441 +1365,267 @@ function displayAdmissionStudents() {
 
             <tr>
 
-                <td colspan="10">
-
-                    কোনো শিক্ষার্থীর তথ্য পাওয়া যায়নি।
-
+                <td colspan="8">
+                    কোনো শিক্ষার্থী পাওয়া যায়নি।
                 </td>
 
             </tr>
 
         `;
 
+    }
+
+}
+
+
+/* =========================================================
+   17. STUDENT SEARCH
+   ========================================================= */
+
+function showAdmissionStudents() {
+
+    const year =
+        document.getElementById(
+            "studentSearchYear"
+        )?.value || "";
+
+
+    const classCode =
+        document.getElementById(
+            "studentSearchClass"
+        )?.value || "";
+
+
+    const output =
+        document.getElementById(
+            "studentSearchOutput"
+        );
+
+
+    const message =
+        document.getElementById(
+            "studentSearchMessage"
+        );
+
+
+    if (!output) return;
+
+
+    let list =
+        admissionStudents.slice();
+
+
+    if (year) {
+
+        list =
+            list.filter(
+                function(student) {
+
+                    return (
+                        String(student.year) ===
+                        String(year)
+                    );
+
+                }
+            );
+
+    }
+
+
+    if (classCode) {
+
+        list =
+            list.filter(
+                function(student) {
+
+                    return (
+                        student.classCode ===
+                        classCode
+                    );
+
+                }
+            );
+
+    }
+
+
+    if (message) {
+
+        message.innerHTML =
+            "মোট " +
+            list.length +
+            " জন শিক্ষার্থী পাওয়া গেছে।";
+
+    }
+
+
+    if (!list.length) {
+
+        output.innerHTML =
+            "<p>কোনো শিক্ষার্থী পাওয়া যায়নি।</p>";
+
         return;
 
     }
 
 
-    body.innerHTML =
-        list.map(function(student, index) {
+    let html = `
 
-            return `
+        <table class="result-table">
+
+            <thead>
 
                 <tr>
 
-                    <td>${index + 1}</td>
+                    <th>Student ID</th>
+                    <th>রোল</th>
+                    <th>নাম</th>
+                    <th>শ্রেণি</th>
+                    <th>পিতার নাম</th>
+                    <th>মোবাইল</th>
 
-                    <td>${student.studentId}</td>
+                </tr>
 
-                    <td>${student.roll}</td>
+            </thead>
 
-                    <td>${student.name}</td>
+            <tbody>
 
-                    <td>${student.fatherName}</td>
+    `;
 
-                    <td>${student.motherName}</td>
 
-                    <td>${student.gender}</td>
+    list.forEach(
+        function(student) {
 
-                    <td>${student.mobile}</td>
+            html += `
 
-                    <td>${student.className}</td>
+                <tr>
 
                     <td>
+                        ${escapeHTML(student.studentId || "—")}
+                    </td>
 
-                        <button
-                            type="button"
-                            onclick="editAdmissionStudent('${student.id}')">
+                    <td>
+                        ${escapeHTML(student.roll || "—")}
+                    </td>
 
-                            ✏️ Edit
+                    <td>
+                        ${escapeHTML(student.name || "—")}
+                    </td>
 
-                        </button>
+                    <td>
+                        ${escapeHTML(student.className || "—")}
+                    </td>
 
-                        <button
-                            type="button"
-                            onclick="deleteAdmissionStudent('${student.id}')">
+                    <td>
+                        ${escapeHTML(student.fatherName || "—")}
+                    </td>
 
-                            🗑️ Delete
-
-                        </button>
-
+                    <td>
+                        ${escapeHTML(student.mobile || "—")}
                     </td>
 
                 </tr>
 
             `;
 
-        }).join("");
-
-}
-
-
-/* =========================================================
-   17. GET STUDENTS FOR EXAM
-   ========================================================= */
-
-function getStudentsForExam(
-    year,
-    className
-) {
-
-    const classCode =
-        getClassCode(className);
-
-
-    return admissionStudents.filter(
-        function(student) {
-
-            return (
-                String(student.year) ===
-                String(year) &&
-                student.classCode ===
-                classCode
-            );
-
         }
     );
 
-}
+
+    html += `
+            </tbody>
+        </table>
+    `;
 
 
-/* =========================================================
-   18. EXAM MARK KEY
-   ========================================================= */
-
-function getExamMarkKey(
-    year,
-    examName,
-    classCode,
-    studentId
-) {
-
-    return (
-        String(year) +
-        "|" +
-        String(examName) +
-        "|" +
-        String(classCode) +
-        "|" +
-        String(studentId)
-    );
+    output.innerHTML =
+        html;
 
 }
 
 
 /* =========================================================
-   19. GET EXISTING MARK
+   18. PHOTO UPLOAD
    ========================================================= */
 
-function getExistingExamMark(
-    year,
-    examName,
-    classCode,
-    studentId
-) {
+function admissionPhotoUpload(event) {
 
-    return examMarks.find(function(item) {
-
-        return (
-            item.key ===
-            getExamMarkKey(
-                year,
-                examName,
-                classCode,
-                studentId
-            )
-        );
-
-    });
-
-}
+    const file =
+        event.target.files[0];
 
 
-/* =========================================================
-   20. SAVE EXAM MARKS
-   ========================================================= */
-
-function saveExamMarks() {
-
-    const year =
-        document.getElementById(
-            "marksYear"
-        )?.value ||
-        document.getElementById(
-            "examYear"
-        )?.value ||
-        "";
+    if (!file) return;
 
 
-    const examName =
-        document.getElementById(
-            "marksExamName"
-        )?.value ||
-        document.getElementById(
-            "examName"
-        )?.value ||
-        "";
+    const reader =
+        new FileReader();
 
 
-    const classSelect =
-        document.getElementById(
-            "marksClass"
-        ) ||
-        document.getElementById(
-            "examClass"
-        );
+    reader.onload =
+        function(e) {
+
+            let input =
+                document.getElementById(
+                    "admissionPhotoData"
+                );
 
 
-    const className =
-        classSelect?.value || "";
+            if (!input) {
+
+                input =
+                    document.createElement(
+                        "input"
+                    );
+
+                input.type =
+                    "hidden";
+
+                input.id =
+                    "admissionPhotoData";
+
+                document.getElementById(
+                    "admissionForm"
+                ).appendChild(input);
+
+            }
 
 
-    const studentId =
-        document.getElementById(
-            "marksStudentId"
-        )?.value || "";
-
-
-    if (
-        !year ||
-        !examName ||
-        !className ||
-        !studentId
-    ) {
-
-        alert(
-            "⚠️ সন, পরীক্ষা, শ্রেণি ও শিক্ষার্থী নির্বাচন করুন।"
-        );
-
-        return;
-
-    }
-
-
-    const student =
-        admissionStudents.find(function(item) {
-
-            return (
-                String(item.studentId) ===
-                String(studentId)
-            );
-
-        });
-
-
-    if (!student) {
-
-        alert(
-            "❌ শিক্ষার্থীর তথ্য পাওয়া যায়নি।"
-        );
-
-        return;
-
-    }
-
-
-    const marks = {};
-
-
-    let invalid = false;
-
-
-    subjects.forEach(function(subject) {
-
-        const safe =
-            subject.name.replace(
-                /[^a-zA-Z0-9]/g,
-                ""
-            );
-
-
-        const mcqInput =
-            document.querySelector(
-                `[data-subject="${subject.name}"][data-part="mcq"]`
-            );
-
-
-        const cqInput =
-            document.querySelector(
-                `[data-subject="${subject.name}"][data-part="cq"]`
-            );
-
-
-        const practicalInput =
-            document.querySelector(
-                `[data-subject="${subject.name}"][data-part="practical"]`
-            );
-
-
-        let mcq =
-            Number(
-                mcqInput?.value || 0
-            );
-
-
-        let cq =
-            Number(
-                cqInput?.value || 0
-            );
-
-
-        let practical =
-            Number(
-                practicalInput?.value || 0
-            );
-
-
-        if (
-            mcq < 0 ||
-            mcq > subject.mcqFull ||
-            cq < 0 ||
-            cq > subject.cqFull ||
-            practical < 0 ||
-            practical > subject.practicalFull
-        ) {
-
-            invalid = true;
-
-        }
-
-
-        marks[subject.name] = {
-
-            mcq,
-            cq,
-            practical
+            input.value =
+                e.target.result;
 
         };
 
-    });
 
-
-    if (invalid) {
-
-        alert(
-            "⚠️ কোনো নম্বর নির্ধারিত পূর্ণমানের বেশি দেওয়া যাবে না।"
-        );
-
-        return;
-
-    }
-
-
-    const key =
-        getExamMarkKey(
-            year,
-            examName,
-            getClassCode(className),
-            student.studentId
-        );
-
-
-    const record = {
-
-        key,
-
-        year,
-
-        examName,
-
-        classCode:
-            getClassCode(className),
-
-        className:
-            student.className,
-
-        studentId:
-            student.studentId,
-
-        name:
-            student.name,
-
-        roll:
-            student.roll,
-
-        marks,
-
-        updatedAt:
-            new Date().toISOString()
-
-    };
-
-
-    const index =
-        examMarks.findIndex(function(item) {
-
-            return item.key === key;
-
-        });
-
-
-    if (index === -1) {
-
-        examMarks.push(record);
-
-    }
-
-    else {
-
-        examMarks[index] =
-            record;
-
-    }
-
-
-    saveExamStorage();
-
-
-    alert(
-        "✅ পরীক্ষার নম্বর সফলভাবে Save হয়েছে।"
-    );
-
-
-    calculateExamResult();
+    reader.readAsDataURL(file);
 
 }
 
 
 /* =========================================================
-   21. LOAD EXAM STUDENTS
+   19. MARKS - STUDENT LIST
    ========================================================= */
 
-function loadExamStudents() {
+function updateMarksStudentList() {
 
     const year =
         document.getElementById(
             "marksYear"
-        )?.value ||
-        document.getElementById(
-            "examYear"
-        )?.value ||
-        "";
+        )?.value || "";
 
 
-    const classSelect =
+    const classCode =
         document.getElementById(
             "marksClass"
-        ) ||
-        document.getElementById(
-            "examClass"
-        );
-
-
-    const className =
-        classSelect?.value || "";
+        )?.value || "";
 
 
     const select =
         document.getElementById(
-            "marksStudentId"
+            "marksStudent"
         );
 
 
-    if (!select) {
-
-        return;
-
-    }
+    if (!select) return;
 
 
     select.innerHTML = `
@@ -1544,7 +1639,7 @@ function loadExamStudents() {
 
     if (
         !year ||
-        !className
+        !classCode
     ) {
 
         return;
@@ -1552,91 +1647,296 @@ function loadExamStudents() {
     }
 
 
-    const list =
-        getStudentsForExam(
-            year,
-            className
+    admissionStudents
+        .filter(
+            function(student) {
+
+                return (
+                    String(student.year) ===
+                    String(year) &&
+                    student.classCode ===
+                    classCode
+                );
+
+            }
+        )
+        .sort(
+            function(a, b) {
+
+                return (
+                    Number(a.roll || 0) -
+                    Number(b.roll || 0)
+                );
+
+            }
+        )
+        .forEach(
+            function(student) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    student.studentId;
+
+                option.textContent =
+                    student.roll +
+                    " — " +
+                    student.name;
+
+                select.appendChild(
+                    option
+                );
+
+            }
         );
-
-
-    list.forEach(function(student) {
-
-        const option =
-            document.createElement(
-                "option"
-            );
-
-
-        option.value =
-            student.studentId;
-
-
-        option.textContent =
-            student.roll +
-            " - " +
-            student.name +
-            " (" +
-            student.studentId +
-            ")";
-
-
-        select.appendChild(
-            option
-        );
-
-    });
 
 }
 
 
 /* =========================================================
-   22. LOAD STUDENT MARKS
+   20. MARKS - SUBJECT LIST
    ========================================================= */
 
-function loadStudentMarks() {
+function updateSubjectList() {
+
+    const select =
+        document.getElementById(
+            "marksSubject"
+        );
+
+
+    if (!select) return;
+
+
+    select.innerHTML = `
+
+        <option value="">
+            বিষয় নির্বাচন করুন
+        </option>
+
+    `;
+
+
+    SUBJECTS.forEach(
+        function(subject) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                subject.name;
+
+            option.textContent =
+                subject.name +
+                (
+                    subject.optional
+                        ? " (ঐচ্ছিক)"
+                        : ""
+                );
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    updateMarksInputs();
+
+}
+
+
+/* =========================================================
+   21. MARKS - INPUT SETTINGS
+   ========================================================= */
+
+function updateMarksInputs() {
+
+    const subjectName =
+        document.getElementById(
+            "marksSubject"
+        )?.value || "";
+
+
+    const subject =
+        SUBJECTS.find(
+            function(item) {
+
+                return item.name ===
+                    subjectName;
+
+            }
+        );
+
+
+    const mcq =
+        document.getElementById(
+            "marksMCQ"
+        );
+
+
+    const cq =
+        document.getElementById(
+            "marksCQ"
+        );
+
+
+    const practical =
+        document.getElementById(
+            "marksPractical"
+        );
+
+
+    if (!subject) {
+
+        if (mcq) {
+
+            mcq.value = "";
+
+            mcq.placeholder =
+                "MCQ নম্বর";
+
+        }
+
+
+        if (cq) {
+
+            cq.value = "";
+
+            cq.placeholder =
+                "CQ নম্বর";
+
+        }
+
+
+        if (practical) {
+
+            practical.value = "";
+
+            practical.placeholder =
+                "Practical নম্বর";
+
+        }
+
+
+        return;
+
+    }
+
+
+    if (mcq) {
+
+        mcq.disabled =
+            subject.mcq === 0;
+
+        mcq.max =
+            subject.mcq;
+
+        mcq.placeholder =
+            subject.mcq === 0
+                ? "MCQ নেই"
+                : "MCQ: 0-" + subject.mcq;
+
+        if (subject.mcq === 0) {
+
+            mcq.value = "";
+
+        }
+
+    }
+
+
+    if (cq) {
+
+        cq.disabled =
+            subject.cq === 0;
+
+        cq.max =
+            subject.cq;
+
+        cq.placeholder =
+            subject.cq === 0
+                ? "CQ নেই"
+                : "CQ: 0-" + subject.cq;
+
+        if (subject.cq === 0) {
+
+            cq.value = "";
+
+        }
+
+    }
+
+
+    if (practical) {
+
+        practical.disabled =
+            subject.practical === 0;
+
+        practical.max =
+            subject.practical;
+
+        practical.placeholder =
+            subject.practical === 0
+                ? "Practical নেই"
+                : "Practical: 0-" +
+                  subject.practical;
+
+        if (subject.practical === 0) {
+
+            practical.value = "";
+
+        }
+
+    }
+
+
+    loadExistingMarks();
+
+}
+
+
+/* =========================================================
+   22. LOAD EXISTING MARKS
+========================================================= */
+
+function loadExistingMarks() {
 
     const year =
         document.getElementById(
             "marksYear"
-        )?.value ||
-        document.getElementById(
-            "examYear"
-        )?.value ||
-        "";
+        )?.value || "";
 
 
-    const examName =
+    const exam =
         document.getElementById(
-            "marksExamName"
-        )?.value ||
-        document.getElementById(
-            "examName"
-        )?.value ||
-        "";
-
-
-    const className =
-        document.getElementById(
-            "marksClass"
-        )?.value ||
-        document.getElementById(
-            "examClass"
-        )?.value ||
-        "";
+            "marksExam"
+        )?.value || "";
 
 
     const studentId =
         document.getElementById(
-            "marksStudentId"
-        )?.value ||
-        "";
+            "marksStudent"
+        )?.value || "";
+
+
+    const subject =
+        document.getElementById(
+            "marksSubject"
+        )?.value || "";
 
 
     if (
         !year ||
-        !examName ||
-        !className ||
-        !studentId
+        !exam ||
+        !studentId ||
+        !subject
     ) {
 
         return;
@@ -1644,50 +1944,46 @@ function loadStudentMarks() {
     }
 
 
-    const existing =
-        getExistingExamMark(
-            year,
-            examName,
-            getClassCode(className),
-            studentId
+    const item =
+        marksData.find(
+            function(mark) {
+
+                return (
+                    String(mark.year) ===
+                    String(year) &&
+                    mark.exam === exam &&
+                    mark.studentId === studentId &&
+                    mark.subject === subject
+                );
+
+            }
         );
 
 
-    subjects.forEach(function(subject) {
-
-        const mcq =
-            document.querySelector(
-                `[data-subject="${subject.name}"][data-part="mcq"]`
-            );
+    const mcq =
+        document.getElementById(
+            "marksMCQ"
+        );
 
 
-        const cq =
-            document.querySelector(
-                `[data-subject="${subject.name}"][data-part="cq"]`
-            );
+    const cq =
+        document.getElementById(
+            "marksCQ"
+        );
 
 
-        const practical =
-            document.querySelector(
-                `[data-subject="${subject.name}"][data-part="practical"]`
-            );
+    const practical =
+        document.getElementById(
+            "marksPractical"
+        );
 
 
-        const data =
-            existing?.marks?.[subject.name] ||
-            {
-                mcq: "",
-                cq: "",
-                practical: ""
-            };
-
+    if (item) {
 
         if (mcq) {
 
             mcq.value =
-                subject.mcqFull === 0
-                    ? ""
-                    : data.mcq ?? "";
+                item.mcq || "";
 
         }
 
@@ -1695,9 +1991,7 @@ function loadStudentMarks() {
         if (cq) {
 
             cq.value =
-                subject.cqFull === 0
-                    ? ""
-                    : data.cq ?? "";
+                item.cq || "";
 
         }
 
@@ -1705,310 +1999,811 @@ function loadStudentMarks() {
         if (practical) {
 
             practical.value =
-                subject.practicalFull === 0
-                    ? ""
-                    : data.practical ?? "";
+                item.practical || "";
 
         }
 
-    });
+    }
+
+    else {
+
+        if (mcq) mcq.value = "";
+
+        if (cq) cq.value = "";
+
+        if (practical) practical.value = "";
+
+    }
 
 }
 
 
 /* =========================================================
-   23. CALCULATE EXAM RESULT
+   23. SAVE MARKS
    ========================================================= */
 
-function calculateExamResult() {
+function saveMarks() {
 
     const year =
         document.getElementById(
             "marksYear"
-        )?.value ||
+        )?.value || "";
+
+
+    const exam =
         document.getElementById(
-            "examYear"
-        )?.value ||
-        "";
+            "marksExam"
+        )?.value || "";
 
 
-    const examName =
-        document.getElementById(
-            "marksExamName"
-        )?.value ||
-        document.getElementById(
-            "examName"
-        )?.value ||
-        "";
-
-
-    const className =
+    const classCode =
         document.getElementById(
             "marksClass"
-        )?.value ||
-        document.getElementById(
-            "examClass"
-        )?.value ||
-        "";
+        )?.value || "";
 
 
     const studentId =
         document.getElementById(
-            "marksStudentId"
-        )?.value ||
-        "";
+            "marksStudent"
+        )?.value || "";
+
+
+    const subjectName =
+        document.getElementById(
+            "marksSubject"
+        )?.value || "";
 
 
     if (
         !year ||
-        !examName ||
-        !className ||
-        !studentId
+        !exam ||
+        !classCode ||
+        !studentId ||
+        !subjectName
     ) {
 
-        return null;
+        showMarksMessage(
+            "⚠️ সন, পরীক্ষা, শ্রেণি, শিক্ষার্থী ও বিষয় নির্বাচন করুন।",
+            "red"
+        );
+
+        return;
 
     }
 
 
-    const record =
-        getExistingExamMark(
-            year,
-            examName,
-            getClassCode(className),
-            studentId
+    const subject =
+        SUBJECTS.find(
+            function(item) {
+
+                return item.name ===
+                    subjectName;
+
+            }
         );
 
 
-    if (!record) {
+    if (!subject) return;
 
-        return null;
+
+    const mcq =
+        Number(
+            document.getElementById(
+                "marksMCQ"
+            )?.value || 0
+        );
+
+
+    const cq =
+        Number(
+            document.getElementById(
+                "marksCQ"
+            )?.value || 0
+        );
+
+
+    const practical =
+        Number(
+            document.getElementById(
+                "marksPractical"
+            )?.value || 0
+        );
+
+
+    if (
+        mcq < 0 ||
+        mcq > subject.mcq
+    ) {
+
+        showMarksMessage(
+            "⚠️ MCQ নম্বর সঠিক নয়।",
+            "red"
+        );
+
+        return;
 
     }
 
 
-    const student = {
+    if (
+        cq < 0 ||
+        cq > subject.cq
+    ) {
 
-        name:
-            record.name,
+        showMarksMessage(
+            "⚠️ CQ নম্বর সঠিক নয়।",
+            "red"
+        );
 
-        roll:
-            record.roll,
+        return;
 
-        studentId:
-            record.studentId,
+    }
 
-        className:
-            record.className,
+
+    if (
+        practical < 0 ||
+        practical > subject.practical
+    ) {
+
+        showMarksMessage(
+            "⚠️ Practical নম্বর সঠিক নয়।",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    const student =
+        admissionStudents.find(
+            function(item) {
+
+                return (
+                    item.studentId ===
+                    studentId
+                );
+
+            }
+        );
+
+
+    if (!student) {
+
+        showMarksMessage(
+            "❌ শিক্ষার্থী পাওয়া যায়নি।",
+            "red"
+        );
+
+        return;
+
+    }
+
+
+    const existingIndex =
+        marksData.findIndex(
+            function(mark) {
+
+                return (
+                    String(mark.year) ===
+                    String(year) &&
+                    mark.exam === exam &&
+                    mark.studentId === studentId &&
+                    mark.subject === subjectName
+                );
+
+            }
+        );
+
+
+    const data = {
+
+        id:
+            existingIndex >= 0
+                ? marksData[existingIndex].id
+                : Date.now().toString(),
 
         year:
-            record.year,
+            year,
 
-        examName:
-            record.examName,
+        exam:
+            exam,
 
-        marks:
-            record.marks
+        classCode:
+            classCode,
+
+        className:
+            CLASS_LIST[classCode],
+
+        studentId:
+            studentId,
+
+        studentName:
+            student.name,
+
+        roll:
+            student.roll,
+
+        subject:
+            subjectName,
+
+        mcq:
+            mcq,
+
+        cq:
+            cq,
+
+        practical:
+            practical
 
     };
 
 
-    return calculateStudentResult(
-        student
+    if (existingIndex >= 0) {
+
+        marksData[existingIndex] =
+            data;
+
+    }
+
+    else {
+
+        marksData.push(
+            data
+        );
+
+    }
+
+
+    saveMarksData();
+
+    renderMarksTable();
+
+    updateDashboard();
+
+
+    showMarksMessage(
+        "✅ নম্বর সফলভাবে সংরক্ষণ হয়েছে।",
+        "green"
     );
 
 }
 
 
 /* =========================================================
-   24. CALCULATE STUDENT RESULT
+   24. MARKS MESSAGE
    ========================================================= */
 
-function calculateStudentResult(student) {
+function showMarksMessage(
+    text,
+    color
+) {
 
-    let compulsoryGroups = {};
+    const box =
+        document.getElementById(
+            "marksMessage"
+        );
 
-    let hasFail = false;
 
-    let failSubjectCount = 0;
+    if (!box) return;
+
+
+    box.textContent =
+        text;
+
+    box.style.color =
+        color;
+
+    box.style.fontWeight =
+        "bold";
+
+}
+
+
+/* =========================================================
+   25. MARKS TABLE
+   ========================================================= */
+
+function renderMarksTable() {
+
+    const body =
+        document.getElementById(
+            "marksTable"
+        );
+
+
+    if (!body) return;
+
+
+    body.innerHTML =
+        "";
+
+
+    const year =
+        document.getElementById(
+            "marksYear"
+        )?.value || "";
+
+
+    const exam =
+        document.getElementById(
+            "marksExam"
+        )?.value || "";
+
+
+    const classCode =
+        document.getElementById(
+            "marksClass"
+        )?.value || "";
+
+
+    let list =
+        marksData.slice();
+
+
+    if (year) {
+
+        list =
+            list.filter(
+                function(item) {
+
+                    return (
+                        String(item.year) ===
+                        String(year)
+                    );
+
+                }
+            );
+
+    }
+
+
+    if (exam) {
+
+        list =
+            list.filter(
+                function(item) {
+
+                    return (
+                        item.exam ===
+                        exam
+                    );
+
+                }
+            );
+
+    }
+
+
+    if (classCode) {
+
+        list =
+            list.filter(
+                function(item) {
+
+                    return (
+                        item.classCode ===
+                        classCode
+                    );
+
+                }
+            );
+
+    }
+
+
+    list.forEach(
+        function(item) {
+
+            const total =
+                Number(item.mcq || 0) +
+                Number(item.cq || 0) +
+                Number(item.practical || 0);
+
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${escapeHTML(item.studentName)}
+                </td>
+
+                <td>
+                    ${escapeHTML(item.roll)}
+                </td>
+
+                <td>
+                    ${escapeHTML(item.subject)}
+                </td>
+
+                <td>
+                    ${item.mcq}
+                </td>
+
+                <td>
+                    ${item.cq}
+                </td>
+
+                <td>
+                    ${item.practical}
+                </td>
+
+                <td>
+                    ${total}
+                </td>
+
+                <td>
+
+                    <button
+                        type="button"
+                        onclick="deleteMarks('${item.id}')">
+
+                        🗑️ Delete
+
+                    </button>
+
+                </td>
+
+            `;
+
+
+            body.appendChild(tr);
+
+        }
+    );
+
+
+    if (!list.length) {
+
+        body.innerHTML = `
+
+            <tr>
+
+                <td colspan="8">
+                    কোনো সংরক্ষিত নম্বর নেই।
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   26. DELETE MARKS
+   ========================================================= */
+
+function deleteMarks(id) {
+
+    if (
+        !confirm(
+            "এই নম্বরটি Delete করবেন?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    marksData =
+        marksData.filter(
+            function(item) {
+
+                return item.id !== id;
+
+            }
+        );
+
+
+    saveMarksData();
+
+    renderMarksTable();
+
+    updateDashboard();
+
+}
+
+
+/* =========================================================
+   27. GRADE
+   ========================================================= */
+
+function getGrade(mark, full) {
+
+    if (!full) {
+
+        return {
+            grade: "-",
+            point: 0
+        };
+
+    }
+
+
+    const percentage =
+        (mark / full) * 100;
+
+
+    if (percentage >= 80) {
+
+        return {
+            grade: "A+",
+            point: 5
+        };
+
+    }
+
+
+    if (percentage >= 70) {
+
+        return {
+            grade: "A",
+            point: 4
+        };
+
+    }
+
+
+    if (percentage >= 60) {
+
+        return {
+            grade: "A-",
+            point: 3.5
+        };
+
+    }
+
+
+    if (percentage >= 50) {
+
+        return {
+            grade: "B",
+            point: 3
+        };
+
+    }
+
+
+    if (percentage >= 40) {
+
+        return {
+            grade: "C",
+            point: 2
+        };
+
+    }
+
+
+    if (percentage >= 33) {
+
+        return {
+            grade: "D",
+            point: 1
+        };
+
+    }
+
+
+    return {
+        grade: "F",
+        point: 0
+    };
+
+}
+
+
+/* =========================================================
+   28. PASS CHECK
+   ========================================================= */
+
+function passedPart(mark, full) {
+
+    if (full === 0) {
+
+        return true;
+
+    }
+
+
+    return (
+        mark >=
+        Math.ceil(full * 0.33)
+    );
+
+}
+
+
+/* =========================================================
+   29. CALCULATE RESULT
+   ========================================================= */
+
+function calculateResult(
+    student,
+    year,
+    exam
+) {
+
+    const groups = {};
 
     let totalMarks = 0;
 
-    let totalFullMarks = 0;
+    let totalFull = 0;
+
+    let failedSubjects = 0;
 
     let agricultureBonus = 0;
 
 
-    subjects.forEach(function(subject) {
+    SUBJECTS.forEach(
+        function(subject) {
 
-        const data =
-            student.marks?.[subject.name] ||
-            {
-                mcq: 0,
-                cq: 0,
-                practical: 0
-            };
+            const item =
+                marksData.find(
+                    function(mark) {
 
+                        return (
+                            String(mark.year) ===
+                            String(year) &&
+                            mark.exam === exam &&
+                            mark.studentId ===
+                                student.studentId &&
+                            mark.subject ===
+                                subject.name
+                        );
 
-        const mcq =
-            Number(data.mcq || 0);
-
-        const cq =
-            Number(data.cq || 0);
-
-        const practical =
-            Number(data.practical || 0);
-
-
-        const total =
-            mcq +
-            cq +
-            practical;
+                    }
+                );
 
 
-        totalMarks += total;
-
-        totalFullMarks +=
-            subject.fullMarks;
-
-
-        const mcqPass =
-            partPassed(
-                mcq,
-                subject.mcqFull
-            );
+            const mcq =
+                item
+                    ? Number(item.mcq || 0)
+                    : 0;
 
 
-        const cqPass =
-            partPassed(
-                cq,
-                subject.cqFull
-            );
+            const cq =
+                item
+                    ? Number(item.cq || 0)
+                    : 0;
 
 
-        const practicalPass =
-            partPassed(
-                practical,
-                subject.practicalFull
-            );
+            const practical =
+                item
+                    ? Number(item.practical || 0)
+                    : 0;
 
 
-        const subjectPass =
-            mcqPass &&
-            cqPass &&
-            practicalPass;
+            const total =
+                mcq +
+                cq +
+                practical;
 
 
-        if (
-            !subject.optional &&
-            !subjectPass
-        ) {
+            totalMarks +=
+                total;
 
-            hasFail = true;
-
-            failSubjectCount++;
-
-        }
+            totalFull +=
+                subject.full;
 
 
-        const gradeInfo =
-            getGrade(
-                total,
-                subject.fullMarks
-            );
+            const pass =
+                passedPart(
+                    mcq,
+                    subject.mcq
+                ) &&
+                passedPart(
+                    cq,
+                    subject.cq
+                ) &&
+                passedPart(
+                    practical,
+                    subject.practical
+                );
 
-
-        if (subject.optional) {
-
-            const percentage =
-                total /
-                subject.fullMarks *
-                100;
-
-
-            if (percentage > 40) {
-
-                agricultureBonus =
-                    Math.max(
-                        0,
-                        gradeInfo.point - 2
-                    );
-
-            }
-
-        }
-
-
-        else {
 
             if (
-                !compulsoryGroups[
-                    subject.group
-                ]
+                !subject.optional &&
+                !pass
             ) {
 
-                compulsoryGroups[
-                    subject.group
-                ] = [];
+                failedSubjects++;
 
             }
 
 
-            compulsoryGroups[
-                subject.group
-            ].push(
-                gradeInfo.point
-            );
+            const grade =
+                getGrade(
+                    total,
+                    subject.full
+                );
+
+
+            if (
+                subject.optional
+            ) {
+
+                if (
+                    total >
+                    subject.full * 0.40
+                ) {
+
+                    agricultureBonus =
+                        Math.max(
+                            0,
+                            grade.point - 2
+                        );
+
+                }
+
+            }
+
+            else {
+
+                if (!groups[subject.group]) {
+
+                    groups[subject.group] =
+                        [];
+
+                }
+
+
+                groups[subject.group].push(
+                    grade.point
+                );
+
+            }
 
         }
-
-    });
-
-
-    let compulsoryPointTotal = 0;
-
-    let compulsoryGroupCount = 0;
+    );
 
 
-    Object.keys(
-        compulsoryGroups
-    ).forEach(function(group) {
+    let groupTotal =
+        0;
 
-        const points =
-            compulsoryGroups[group];
-
-
-        const groupGPA =
-            points.reduce(
-                function(sum, point) {
-
-                    return sum + point;
-
-                },
-                0
-            ) /
-            points.length;
+    let groupCount =
+        0;
 
 
-        compulsoryPointTotal +=
-            groupGPA;
+    Object.values(groups)
+        .forEach(
+            function(points) {
+
+                if (!points.length)
+                    return;
 
 
-        compulsoryGroupCount++;
+                const average =
+                    points.reduce(
+                        function(a, b) {
+                            return a + b;
+                        },
+                        0
+                    ) /
+                    points.length;
 
-    });
+
+                groupTotal +=
+                    average;
+
+                groupCount++;
+
+            }
+        );
 
 
-    let compulsoryGPA = 0;
-
-
-    if (compulsoryGroupCount > 0) {
-
-        compulsoryGPA =
-            compulsoryPointTotal /
-            compulsoryGroupCount;
-
-    }
+    const compulsoryGPA =
+        groupCount
+            ? groupTotal / groupCount
+            : 0;
 
 
     let finalGPA =
@@ -2023,7 +2818,13 @@ function calculateStudentResult(student) {
     }
 
 
-    if (hasFail) {
+    const result =
+        failedSubjects > 0
+            ? "FAIL"
+            : "PASS";
+
+
+    if (result === "FAIL") {
 
         finalGPA = 0;
 
@@ -2032,24 +2833,26 @@ function calculateStudentResult(student) {
 
     return {
 
-        compulsoryGPA,
+        totalMarks:
+            totalMarks,
 
-        agricultureBonus,
+        totalFull:
+            totalFull,
 
-        finalGPA,
+        compulsoryGPA:
+            compulsoryGPA,
 
-        totalMarks,
+        agricultureBonus:
+            agricultureBonus,
 
-        totalFullMarks,
+        finalGPA:
+            finalGPA,
 
-        failSubjectCount,
-
-        hasFail,
+        failedSubjects:
+            failedSubjects,
 
         result:
-            hasFail
-                ? "FAIL"
-                : "PASS"
+            result
 
     };
 
@@ -2057,165 +2860,7 @@ function calculateStudentResult(student) {
 
 
 /* =========================================================
-   25. GET ALL RESULT RECORDS
-   ========================================================= */
-
-function getResultStudents(
-    year,
-    examName,
-    className
-) {
-
-    const classCode =
-        getClassCode(className);
-
-
-    return examMarks
-        .filter(function(record) {
-
-            return (
-                String(record.year) ===
-                String(year) &&
-
-                record.examName ===
-                examName &&
-
-                record.classCode ===
-                classCode
-            );
-
-        })
-        .map(function(record) {
-
-            const student = {
-
-                name:
-                    record.name,
-
-                roll:
-                    record.roll,
-
-                studentId:
-                    record.studentId,
-
-                className:
-                    record.className,
-
-                year:
-                    record.year,
-
-                examName:
-                    record.examName,
-
-                marks:
-                    record.marks
-
-            };
-
-
-            const result =
-                calculateStudentResult(
-                    student
-                );
-
-
-            return {
-
-                student,
-
-                ...result
-
-            };
-
-        });
-
-}
-
-
-/* =========================================================
-   26. MERIT POSITION
-   ========================================================= */
-
-function getStudentMeritPosition(
-    student
-) {
-
-    const list =
-        getResultStudents(
-            student.year,
-            student.examName,
-            student.className
-        )
-        .filter(function(item) {
-
-            return (
-                item.result === "PASS"
-            );
-
-        });
-
-
-    list.sort(function(a, b) {
-
-        if (
-            b.finalGPA !==
-            a.finalGPA
-        ) {
-
-            return (
-                b.finalGPA -
-                a.finalGPA
-            );
-
-        }
-
-
-        if (
-            b.totalMarks !==
-            a.totalMarks
-        ) {
-
-            return (
-                b.totalMarks -
-                a.totalMarks
-            );
-
-        }
-
-
-        return String(
-            a.student.roll
-        ).localeCompare(
-            String(b.student.roll),
-            undefined,
-            {
-                numeric: true
-            }
-        );
-
-    });
-
-
-    const index =
-        list.findIndex(function(item) {
-
-            return (
-                String(item.student.studentId) ===
-                String(student.studentId)
-            );
-
-        });
-
-
-    return index === -1
-        ? "—"
-        : index + 1;
-
-}
-
-
-/* =========================================================
-   27. RESULT SEARCH
+   30. RESULT SEARCH
    ========================================================= */
 
 function searchResult() {
@@ -2226,13 +2871,13 @@ function searchResult() {
         )?.value || "";
 
 
-    const examName =
+    const exam =
         document.getElementById(
             "examName"
         )?.value || "";
 
 
-    const className =
+    const classCode =
         document.getElementById(
             "examClass"
         )?.value || "";
@@ -2256,31 +2901,25 @@ function searchResult() {
         );
 
 
-    if (message) {
-
+    if (message)
         message.innerHTML = "";
 
-    }
 
-
-    if (output) {
-
+    if (output)
         output.innerHTML = "";
-
-    }
 
 
     if (
         !year ||
-        !examName ||
-        !className ||
+        !exam ||
+        !classCode ||
         !roll
     ) {
 
         if (message) {
 
             message.innerHTML =
-                "⚠️ সন, পরীক্ষার নাম, শ্রেণি ও রোল নম্বর পূরণ করুন।";
+                "⚠️ সন, পরীক্ষা, শ্রেণি ও রোল পূরণ করুন।";
 
             message.style.color =
                 "red";
@@ -2292,36 +2931,29 @@ function searchResult() {
     }
 
 
-    const classCode =
-        getClassCode(className);
+    const student =
+        admissionStudents.find(
+            function(item) {
+
+                return (
+                    String(item.year) ===
+                    String(year) &&
+                    item.classCode ===
+                    classCode &&
+                    String(item.roll) ===
+                    String(roll)
+                );
+
+            }
+        );
 
 
-    const record =
-        examMarks.find(function(item) {
-
-            return (
-                String(item.year) ===
-                String(year) &&
-
-                item.examName ===
-                examName &&
-
-                item.classCode ===
-                classCode &&
-
-                String(item.roll) ===
-                String(roll)
-            );
-
-        });
-
-
-    if (!record) {
+    if (!student) {
 
         if (message) {
 
             message.innerHTML =
-                "❌ এই তথ্যের কোনো ফলাফল পাওয়া যায়নি।";
+                "❌ এই রোলের শিক্ষার্থী পাওয়া যায়নি।";
 
             message.style.color =
                 "red";
@@ -2333,204 +2965,54 @@ function searchResult() {
     }
 
 
-    const student = {
-
-        name:
-            record.name,
-
-        roll:
-            record.roll,
-
-        studentId:
-            record.studentId,
-
-        className:
-            record.className,
-
-        year:
-            record.year,
-
-        examName:
-            record.examName,
-
-        marks:
-            record.marks
-
-    };
-
-
     const calculation =
-        calculateStudentResult(
-            student
+        calculateResult(
+            student,
+            year,
+            exam
         );
 
 
-    displayResult(
-        student,
-        calculation,
-        output,
-        message
-    );
-
-}
-
-
-/* =========================================================
-   28. DISPLAY RESULT
-   ========================================================= */
-
-function displayResult(
-    student,
-    calculation,
-    output,
-    message
-) {
-
-    if (!output) {
-
-        return;
-
-    }
-
-
-    let rows = "";
-
-
-    subjects.forEach(function(subject) {
-
-        const data =
-            student.marks?.[subject.name] ||
-            {
-                mcq: 0,
-                cq: 0,
-                practical: 0
-            };
-
-
-        const mcq =
-            Number(data.mcq || 0);
-
-        const cq =
-            Number(data.cq || 0);
-
-        const practical =
-            Number(data.practical || 0);
-
-
-        const total =
-            mcq +
-            cq +
-            practical;
-
-
-        const gradeInfo =
-            getGrade(
-                total,
-                subject.fullMarks
-            );
-
-
-        rows += `
-
-            <tr>
-
-                <td>${subject.name}</td>
-
-                <td>${subject.fullMarks}</td>
-
-                <td>
-                    ${
-                        subject.mcqFull === 0
-                            ? "-"
-                            : mcq
-                    }
-                </td>
-
-                <td>
-                    ${
-                        subject.cqFull === 0
-                            ? "-"
-                            : cq
-                    }
-                </td>
-
-                <td>
-                    ${
-                        subject.practicalFull === 0
-                            ? "-"
-                            : practical
-                    }
-                </td>
-
-                <td>${total}</td>
-
-                <td>${gradeInfo.grade}</td>
-
-                <td>
-                    ${gradeInfo.point.toFixed(2)}
-                </td>
-
-            </tr>
-
-        `;
-
-    });
+    const rows =
+        buildResultRows(
+            student,
+            year,
+            exam
+        );
 
 
     const merit =
-        getStudentMeritPosition(
-            student
+        getMeritPosition(
+            student,
+            year,
+            exam
         );
 
 
-    let remarks = "";
-
-
-    if (calculation.result === "FAIL") {
-
-        remarks =
-            "ফেল — পুনরায় পরীক্ষার প্রয়োজন।";
-
-    }
-
-    else if (calculation.finalGPA >= 5) {
-
-        remarks =
-            "অত্যন্ত ভালো ফলাফল।";
-
-    }
-
-    else if (calculation.finalGPA >= 4) {
-
-        remarks =
-            "খুব ভালো ফলাফল।";
-
-    }
-
-    else if (calculation.finalGPA >= 3) {
-
-        remarks =
-            "ভালো ফলাফল।";
-
-    }
-
-    else {
-
-        remarks =
-            "উত্তীর্ণ।";
-
-    }
+    const remarks =
+        calculation.result === "FAIL"
+            ? "ফেল — পুনরায় পরীক্ষার প্রয়োজন।"
+            : calculation.finalGPA >= 5
+                ? "অত্যন্ত ভালো ফলাফল।"
+                : calculation.finalGPA >= 4
+                    ? "খুব ভালো ফলাফল।"
+                    : calculation.finalGPA >= 3
+                        ? "ভালো ফলাফল।"
+                        : "উত্তীর্ণ।";
 
 
     if (message) {
 
         message.innerHTML =
-            "✅ ফলাফল পাওয়া গেছে";
+            "✅ ফলাফল পাওয়া গেছে।";
 
         message.style.color =
-            "#087f4f";
+            "green";
 
     }
+
+
+    if (!output) return;
 
 
     output.innerHTML = `
@@ -2538,38 +3020,20 @@ function displayResult(
         <div class="result-summary">
 
             <h3>
-                ${student.name}
+                ${escapeHTML(student.name)}
             </h3>
 
             <p>
-
-                <strong>Student ID:</strong>
-                ${student.studentId}
-
+                সন: ${year}
                 &nbsp; | &nbsp;
-
-                <strong>রোল:</strong>
-                ${student.roll}
-
+                পরীক্ষা: ${escapeHTML(exam)}
             </p>
 
             <p>
-
-                <strong>সন:</strong>
-                ${student.year}
-
+                শ্রেণি:
+                ${escapeHTML(student.className)}
                 &nbsp; | &nbsp;
-
-                <strong>পরীক্ষা:</strong>
-                ${student.examName}
-
-            </p>
-
-            <p>
-
-                <strong>শ্রেণি:</strong>
-                ${student.className}
-
+                রোল: ${escapeHTML(student.roll)}
             </p>
 
         </div>
@@ -2605,116 +3069,78 @@ function displayResult(
                 <tfoot>
 
                     <tr>
-
                         <th colspan="5">
                             মোট প্রাপ্ত নম্বর
                         </th>
-
                         <th>
                             ${calculation.totalMarks}
                         </th>
-
                         <th colspan="2">
-                            ${calculation.totalFullMarks}
+                            ${calculation.totalFull}
                         </th>
-
                     </tr>
 
-
                     <tr>
-
                         <th colspan="7">
                             আবশ্যিক বিষয়ের GPA
                         </th>
-
                         <th>
                             ${calculation.compulsoryGPA.toFixed(2)}
                         </th>
-
                     </tr>
 
-
                     <tr>
-
                         <th colspan="7">
                             কৃষির অতিরিক্ত GPA
                         </th>
-
                         <th>
                             ${calculation.agricultureBonus.toFixed(2)}
                         </th>
-
                     </tr>
 
-
                     <tr>
-
                         <th colspan="7">
                             চূড়ান্ত GPA
                         </th>
-
                         <th>
                             ${calculation.finalGPA.toFixed(2)}
                         </th>
-
                     </tr>
 
-
                     <tr>
-
                         <th colspan="7">
                             ফেল বিষয় সংখ্যা
                         </th>
-
                         <th>
-                            ${calculation.failSubjectCount}
+                            ${calculation.failedSubjects}
                         </th>
-
                     </tr>
 
-
                     <tr>
-
                         <th colspan="7">
                             মেধাক্রম
                         </th>
-
                         <th>
                             ${merit}
                         </th>
-
                     </tr>
 
-
                     <tr>
-
                         <th colspan="7">
                             Remarks
                         </th>
-
                         <th>
                             ${remarks}
                         </th>
-
                     </tr>
 
-
                     <tr>
-
                         <th colspan="7">
                             ফলাফল
                         </th>
-
-                        <th class="${
-                            calculation.result === "PASS"
-                                ? "result-pass"
-                                : "result-fail"
-                        }">
-
+                        <th>
                             ${calculation.result}
-
                         </th>
-
                     </tr>
 
                 </tfoot>
@@ -2726,298 +3152,11 @@ function displayResult(
 
         <button
             type="button"
-            class="print-button"
-            onclick="printMarksheet()">
+            onclick="printResult()">
 
             🖨️ মার্কশিট প্রিন্ট করুন
 
         </button>
-
-
-        <div class="marksheet">
-
-            <div style="
-                border:2px solid #b8860b;
-                padding:20px;
-                min-height:1050px;
-                position:relative;
-                overflow:hidden;
-            ">
-
-                <div style="
-                    position:absolute;
-                    top:42%;
-                    left:50%;
-                    transform:translate(-50%,-50%);
-                    font-size:150px;
-                    opacity:0.08;
-                    z-index:0;
-                ">
-                    🕌
-                </div>
-
-
-                <div style="
-                    position:relative;
-                    z-index:1;
-                    text-align:center;
-                ">
-
-                    <h1 style="color:#075e3b;">
-                        Abdullah Hat Islamia
-                    </h1>
-
-                    <h2 style="color:#075e3b;">
-                        Fazil (Degree) Madrasah
-                    </h2>
-
-                    <p>
-                        নাটেশ্বর, সোনাইমুড়ী, নোয়াখালী
-                    </p>
-
-                    <h2>
-                        ${student.examName} — মার্কশিট
-                    </h2>
-
-                </div>
-
-
-                <div style="
-                    position:relative;
-                    z-index:1;
-                    margin-top:25px;
-                    display:grid;
-                    grid-template-columns:1fr 1fr;
-                    gap:8px;
-                    border:1px solid #777;
-                    padding:12px;
-                ">
-
-                    <div>
-                        <strong>শিক্ষার্থীর নাম:</strong>
-                        ${student.name}
-                    </div>
-
-                    <div>
-                        <strong>রোল:</strong>
-                        ${student.roll}
-                    </div>
-
-                    <div>
-                        <strong>Student ID:</strong>
-                        ${student.studentId}
-                    </div>
-
-                    <div>
-                        <strong>শ্রেণি:</strong>
-                        ${student.className}
-                    </div>
-
-                    <div>
-                        <strong>সন:</strong>
-                        ${student.year}
-                    </div>
-
-                </div>
-
-
-                <table style="
-                    position:relative;
-                    z-index:1;
-                    width:100%;
-                    border-collapse:collapse;
-                    margin-top:18px;
-                ">
-
-                    <thead>
-
-                        <tr>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                বিষয়
-                            </th>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                পূর্ণমান
-                            </th>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                MCQ
-                            </th>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                CQ
-                            </th>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                Practical
-                            </th>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                মোট
-                            </th>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                গ্রেড
-                            </th>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                GPA
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        ${rows}
-
-                    </tbody>
-
-                </table>
-
-
-                <div style="
-                    position:relative;
-                    z-index:1;
-                    margin-top:18px;
-                ">
-
-                    <table style="
-                        width:100%;
-                        border-collapse:collapse;
-                    ">
-
-                        <tr>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                মোট প্রাপ্ত নম্বর
-                            </th>
-
-                            <td style="border:1px solid #555;padding:7px;text-align:center;">
-                                ${calculation.totalMarks}
-                            </td>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                মোট পূর্ণমান
-                            </th>
-
-                            <td style="border:1px solid #555;padding:7px;text-align:center;">
-                                ${calculation.totalFullMarks}
-                            </td>
-
-                        </tr>
-
-
-                        <tr>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                আবশ্যিক GPA
-                            </th>
-
-                            <td style="border:1px solid #555;padding:7px;text-align:center;">
-                                ${calculation.compulsoryGPA.toFixed(2)}
-                            </td>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                কৃষি Bonus
-                            </th>
-
-                            <td style="border:1px solid #555;padding:7px;text-align:center;">
-                                ${calculation.agricultureBonus.toFixed(2)}
-                            </td>
-
-                        </tr>
-
-
-                        <tr>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                চূড়ান্ত GPA
-                            </th>
-
-                            <td style="border:1px solid #555;padding:7px;text-align:center;font-weight:bold;">
-                                ${calculation.finalGPA.toFixed(2)}
-                            </td>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                ফেল বিষয়
-                            </th>
-
-                            <td style="border:1px solid #555;padding:7px;text-align:center;">
-                                ${calculation.failSubjectCount}
-                            </td>
-
-                        </tr>
-
-
-                        <tr>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                মেধাক্রম
-                            </th>
-
-                            <td style="border:1px solid #555;padding:7px;text-align:center;font-weight:bold;">
-                                ${merit}
-                            </td>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                ফলাফল
-                            </th>
-
-                            <td style="border:1px solid #555;padding:7px;text-align:center;font-weight:bold;">
-                                ${calculation.result}
-                            </td>
-
-                        </tr>
-
-
-                        <tr>
-
-                            <th style="border:1px solid #555;padding:7px;">
-                                Remarks
-                            </th>
-
-                            <td colspan="3" style="border:1px solid #555;padding:7px;text-align:center;">
-                                ${remarks}
-                            </td>
-
-                        </tr>
-
-                    </table>
-
-                </div>
-
-
-                <div style="
-                    position:relative;
-                    z-index:1;
-                    display:flex;
-                    justify-content:space-between;
-                    margin-top:90px;
-                    text-align:center;
-                ">
-
-                    <div>
-
-                        ____________________<br>
-                        শ্রেণি শিক্ষকের স্বাক্ষর
-
-                    </div>
-
-                    <div>
-
-                        ____________________<br>
-                        অধ্যক্ষের স্বাক্ষর
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
 
     `;
 
@@ -3025,317 +3164,489 @@ function displayResult(
 
 
 /* =========================================================
-   29. MERIT LIST
+   31. BUILD RESULT ROWS
    ========================================================= */
 
-function generateMeritList() {
+function buildResultRows(
+    student,
+    year,
+    exam
+) {
 
-    const year =
-        document.getElementById(
-            "examYear"
-        )?.value || "";
-
-
-    const examName =
-        document.getElementById(
-            "examName"
-        )?.value || "";
+    let html = "";
 
 
-    const className =
-        document.getElementById(
-            "examClass"
-        )?.value || "";
+    SUBJECTS.forEach(
+        function(subject) {
+
+            const item =
+                marksData.find(
+                    function(mark) {
+
+                        return (
+                            String(mark.year) ===
+                            String(year) &&
+                            mark.exam === exam &&
+                            mark.studentId ===
+                                student.studentId &&
+                            mark.subject ===
+                                subject.name
+                        );
+
+                    }
+                );
 
 
-    const body =
-        document.getElementById(
-            "meritTableBody"
+            const mcq =
+                item
+                    ? Number(item.mcq || 0)
+                    : 0;
+
+
+            const cq =
+                item
+                    ? Number(item.cq || 0)
+                    : 0;
+
+
+            const practical =
+                item
+                    ? Number(item.practical || 0)
+                    : 0;
+
+
+            const total =
+                mcq +
+                cq +
+                practical;
+
+
+            const grade =
+                getGrade(
+                    total,
+                    subject.full
+                );
+
+
+            html += `
+
+                <tr>
+
+                    <td>
+                        ${escapeHTML(subject.name)}
+                    </td>
+
+                    <td>
+                        ${subject.full}
+                    </td>
+
+                    <td>
+                        ${
+                            subject.mcq
+                                ? mcq
+                                : "-"
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            subject.cq
+                                ? cq
+                                : "-"
+                        }
+                    </td>
+
+                    <td>
+                        ${
+                            subject.practical
+                                ? practical
+                                : "-"
+                        }
+                    </td>
+
+                    <td>
+                        ${total}
+                    </td>
+
+                    <td>
+                        ${grade.grade}
+                    </td>
+
+                    <td>
+                        ${grade.point.toFixed(2)}
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    return html;
+
+}
+
+
+/* =========================================================
+   32. MERIT POSITION
+   ========================================================= */
+
+function getMeritPosition(
+    student,
+    year,
+    exam
+) {
+
+    const list = [];
+
+
+    admissionStudents
+        .filter(
+            function(item) {
+
+                return (
+                    String(item.year) ===
+                    String(year) &&
+                    item.classCode ===
+                    student.classCode
+                );
+
+            }
+        )
+        .forEach(
+            function(item) {
+
+                const result =
+                    calculateResult(
+                        item,
+                        year,
+                        exam
+                    );
+
+
+                if (
+                    result.result ===
+                    "PASS"
+                ) {
+
+                    list.push({
+
+                        student:
+                            item,
+
+                        gpa:
+                            result.finalGPA,
+
+                        marks:
+                            result.totalMarks
+
+                    });
+
+                }
+
+            }
         );
 
 
-    if (!body) {
+    list.sort(
+        function(a, b) {
 
-        return;
+            if (
+                b.gpa !== a.gpa
+            ) {
 
-    }
+                return b.gpa -
+                    a.gpa;
+
+            }
+
+
+            if (
+                b.marks !== a.marks
+            ) {
+
+                return b.marks -
+                    a.marks;
+
+            }
+
+
+            return (
+                Number(a.student.roll) -
+                Number(b.student.roll)
+            );
+
+        }
+    );
+
+
+    const index =
+        list.findIndex(
+            function(item) {
+
+                return (
+                    item.student.studentId ===
+                    student.studentId
+                );
+
+            }
+        );
+
+
+    return index === -1
+        ? "—"
+        : index + 1;
+
+}
+
+
+/* =========================================================
+   33. MERIT LIST
+   ========================================================= */
+
+function showMeritList() {
+
+    const year =
+        document.getElementById(
+            "meritYear"
+        )?.value || "";
+
+
+    const exam =
+        document.getElementById(
+            "meritExam"
+        )?.value || "";
+
+
+    const classCode =
+        document.getElementById(
+            "meritClass"
+        )?.value || "";
+
+
+    const message =
+        document.getElementById(
+            "meritMessage"
+        );
+
+
+    const output =
+        document.getElementById(
+            "meritOutput"
+        );
+
+
+    if (!output) return;
 
 
     if (
         !year ||
-        !examName ||
-        !className
+        !exam ||
+        !classCode
     ) {
 
-        body.innerHTML = `
+        if (message) {
 
-            <tr>
+            message.innerHTML =
+                "⚠️ সন, পরীক্ষা ও শ্রেণি নির্বাচন করুন।";
 
-                <td colspan="9">
-                    ⚠️ সন, পরীক্ষা ও শ্রেণি নির্বাচন করুন।
-                </td>
+            message.style.color =
+                "red";
 
-            </tr>
-
-        `;
+        }
 
         return;
 
     }
 
 
-    const yearText =
-        document.getElementById(
-            "meritYear"
-        );
+    const list = [];
 
 
-    const examText =
-        document.getElementById(
-            "meritExamName"
-        );
+    admissionStudents
+        .filter(
+            function(student) {
+
+                return (
+                    String(student.year) ===
+                    String(year) &&
+                    student.classCode ===
+                    classCode
+                );
+
+            }
+        )
+        .forEach(
+            function(student) {
+
+                const result =
+                    calculateResult(
+                        student,
+                        year,
+                        exam
+                    );
 
 
-    const classText =
-        document.getElementById(
-            "meritClass"
-        );
+                list.push({
 
+                    student:
+                        student,
 
-    if (yearText) {
+                    result:
+                        result
 
-        yearText.textContent =
-            year;
+                });
 
-    }
-
-
-    if (examText) {
-
-        examText.textContent =
-            examName;
-
-    }
-
-
-    if (classText) {
-
-        classText.textContent =
-            className;
-
-    }
-
-
-    const list =
-        getResultStudents(
-            year,
-            examName,
-            className
-        );
-
-
-    list.sort(function(a, b) {
-
-        if (
-            a.result === "PASS" &&
-            b.result !== "PASS"
-        ) {
-
-            return -1;
-
-        }
-
-
-        if (
-            a.result !== "PASS" &&
-            b.result === "PASS"
-        ) {
-
-            return 1;
-
-        }
-
-
-        if (
-            b.finalGPA !==
-            a.finalGPA
-        ) {
-
-            return (
-                b.finalGPA -
-                a.finalGPA
-            );
-
-        }
-
-
-        if (
-            b.totalMarks !==
-            a.totalMarks
-        ) {
-
-            return (
-                b.totalMarks -
-                a.totalMarks
-            );
-
-        }
-
-
-        return String(
-            a.student.roll
-        ).localeCompare(
-            String(b.student.roll),
-            undefined,
-            {
-                numeric: true
             }
         );
 
-    });
+
+    list.sort(
+        function(a, b) {
+
+            if (
+                a.result.result ===
+                "PASS" &&
+                b.result.result !==
+                "PASS"
+            ) {
+
+                return -1;
+
+            }
 
 
-    const total =
-        list.length;
+            if (
+                a.result.result !==
+                "PASS" &&
+                b.result.result ===
+                "PASS"
+            ) {
+
+                return 1;
+
+            }
 
 
-    const passed =
-        list.filter(function(item) {
+            if (
+                b.result.finalGPA !==
+                a.result.finalGPA
+            ) {
 
-            return item.result === "PASS";
+                return (
+                    b.result.finalGPA -
+                    a.result.finalGPA
+                );
 
-        }).length;
-
-
-    const failed =
-        list.filter(function(item) {
-
-            return item.result === "FAIL";
-
-        }).length;
+            }
 
 
-    const totalElement =
-        document.getElementById(
-            "totalStudents"
-        );
+            if (
+                b.result.totalMarks !==
+                a.result.totalMarks
+            ) {
+
+                return (
+                    b.result.totalMarks -
+                    a.result.totalMarks
+                );
+
+            }
 
 
-    const passedElement =
-        document.getElementById(
-            "totalPassed"
-        );
+            return (
+                Number(a.student.roll) -
+                Number(b.student.roll)
+            );
+
+        }
+    );
 
 
-    const failedElement =
-        document.getElementById(
-            "totalFailed"
-        );
-
-
-    if (totalElement) {
-
-        totalElement.textContent =
-            total;
-
-    }
-
-
-    if (passedElement) {
-
-        passedElement.textContent =
-            passed;
-
-    }
-
-
-    if (failedElement) {
-
-        failedElement.textContent =
-            failed;
-
-    }
-
-
-    let position = 0;
+    let merit = 0;
 
     let previousGPA = null;
 
     let previousMarks = null;
 
 
-    body.innerHTML =
-        list.map(function(item, index) {
+    let html = `
 
-            let merit = "—";
+        <h3 style="text-align:center;">
+            ${escapeHTML(CLASS_LIST[classCode])}
+        </h3>
+
+        <p style="text-align:center;">
+            ${year} — ${escapeHTML(exam)}
+        </p>
+
+        <table class="result-table">
+
+            <thead>
+
+                <tr>
+
+                    <th>ক্রম</th>
+                    <th>Student ID</th>
+                    <th>রোল</th>
+                    <th>নাম</th>
+                    <th>GPA</th>
+                    <th>মোট নম্বর</th>
+                    <th>ফলাফল</th>
+                    <th>ফেল বিষয়</th>
+                    <th>মেধাক্রম</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+    `;
 
 
-            if (item.result === "PASS") {
+    list.forEach(
+        function(item, index) {
+
+            let position =
+                "—";
+
+
+            if (
+                item.result.result ===
+                "PASS"
+            ) {
 
                 if (
-                    item.finalGPA !==
+                    item.result.finalGPA !==
                     previousGPA ||
-                    item.totalMarks !==
+                    item.result.totalMarks !==
                     previousMarks
                 ) {
 
-                    position =
+                    merit =
                         index + 1;
 
                 }
 
 
-                merit =
-                    position;
+                position =
+                    merit;
 
 
                 previousGPA =
-                    item.finalGPA;
+                    item.result.finalGPA;
+
 
                 previousMarks =
-                    item.totalMarks;
+                    item.result.totalMarks;
 
             }
 
 
-            let remarks = "";
-
-
-            if (item.result === "FAIL") {
-
-                remarks =
-                    "ফেল — " +
-                    item.failSubjectCount +
-                    "টি বিষয়ে";
-
-            }
-
-            else if (item.finalGPA >= 5) {
-
-                remarks = "Excellent";
-
-            }
-
-            else if (item.finalGPA >= 4) {
-
-                remarks = "Very Good";
-
-            }
-
-            else if (item.finalGPA >= 3) {
-
-                remarks = "Good";
-
-            }
-
-            else {
-
-                remarks = "Passed";
-
-            }
-
-
-            return `
+            html += `
 
                 <tr>
 
@@ -3344,43 +3655,1005 @@ function generateMeritList() {
                     </td>
 
                     <td>
-                        ${item.student.studentId}
+                        ${escapeHTML(item.student.studentId || "—")}
                     </td>
 
                     <td>
-                        ${item.student.roll}
+                        ${escapeHTML(item.student.roll || "—")}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(item.student.name || "—")}
                     </td>
 
                     <td>
                         ${
-                            item.result === "FAIL"
-                                ? "0.00"
-                                : item.finalGPA.toFixed(2)
+                            item.result.result === "PASS"
+                                ? item.result.finalGPA.toFixed(2)
+                                : "—"
                         }
                     </td>
 
                     <td>
-                        ${item.totalMarks}
+                        ${item.result.totalMarks}
                     </td>
 
                     <td>
-                        ${item.result}
+                        ${item.result.result}
                     </td>
 
                     <td>
-                        ${item.failSubjectCount}
+                        ${item.result.failedSubjects}
                     </td>
 
                     <td>
-                        ${merit}
-                    </td>
-
-                    <td>
-                        ${remarks}
+                        ${position}
                     </td>
 
                 </tr>
 
             `;
 
-        }).join("");
+        }
+    );
+
+
+    html += `
+
+            </tbody>
+
+        </table>
+
+        <br>
+
+        <button
+            type="button"
+            onclick="printMeritList()">
+
+            🖨️ মেধা তালিকা প্রিন্ট
+
+        </button>
+
+    `;
+
+
+    output.innerHTML =
+        html;
+
+
+    if (message) {
+
+        message.innerHTML =
+            "✅ মেধা তালিকা তৈরি হয়েছে।";
+
+        message.style.color =
+            "green";
+
+    }
+
+}
+
+
+/* =========================================================
+   34. PRINT MERIT LIST
+   ========================================================= */
+
+function printMeritList() {
+
+    const output =
+        document.getElementById(
+            "meritOutput"
+        );
+
+
+    if (!output) return;
+
+
+    printHTML(
+        output.innerHTML,
+        "মেধা তালিকা"
+    );
+
+}
+
+
+/* =========================================================
+   35. PRINT RESULT
+   ========================================================= */
+
+function printResult() {
+
+    const output =
+        document.getElementById(
+            "resultOutput"
+        );
+
+
+    if (!output) return;
+
+
+    printHTML(
+        output.innerHTML,
+        "ফলাফল"
+    );
+
+}
+
+
+/* =========================================================
+   36. PRINT FUNCTION
+   ========================================================= */
+
+function printHTML(
+    content,
+    title
+) {
+
+    const win =
+        window.open(
+            "",
+            "_blank"
+        );
+
+
+    if (!win) {
+
+        alert(
+            "Popup Blocked হয়েছে। Browser থেকে popup অনুমতি দিন।"
+        );
+
+        return;
+
+    }
+
+
+    win.document.write(`
+
+        <!DOCTYPE html>
+
+        <html lang="bn">
+
+        <head>
+
+            <meta charset="UTF-8">
+
+            <title>
+                ${title}
+            </title>
+
+            <style>
+
+                body {
+
+                    font-family:
+                        Arial,
+                        "Noto Sans Bengali",
+                        sans-serif;
+
+                    margin:20px;
+
+                }
+
+                table {
+
+                    width:100%;
+
+                    border-collapse:
+                        collapse;
+
+                }
+
+                th,
+                td {
+
+                    border:
+                        1px solid #000;
+
+                    padding:7px;
+
+                    text-align:center;
+
+                }
+
+                h1,
+                h2,
+                h3,
+                p {
+
+                    text-align:center;
+
+                }
+
+                button {
+
+                    display:none;
+
+                }
+
+                @media print {
+
+                    body {
+
+                        margin:10mm;
+
+                    }
+
+                }
+
+            </style>
+
+        </head>
+
+        <body>
+
+            <h2>
+                Abdullah Hat Islamia
+            </h2>
+
+            <h3>
+                Fazil (Degree) Madrasah
+            </h3>
+
+            <p>
+                নাটেশ্বর, সোনাইমুড়ী, নোয়াখালী
+            </p>
+
+            ${content}
+
+        </body>
+
+        </html>
+
+    `);
+
+
+    win.document.close();
+
+    win.focus();
+
+
+    setTimeout(
+        function() {
+
+            win.print();
+
+            win.close();
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   37. DASHBOARD
+   ========================================================= */
+
+function showDashboard() {
+
+    const year =
+        document.getElementById(
+            "dashboardYear"
+        )?.value || "";
+
+
+    const classCode =
+        document.getElementById(
+            "dashboardClass"
+        )?.value || "";
+
+
+    const output =
+        document.getElementById(
+            "dashboardOutput"
+        );
+
+
+    const message =
+        document.getElementById(
+            "dashboardMessage"
+        );
+
+
+    if (!output) return;
+
+
+    if (!year) {
+
+        if (message) {
+
+            message.innerHTML =
+                "⚠️ সন নির্বাচন করুন।";
+
+            message.style.color =
+                "red";
+
+        }
+
+        return;
+
+    }
+
+
+    let students =
+        admissionStudents.filter(
+            function(student) {
+
+                return (
+                    String(student.year) ===
+                    String(year)
+                );
+
+            }
+        );
+
+
+    if (classCode) {
+
+        students =
+            students.filter(
+                function(student) {
+
+                    return (
+                        student.classCode ===
+                        classCode
+                    );
+
+                }
+            );
+
+    }
+
+
+    const total =
+        students.length;
+
+
+    const male =
+        students.filter(
+            function(s) {
+
+                return s.gender ===
+                    "পুরুষ";
+
+            }
+        ).length;
+
+
+    const female =
+        students.filter(
+            function(s) {
+
+                return s.gender ===
+                    "নারী";
+
+            }
+        ).length;
+
+
+    const classCards =
+        Object.keys(CLASS_LIST)
+            .map(
+                function(code) {
+
+                    const count =
+                        admissionStudents.filter(
+                            function(student) {
+
+                                return (
+                                    String(student.year) ===
+                                    String(year) &&
+                                    student.classCode ===
+                                    code
+                                );
+
+                            }
+                        ).length;
+
+
+                    return `
+
+                        <div class="card">
+
+                            <h3>
+                                ${CLASS_LIST[code]}
+                            </h3>
+
+                            <p>
+                                ${count} জন
+                            </p>
+
+                        </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    let totalMarksRecords = 0;
+
+
+    marksData.forEach(
+        function(mark) {
+
+            if (
+                String(mark.year) ===
+                String(year)
+            ) {
+
+                if (
+                    !classCode ||
+                    mark.classCode ===
+                    classCode
+                ) {
+
+                    totalMarksRecords++;
+
+                }
+
+            }
+
+        }
+    );
+
+
+    output.innerHTML = `
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>
+                    👨‍🎓 মোট শিক্ষার্থী
+                </h3>
+
+                <p>
+                    ${total} জন
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    👨 পুরুষ
+                </h3>
+
+                <p>
+                    ${male} জন
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    👩 নারী
+                </h3>
+
+                <p>
+                    ${female} জন
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    ✍️ সংরক্ষিত নম্বর
+                </h3>
+
+                <p>
+                    ${totalMarksRecords} টি
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <hr>
+
+        <h3 style="text-align:center;">
+            📚 শ্রেণিভিত্তিক শিক্ষার্থী
+        </h3>
+
+
+        <div class="cards">
+
+            ${classCards}
+
+        </div>
+
+    `;
+
+
+    if (message) {
+
+        message.innerHTML =
+            "✅ Dashboard প্রস্তুত।";
+
+        message.style.color =
+            "green";
+
+    }
+
+}
+
+
+/* =========================================================
+   38. UPDATE DASHBOARD
+   ========================================================= */
+
+function updateDashboard() {
+
+    const year =
+        document.getElementById(
+            "dashboardYear"
+        )?.value;
+
+
+    const classCode =
+        document.getElementById(
+            "dashboardClass"
+        )?.value;
+
+
+    if (year) {
+
+        showDashboard();
+
+    }
+
+}
+
+
+/* =========================================================
+   39. ESCAPE HTML
+   ========================================================= */
+
+function escapeHTML(value) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   40. DOM READY
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+
+        /* =====================================
+           DROPDOWNS
+        ===================================== */
+
+        initializeDropdowns();
+
+
+        /* =====================================
+           ADMISSION YEAR / CLASS
+        ===================================== */
+
+        const admissionYear =
+            document.getElementById(
+                "admissionYear"
+            );
+
+
+        const admissionClass =
+            document.getElementById(
+                "admissionClass"
+            );
+
+
+        if (admissionYear) {
+
+            admissionYear.addEventListener(
+                "change",
+                generateStudentId
+            );
+
+        }
+
+
+        if (admissionClass) {
+
+            admissionClass.addEventListener(
+                "change",
+                generateStudentId
+            );
+
+        }
+
+
+        /* =====================================
+           ADMISSION FORM
+        ===================================== */
+
+        const admissionForm =
+            document.getElementById(
+                "admissionForm"
+            );
+
+
+        if (admissionForm) {
+
+            admissionForm.addEventListener(
+                "submit",
+                function(event) {
+
+                    event.preventDefault();
+
+                    saveAdmissionData();
+
+                }
+            );
+
+        }
+
+
+        /* =====================================
+           PHOTO
+        ===================================== */
+
+        const photo =
+            document.getElementById(
+                "admissionPhoto"
+            );
+
+
+        if (photo) {
+
+            photo.addEventListener(
+                "change",
+                admissionPhotoUpload
+            );
+
+        }
+
+
+        /* =====================================
+           ADMISSION LIST
+        ===================================== */
+
+        const listYear =
+            document.getElementById(
+                "studentListYear"
+            );
+
+
+        const listClass =
+            document.getElementById(
+                "studentListClass"
+            );
+
+
+        if (listYear) {
+
+            listYear.addEventListener(
+                "change",
+                displayAdmissionStudents
+            );
+
+        }
+
+
+        if (listClass) {
+
+            listClass.addEventListener(
+                "change",
+                displayAdmissionStudents
+            );
+
+        }
+
+
+        /* =====================================
+           STUDENT SEARCH
+        ===================================== */
+
+        const searchYear =
+            document.getElementById(
+                "studentSearchYear"
+            );
+
+
+        const searchClass =
+            document.getElementById(
+                "studentSearchClass"
+            );
+
+
+        if (searchYear) {
+
+            searchYear.addEventListener(
+                "change",
+                showAdmissionStudents
+            );
+
+        }
+
+
+        if (searchClass) {
+
+            searchClass.addEventListener(
+                "change",
+                showAdmissionStudents
+            );
+
+        }
+
+
+        /* =====================================
+           MARKS
+        ===================================== */
+
+        const marksYear =
+            document.getElementById(
+                "marksYear"
+            );
+
+
+        const marksClass =
+            document.getElementById(
+                "marksClass"
+            );
+
+
+        const marksExam =
+            document.getElementById(
+                "marksExam"
+            );
+
+
+        const marksStudent =
+            document.getElementById(
+                "marksStudent"
+            );
+
+
+        const marksSubject =
+            document.getElementById(
+                "marksSubject"
+            );
+
+
+        if (marksYear) {
+
+            marksYear.addEventListener(
+                "change",
+                function() {
+
+                    updateMarksStudentList();
+
+                    renderMarksTable();
+
+                }
+            );
+
+        }
+
+
+        if (marksClass) {
+
+            marksClass.addEventListener(
+                "change",
+                function() {
+
+                    updateMarksStudentList();
+
+                    renderMarksTable();
+
+                }
+            );
+
+        }
+
+
+        if (marksExam) {
+
+            marksExam.addEventListener(
+                "change",
+                renderMarksTable
+            );
+
+        }
+
+
+        if (marksStudent) {
+
+            marksStudent.addEventListener(
+                "change",
+                loadExistingMarks
+            );
+
+        }
+
+
+        if (marksSubject) {
+
+            marksSubject.addEventListener(
+                "change",
+                updateMarksInputs
+            );
+
+        }
+
+
+        updateSubjectList();
+
+        renderMarksTable();
+
+
+        /* =====================================
+           RESULT CLASS
+        ===================================== */
+
+        const examClass =
+            document.getElementById(
+                "examClass"
+            );
+
+
+        if (examClass) {
+
+            examClass.addEventListener(
+                "change",
+                function() {
+
+                    /* nothing */
+
+                }
+            );
+
+        }
+
+
+        /* =====================================
+           DASHBOARD
+        ===================================== */
+
+        const dashboardYear =
+            document.getElementById(
+                "dashboardYear"
+            );
+
+
+        const dashboardClass =
+            document.getElementById(
+                "dashboardClass"
+            );
+
+
+        if (dashboardYear) {
+
+            dashboardYear.addEventListener(
+                "change",
+                showDashboard
+            );
+
+        }
+
+
+        if (dashboardClass) {
+
+            dashboardClass.addEventListener(
+                "change",
+                showDashboard
+            );
+
+        }
+
+
+        /* =====================================
+           MERIT
+        ===================================== */
+
+        const meritYear =
+            document.getElementById(
+                "meritYear"
+            );
+
+
+        const meritExam =
+            document.getElementById(
+                "meritExam"
+            );
+
+
+        const meritClass =
+            document.getElementById(
+                "meritClass"
+            );
+
+
+        if (meritYear) {
+
+            meritYear.addEventListener(
+                "change",
+                function() {
+
+                    /* wait for button */
+
+                }
+            );
+
+        }
+
+
+        if (meritExam) {
+
+            meritExam.addEventListener(
+                "change",
+                function() {
+
+                    /* wait for button */
+
+                }
+            );
+
+        }
+
+
+        if (meritClass) {
+
+            meritClass.addEventListener(
+                "change",
+                function() {
+
+                    /* wait for button */
+
+                }
+            );
+
+        }
+
+
+        /* =====================================
+           DISPLAY
+        ===================================== */
+
+        displayAdmissionStudents();
+
+        showAdmissionStudents();
+
+        updateMarksStudentList();
+
+        updateSubjectList();
+
+
+    }
+);
