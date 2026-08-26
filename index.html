@@ -601,7 +601,428 @@
 </section>
 
 
+<!-- ==========================================
+     ADMISSION
+========================================== -->
 
+<section id="admission" class="section light">
+
+    <h2 class="section-title">
+        📝 Admission বিভাগ
+    </h2>
+
+    <div class="result-box">
+
+        <h3>
+            শিক্ষার্থী ভর্তি তথ্য
+        </h3>
+
+        <form id="admissionForm">
+
+            <div class="result-form">
+
+                <!-- সন -->
+
+                <select id="admissionYear" required>
+
+                    <option value="">
+                        সন নির্বাচন করুন
+                    </option>
+
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                    <option value="2029">2029</option>
+                    <option value="2030">2030</option>
+                    <option value="2031">2031</option>
+                    <option value="2032">2032</option>
+                    <option value="2033">2033</option>
+                    <option value="2034">2034</option>
+                    <option value="2035">2035</option>
+                    <option value="2036">2036</option>
+                    <option value="2037">2037</option>
+                    <option value="2038">2038</option>
+                    <option value="2039">2039</option>
+                    <option value="2040">2040</option>
+
+                </select>
+
+
+                <!-- শ্রেণি -->
+
+                <select id="admissionClass" required>
+
+                    <option value="">
+                        শ্রেণি নির্বাচন করুন
+                    </option>
+
+                    <option value="nurani1">
+                        নূরানী ১ম জামাত
+                    </option>
+
+                    <option value="nurani2">
+                        নূরানী ২য় জামাত
+                    </option>
+
+                    <option value="nurani3">
+                        নূরানী ৩য় জামাত
+                    </option>
+
+                    <option value="ebtedayi4">
+                        ইবতেদায়ী ৪র্থ শ্রেণি
+                    </option>
+
+                    <option value="ebtedayi5">
+                        ইবতেদায়ী ৫ম শ্রেণি
+                    </option>
+
+                    <option value="dakhil6">
+                        দাখিল ৬ষ্ঠ শ্রেণি
+                    </option>
+
+                    <option value="dakhil7">
+                        দাখিল ৭ম শ্রেণি
+                    </option>
+
+                    <option value="dakhil8">
+                        দাখিল ৮ম শ্রেণি
+                    </option>
+
+                    <option value="dakhil9">
+                        দাখিল ৯ম শ্রেণি
+                    </option>
+
+                    <option value="dakhil10">
+                        দাখিল ১০ম শ্রেণি
+                    </option>
+
+                    <option value="alim1">
+                        আলিম ১ম বর্ষ
+                    </option>
+
+                    <option value="alim2">
+                        আলিম ২য় বর্ষ
+                    </option>
+
+                    <option value="fazil1">
+                        ফাজিল ১ম বর্ষ
+                    </option>
+
+                    <option value="fazil2">
+                        ফাজিল ২য় বর্ষ
+                    </option>
+
+                    <option value="fazil3">
+                        ফাজিল ৩য় বর্ষ
+                    </option>
+
+                </select>
+
+
+                <!-- Student ID -->
+
+                <input
+                    type="text"
+                    id="admissionStudentId"
+                    placeholder="Student ID"
+                    readonly>
+
+
+                <!-- নাম -->
+
+                <input
+                    type="text"
+                    id="admissionName"
+                    placeholder="শিক্ষার্থীর নাম"
+                    required>
+
+
+                <!-- Roll -->
+
+                <input
+                    type="text"
+                    id="admissionRoll"
+                    placeholder="রোল"
+                    readonly>
+
+
+                <!-- পিতার নাম -->
+
+                <input
+                    type="text"
+                    id="admissionFather"
+                    placeholder="পিতার নাম">
+
+
+                <!-- মাতার নাম -->
+
+                <input
+                    type="text"
+                    id="admissionMother"
+                    placeholder="মাতার নাম">
+
+
+                <!-- জন্মতারিখ -->
+
+                <input
+                    type="date"
+                    id="admissionDob"
+                    title="জন্মতারিখ">
+
+
+                <!-- লিঙ্গ -->
+
+                <select id="admissionGender">
+
+                    <option value="">
+                        লিঙ্গ নির্বাচন করুন
+                    </option>
+
+                    <option value="পুরুষ">
+                        পুরুষ
+                    </option>
+
+                    <option value="নারী">
+                        নারী
+                    </option>
+
+                    <option value="অন্যান্য">
+                        অন্যান্য
+                    </option>
+
+                </select>
+
+
+                <!-- মোবাইল -->
+
+                <input
+                    type="tel"
+                    id="admissionMobile"
+                    placeholder="মোবাইল নম্বর">
+
+
+                <!-- ঠিকানা -->
+
+                <textarea
+                    id="admissionAddress"
+                    placeholder="ঠিকানা"
+                    rows="3"></textarea>
+
+
+                <!-- ভর্তির তারিখ -->
+
+                <input
+                    type="date"
+                    id="admissionDate"
+                    title="ভর্তির তারিখ">
+
+
+                <!-- ছবি -->
+
+                <input
+                    type="file"
+                    id="admissionPhoto"
+                    accept="image/*">
+
+
+                <!-- Save -->
+
+                <button
+                    type="submit"
+                    id="admissionSaveButton">
+
+                    💾 Save
+
+                </button>
+
+
+                <!-- Cancel Edit -->
+
+                <button
+                    type="button"
+                    id="admissionCancelButton"
+                    onclick="cancelAdmissionEdit()"
+                    style="display:none;">
+
+                    ❌ Cancel
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <div
+            id="admissionMessage"
+            style="margin-top:15px;">
+        </div>
+
+
+        <!-- ==================================
+             STUDENT FILTER
+        =================================== -->
+
+        <hr>
+
+        <h3>
+            📋 শ্রেণিভিত্তিক শিক্ষার্থী তালিকা
+        </h3>
+
+
+        <div class="result-form">
+
+            <select id="studentListYear"
+                    onchange="showAdmissionStudents()">
+
+                <option value="">
+                    সব সন
+                </option>
+
+                <option value="2025">2025</option>
+                <option value="2026">2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+                <option value="2031">2031</option>
+                <option value="2032">2032</option>
+                <option value="2033">2033</option>
+                <option value="2034">2034</option>
+                <option value="2035">2035</option>
+                <option value="2036">2036</option>
+                <option value="2037">2037</option>
+                <option value="2038">2038</option>
+                <option value="2039">2039</option>
+                <option value="2040">2040</option>
+
+            </select>
+
+
+            <select id="studentListClass"
+                    onchange="showAdmissionStudents()">
+
+                <option value="">
+                    সব শ্রেণি
+                </option>
+
+                <option value="nurani1">
+                    নূরানী ১ম জামাত
+                </option>
+
+                <option value="nurani2">
+                    নূরানী ২য় জামাত
+                </option>
+
+                <option value="nurani3">
+                    নূরানী ৩য় জামাত
+                </option>
+
+                <option value="ebtedayi4">
+                    ইবতেদায়ী ৪র্থ শ্রেণি
+                </option>
+
+                <option value="ebtedayi5">
+                    ইবতেদায়ী ৫ম শ্রেণি
+                </option>
+
+                <option value="dakhil6">
+                    দাখিল ৬ষ্ঠ শ্রেণি
+                </option>
+
+                <option value="dakhil7">
+                    দাখিল ৭ম শ্রেণি
+                </option>
+
+                <option value="dakhil8">
+                    দাখিল ৮ম শ্রেণি
+                </option>
+
+                <option value="dakhil9">
+                    দাখিল ৯ম শ্রেণি
+                </option>
+
+                <option value="dakhil10">
+                    দাখিল ১০ম শ্রেণি
+                </option>
+
+                <option value="alim1">
+                    আলিম ১ম বর্ষ
+                </option>
+
+                <option value="alim2">
+                    আলিম ২য় বর্ষ
+                </option>
+
+                <option value="fazil1">
+                    ফাজিল ১ম বর্ষ
+                </option>
+
+                <option value="fazil2">
+                    ফাজিল ২য় বর্ষ
+                </option>
+
+                <option value="fazil3">
+                    ফাজিল ৩য় বর্ষ
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- মোট শিক্ষার্থী -->
+
+        <div
+            id="admissionTotalStudents"
+            style="margin:15px 0; font-size:20px; font-weight:bold;">
+
+            মোট শিক্ষার্থী: 0 জন
+
+        </div>
+
+
+        <!-- STUDENT TABLE -->
+
+        <div style="overflow-x:auto;">
+
+            <table class="result-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Student ID</th>
+                        <th>রোল</th>
+                        <th>ছবি</th>
+                        <th>নাম</th>
+                        <th>পিতার নাম</th>
+                        <th>মাতার নাম</th>
+                        <th>জন্মতারিখ</th>
+                        <th>লিঙ্গ</th>
+                        <th>মোবাইল</th>
+                        <th>ঠিকানা</th>
+                        <th>ভর্তির তারিখ</th>
+                        <th>Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="admissionStudentTable">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+    
 <!-- ==========================================
      ONLINE RESULTS
 ========================================== -->
