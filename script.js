@@ -2476,3 +2476,1122 @@ document.addEventListener(
     }
 );
 :::
+/* =========================================================
+   ADMISSION MANAGEMENT SYSTEM
+   ========================================================= */
+
+/* =========================================================
+   ADMISSION - CLASS LIST
+   ========================================================= */
+
+const admissionClasses = {
+
+    nurani1: "নূরানী ১ম জামাত",
+    nurani2: "নূরানী ২য় জামাত",
+    nurani3: "নূরানী ৩য় জামাত",
+
+    ebtedayi4: "ইবতেদায়ী ৪র্থ শ্রেণি",
+    ebtedayi5: "ইবতেদায়ী ৫ম শ্রেণি",
+
+    dakhil6: "দাখিল ৬ষ্ঠ শ্রেণি",
+    dakhil7: "দাখিল ৭ম শ্রেণি",
+    dakhil8: "দাখিল ৮ম শ্রেণি",
+    dakhil9: "দাখিল ৯ম শ্রেণি",
+    dakhil10: "দাখিল ১০ম শ্রেণি",
+
+    alim1: "আলিম ১ম বর্ষ",
+    alim2: "আলিম ২য় বর্ষ",
+
+    fazil1: "ফাজিল ১ম বর্ষ",
+    fazil2: "ফাজিল ২য় বর্ষ",
+    fazil3: "ফাজিল ৩য় বর্ষ"
+
+};
+
+
+/* =========================================================
+   ADMISSION DATA
+   ========================================================= */
+
+let admissionStudents =
+    JSON.parse(
+        localStorage.getItem("admissionStudents") || "[]"
+    );
+
+
+/* =========================================================
+   SAVE ADMISSION DATA
+   ========================================================= */
+
+function saveAdmissionData() {
+
+    const year =
+        document.getElementById("admissionYear")?.value || "";
+
+    const classCode =
+        document.getElementById("admissionClass")?.value || "";
+
+    const studentId =
+        document.getElementById("admissionStudentId")?.value || "";
+
+    const name =
+        document.getElementById("admissionName")?.value.trim() || "";
+
+    const roll =
+        document.getElementById("admissionRoll")?.value || "";
+
+    const fatherName =
+        document.getElementById("admissionFather")?.value.trim() || "";
+
+    const motherName =
+        document.getElementById("admissionMother")?.value.trim() || "";
+
+    const birthDate =
+        document.getElementById("admissionBirthDate")?.value || "";
+
+    const gender =
+        document.getElementById("admissionGender")?.value || "";
+
+    const mobile =
+        document.getElementById("admissionMobile")?.value.trim() || "";
+
+    const address =
+        document.getElementById("admissionAddress")?.value.trim() || "";
+
+    const admissionDate =
+        document.getElementById("admissionDate")?.value || "";
+
+    const photo =
+        document.getElementById("admissionPhotoData")?.value || "";
+
+
+    if (
+        year === "" ||
+        classCode === "" ||
+        name === "" ||
+        fatherName === "" ||
+        motherName === "" ||
+        birthDate === "" ||
+        gender === "" ||
+        mobile === "" ||
+        address === "" ||
+        admissionDate === ""
+    ) {
+
+        alert("⚠️ প্রয়োজনীয় সব তথ্য পূরণ করুন।");
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       EDIT MODE
+       ===================================================== */
+
+    const editId =
+        document.getElementById("admissionEditId")?.value || "";
+
+
+    if (editId !== "") {
+
+        const index =
+            admissionStudents.findIndex(
+                function(student) {
+
+                    return student.id === editId;
+
+                }
+            );
+
+
+        if (index !== -1) {
+
+            admissionStudents[index] = {
+
+                id: editId,
+
+                year: year,
+
+                classCode: classCode,
+
+                className:
+                    admissionClasses[classCode],
+
+                studentId: studentId,
+
+                name: name,
+
+                roll: roll,
+
+                fatherName: fatherName,
+
+                motherName: motherName,
+
+                birthDate: birthDate,
+
+                gender: gender,
+
+                mobile: mobile,
+
+                address: address,
+
+                admissionDate: admissionDate,
+
+                photo: photo
+
+            };
+
+        }
+
+
+        localStorage.setItem(
+            "admissionStudents",
+            JSON.stringify(admissionStudents)
+        );
+
+
+        alert("✅ শিক্ষার্থীর তথ্য সফলভাবে Edit করা হয়েছে।");
+
+
+        clearAdmissionForm();
+
+        displayAdmissionStudents();
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       DUPLICATE STUDENT ID CHECK
+       ===================================================== */
+
+    const duplicateStudentId =
+        admissionStudents.some(
+            function(student) {
+
+                return (
+                    student.studentId ===
+                    studentId
+                );
+
+            }
+        );
+
+
+    if (duplicateStudentId) {
+
+        alert(
+            "⚠️ এই Student ID ইতোমধ্যে ব্যবহার করা হয়েছে।"
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       ADD NEW STUDENT
+       ===================================================== */
+
+    admissionStudents.push({
+
+        id:
+            Date.now().toString(),
+
+        year: year,
+
+        classCode: classCode,
+
+        className:
+            admissionClasses[classCode],
+
+        studentId: studentId,
+
+        name: name,
+
+        roll: roll,
+
+        fatherName: fatherName,
+
+        motherName: motherName,
+
+        birthDate: birthDate,
+
+        gender: gender,
+
+        mobile: mobile,
+
+        address: address,
+
+        admissionDate: admissionDate,
+
+        photo: photo
+
+    });
+
+
+    localStorage.setItem(
+        "admissionStudents",
+        JSON.stringify(admissionStudents)
+    );
+
+
+    alert(
+        "✅ শিক্ষার্থীর তথ্য সফলভাবে Save হয়েছে।"
+    );
+
+
+    clearAdmissionForm();
+
+    displayAdmissionStudents();
+
+}
+
+
+/* =========================================================
+   AUTO STUDENT ID
+   ========================================================= */
+
+function generateStudentId() {
+
+    const year =
+        document.getElementById("admissionYear")?.value || "";
+
+    const classCode =
+        document.getElementById("admissionClass")?.value || "";
+
+
+    if (
+        year === "" ||
+        classCode === ""
+    ) {
+
+        return;
+
+    }
+
+
+    const classStudents =
+        admissionStudents.filter(
+            function(student) {
+
+                return (
+                    String(student.year) === String(year) &&
+                    student.classCode === classCode
+                );
+
+            }
+        );
+
+
+    let number =
+        classStudents.length + 1;
+
+
+    let studentId =
+        year +
+        classCode.replace(
+            /[^0-9]/g,
+            ""
+        ) +
+        String(number).padStart(
+            3,
+            "0"
+        );
+
+
+    /* =====================================================
+       DUPLICATE PROTECTION
+       ===================================================== */
+
+    while (
+        admissionStudents.some(
+            function(student) {
+
+                return (
+                    student.studentId ===
+                    studentId
+                );
+
+            }
+        )
+    ) {
+
+        number++;
+
+        studentId =
+            year +
+            classCode.replace(
+                /[^0-9]/g,
+                ""
+            ) +
+            String(number).padStart(
+                3,
+                "0"
+            );
+
+    }
+
+
+    const input =
+        document.getElementById(
+            "admissionStudentId"
+        );
+
+
+    if (input) {
+
+        input.value =
+            studentId;
+
+    }
+
+
+    generateAdmissionRoll();
+
+}
+
+
+/* =========================================================
+   AUTO ROLL
+   ========================================================= */
+
+function generateAdmissionRoll() {
+
+    const year =
+        document.getElementById("admissionYear")?.value || "";
+
+    const classCode =
+        document.getElementById("admissionClass")?.value || "";
+
+
+    if (
+        year === "" ||
+        classCode === ""
+    ) {
+
+        return;
+
+    }
+
+
+    const classStudents =
+        admissionStudents.filter(
+            function(student) {
+
+                return (
+                    String(student.year) === String(year) &&
+                    student.classCode === classCode
+                );
+
+            }
+        );
+
+
+    let maxRoll = 0;
+
+
+    classStudents.forEach(
+        function(student) {
+
+            const roll =
+                Number(student.roll || 0);
+
+
+            if (roll > maxRoll) {
+
+                maxRoll = roll;
+
+            }
+
+        }
+    );
+
+
+    const nextRoll =
+        maxRoll + 1;
+
+
+    const rollInput =
+        document.getElementById(
+            "admissionRoll"
+        );
+
+
+    if (rollInput) {
+
+        rollInput.value =
+            nextRoll;
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE STUDENT
+   ========================================================= */
+
+function deleteAdmissionStudent(id) {
+
+    const confirmDelete =
+        confirm(
+            "⚠️ আপনি কি এই শিক্ষার্থীর তথ্য Delete করতে চান?"
+        );
+
+
+    if (!confirmDelete) {
+
+        return;
+
+    }
+
+
+    admissionStudents =
+        admissionStudents.filter(
+            function(student) {
+
+                return student.id !== id;
+
+            }
+        );
+
+
+    localStorage.setItem(
+        "admissionStudents",
+        JSON.stringify(admissionStudents)
+    );
+
+
+    alert(
+        "✅ শিক্ষার্থীর তথ্য Delete করা হয়েছে।"
+    );
+
+
+    displayAdmissionStudents();
+
+}
+
+
+/* =========================================================
+   EDIT STUDENT
+   ========================================================= */
+
+function editAdmissionStudent(id) {
+
+    const student =
+        admissionStudents.find(
+            function(item) {
+
+                return item.id === id;
+
+            }
+        );
+
+
+    if (!student) {
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "admissionYear"
+    ).value =
+        student.year;
+
+
+    document.getElementById(
+        "admissionClass"
+    ).value =
+        student.classCode;
+
+
+    document.getElementById(
+        "admissionStudentId"
+    ).value =
+        student.studentId;
+
+
+    document.getElementById(
+        "admissionName"
+    ).value =
+        student.name;
+
+
+    document.getElementById(
+        "admissionRoll"
+    ).value =
+        student.roll;
+
+
+    document.getElementById(
+        "admissionFather"
+    ).value =
+        student.fatherName;
+
+
+    document.getElementById(
+        "admissionMother"
+    ).value =
+        student.motherName;
+
+
+    document.getElementById(
+        "admissionBirthDate"
+    ).value =
+        student.birthDate;
+
+
+    document.getElementById(
+        "admissionGender"
+    ).value =
+        student.gender;
+
+
+    document.getElementById(
+        "admissionMobile"
+    ).value =
+        student.mobile;
+
+
+    document.getElementById(
+        "admissionAddress"
+    ).value =
+        student.address;
+
+
+    document.getElementById(
+        "admissionDate"
+    ).value =
+        student.admissionDate;
+
+
+    const photoData =
+        document.getElementById(
+            "admissionPhotoData"
+        );
+
+
+    if (photoData) {
+
+        photoData.value =
+            student.photo || "";
+
+    }
+
+
+    const editId =
+        document.getElementById(
+            "admissionEditId"
+        );
+
+
+    if (editId) {
+
+        editId.value =
+            student.id;
+
+    }
+
+
+    const saveButton =
+        document.getElementById(
+            "admissionSaveButton"
+        );
+
+
+    if (saveButton) {
+
+        saveButton.textContent =
+            "✏️ তথ্য Update করুন";
+
+    }
+
+
+    window.location.hash =
+        "admission";
+
+}
+
+
+/* =========================================================
+   CLEAR ADMISSION FORM
+   ========================================================= */
+
+function clearAdmissionForm() {
+
+    const form =
+        document.getElementById(
+            "admissionForm"
+        );
+
+
+    if (form) {
+
+        form.reset();
+
+    }
+
+
+    const studentId =
+        document.getElementById(
+            "admissionStudentId"
+        );
+
+
+    const roll =
+        document.getElementById(
+            "admissionRoll"
+        );
+
+
+    const editId =
+        document.getElementById(
+            "admissionEditId"
+        );
+
+
+    const photoData =
+        document.getElementById(
+            "admissionPhotoData"
+        );
+
+
+    if (studentId) {
+
+        studentId.value = "";
+
+    }
+
+
+    if (roll) {
+
+        roll.value = "";
+
+    }
+
+
+    if (editId) {
+
+        editId.value = "";
+
+    }
+
+
+    if (photoData) {
+
+        photoData.value = "";
+
+    }
+
+
+    const saveButton =
+        document.getElementById(
+            "admissionSaveButton"
+        );
+
+
+    if (saveButton) {
+
+        saveButton.textContent =
+            "💾 Save";
+
+    }
+
+
+    const photoPreview =
+        document.getElementById(
+            "admissionPhotoPreview"
+        );
+
+
+    if (photoPreview) {
+
+        photoPreview.innerHTML = "";
+
+    }
+
+}
+
+
+/* =========================================================
+   DISPLAY ADMISSION STUDENTS
+   ========================================================= */
+
+function displayAdmissionStudents() {
+
+    const year =
+        document.getElementById(
+            "admissionListYear"
+        )?.value || "";
+
+
+    const classCode =
+        document.getElementById(
+            "admissionListClass"
+        )?.value || "";
+
+
+    const tableBody =
+        document.getElementById(
+            "admissionTableBody"
+        );
+
+
+    const totalElement =
+        document.getElementById(
+            "admissionTotalStudents"
+        );
+
+
+    if (!tableBody) {
+
+        return;
+
+    }
+
+
+    let list =
+        admissionStudents.slice();
+
+
+    /* =====================================================
+       YEAR FILTER
+       ===================================================== */
+
+    if (year !== "") {
+
+        list =
+            list.filter(
+                function(student) {
+
+                    return (
+                        String(student.year) ===
+                        String(year)
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       CLASS FILTER
+       ===================================================== */
+
+    if (classCode !== "") {
+
+        list =
+            list.filter(
+                function(student) {
+
+                    return (
+                        student.classCode ===
+                        classCode
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       TOTAL STUDENT
+       ===================================================== */
+
+    if (totalElement) {
+
+        totalElement.textContent =
+            list.length;
+
+    }
+
+
+    let html = "";
+
+
+    list.forEach(
+        function(student, index) {
+
+            html += `
+
+                <tr>
+
+                    <td>
+                        ${index + 1}
+                    </td>
+
+                    <td>
+                        ${student.studentId}
+                    </td>
+
+                    <td>
+                        ${student.roll}
+                    </td>
+
+                    <td>
+                        ${student.name}
+                    </td>
+
+                    <td>
+                        ${student.fatherName}
+                    </td>
+
+                    <td>
+                        ${student.motherName}
+                    </td>
+
+                    <td>
+                        ${student.gender}
+                    </td>
+
+                    <td>
+                        ${student.mobile}
+                    </td>
+
+                    <td>
+                        ${student.className}
+                    </td>
+
+                    <td>
+
+                        <button
+                            type="button"
+                            onclick="editAdmissionStudent('${student.id}')">
+
+                            ✏️ Edit
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="deleteAdmissionStudent('${student.id}')">
+
+                            🗑️ Delete
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+
+    if (html === "") {
+
+        html = `
+
+            <tr>
+
+                <td colspan="10">
+
+                    কোনো শিক্ষার্থীর তথ্য পাওয়া যায়নি।
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+
+    tableBody.innerHTML =
+        html;
+
+}
+
+
+/* =========================================================
+   PHOTO UPLOAD
+   ========================================================= */
+
+function admissionPhotoUpload(event) {
+
+    const file =
+        event.target.files[0];
+
+
+    if (!file) {
+
+        return;
+
+    }
+
+
+    const reader =
+        new FileReader();
+
+
+    reader.onload =
+        function(e) {
+
+            const photoData =
+                document.getElementById(
+                    "admissionPhotoData"
+                );
+
+
+            const preview =
+                document.getElementById(
+                    "admissionPhotoPreview"
+                );
+
+
+            if (photoData) {
+
+                photoData.value =
+                    e.target.result;
+
+            }
+
+
+            if (preview) {
+
+                preview.innerHTML = `
+
+                    <img
+                        src="${e.target.result}"
+                        style="
+                            width:100px;
+                            height:120px;
+                            object-fit:cover;
+                            border:1px solid #777;
+                            border-radius:5px;
+                        "
+                    >
+
+                `;
+
+            }
+
+        };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+/* =========================================================
+   ADMISSION PAGE INITIALIZATION
+   ========================================================= */
+
+function initializeAdmission() {
+
+    const year =
+        document.getElementById(
+            "admissionYear"
+        );
+
+
+    const classSelect =
+        document.getElementById(
+            "admissionClass"
+        );
+
+
+    const photo =
+        document.getElementById(
+            "admissionPhoto"
+        );
+
+
+    const listYear =
+        document.getElementById(
+            "admissionListYear"
+        );
+
+
+    const listClass =
+        document.getElementById(
+            "admissionListClass"
+        );
+
+
+    if (year) {
+
+        year.addEventListener(
+            "change",
+            function() {
+
+                generateStudentId();
+
+            }
+        );
+
+    }
+
+
+    if (classSelect) {
+
+        classSelect.addEventListener(
+            "change",
+            function() {
+
+                generateStudentId();
+
+            }
+        );
+
+    }
+
+
+    if (photo) {
+
+        photo.addEventListener(
+            "change",
+            admissionPhotoUpload
+        );
+
+    }
+
+
+    if (listYear) {
+
+        listYear.addEventListener(
+            "change",
+            displayAdmissionStudents
+        );
+
+    }
+
+
+    if (listClass) {
+
+        listClass.addEventListener(
+            "change",
+            displayAdmissionStudents
+        );
+
+    }
+
+
+    displayAdmissionStudents();
+
+}
+
+
+/* =========================================================
+   DOM LOADED
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        initializeAdmission();
+
+    }
+);
