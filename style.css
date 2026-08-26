@@ -1,23 +1,40 @@
+/* =========================================================
+   ABDULLAH HAT ISLAMIA FAZIL (DEGREE) MADRASAH
+   WEBSITE STYLE
+========================================================= */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
-    font-family: Arial, "Noto Sans Bengali", sans-serif;
+    font-family: Arial, "Noto Sans Bengali", "SolaimanLipi", sans-serif;
     background: #f7f7f7;
     color: #222;
     line-height: 1.7;
 }
 
+/* =========================================================
+   TOP BAR
+========================================================= */
+
 .top-bar {
     background: #075e3b;
     color: white;
     text-align: center;
-    padding: 7px;
+    padding: 7px 10px;
     font-size: 14px;
 }
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .header {
     background: white;
@@ -51,8 +68,14 @@ body {
     color: #555;
 }
 
+/* =========================================================
+   NAVBAR
+========================================================= */
+
 .navbar {
     background: #064d31;
+    position: relative;
+    z-index: 1000;
 }
 
 .navbar ul {
@@ -64,11 +87,16 @@ body {
     flex-wrap: wrap;
 }
 
+.navbar li {
+    position: relative;
+}
+
 .navbar a {
     display: block;
     color: white;
     text-decoration: none;
     padding: 10px 13px;
+    transition: 0.2s;
 }
 
 .navbar a:hover {
@@ -81,9 +109,15 @@ body {
     border: none;
     background: #064d31;
     color: white;
-    padding: 12px;
+    padding: 12px 15px;
     font-size: 18px;
+    cursor: pointer;
+    text-align: center;
 }
+
+/* =========================================================
+   NOTICE
+========================================================= */
 
 .notice {
     display: flex;
@@ -98,20 +132,29 @@ body {
     flex: 1;
 }
 
+/* =========================================================
+   HERO
+========================================================= */
+
 .hero {
     min-height: 430px;
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
+
     background:
         linear-gradient(
-            rgba(0, 70, 40, .82),
-            rgba(0, 70, 40, .82)
-        ),
-        url("");
-    background-size: cover;
+            rgba(0, 70, 40, 0.82),
+            rgba(0, 70, 40, 0.82)
+        );
+
     color: white;
+    padding: 40px 15px;
+}
+
+.hero-content {
+    max-width: 800px;
 }
 
 .hero-content h2 {
@@ -135,10 +178,18 @@ body {
     font-weight: bold;
 }
 
+.button:hover {
+    opacity: 0.9;
+}
+
 .button.gold {
     background: #c99b30;
     color: white;
 }
+
+/* =========================================================
+   QUICK LINKS
+========================================================= */
 
 .quick {
     max-width: 1100px;
@@ -156,12 +207,22 @@ body {
     padding: 20px;
     text-align: center;
     border-radius: 8px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
 }
 
 .quick-card span {
     font-size: 32px;
 }
+
+.quick-card h3,
+.card h3 {
+    color: #075e3b;
+    margin-top: 5px;
+}
+
+/* =========================================================
+   SECTIONS
+========================================================= */
 
 .section {
     padding: 55px 15px;
@@ -178,7 +239,12 @@ body {
     text-align: center;
     color: #075e3b;
     margin-bottom: 30px;
+    font-size: 28px;
 }
+
+/* =========================================================
+   ABOUT
+========================================================= */
 
 .about {
     max-width: 1050px;
@@ -193,20 +259,37 @@ body {
     min-height: 260px;
     background: #e7efe9;
     border: 2px solid #c99b30;
+
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
     font-size: 65px;
+    border-radius: 8px;
 }
+
+.about-image p {
+    font-size: 16px;
+    color: #555;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
 
 .cards {
     max-width: 1100px;
     margin: auto;
+
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
 }
+
+/* =========================================================
+   NOTICE / EMPTY / CALENDAR
+========================================================= */
 
 .empty-box,
 .student-box,
@@ -218,7 +301,14 @@ body {
     padding: 30px;
     text-align: center;
     border-radius: 10px;
-    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+}
+
+.empty-box h3,
+.calendar h3,
+.notice-card h3 {
+    color: #075e3b;
+    margin: 10px 0;
 }
 
 .student-box {
@@ -228,9 +318,14 @@ body {
     text-align: left;
 }
 
+/* =========================================================
+   GALLERY
+========================================================= */
+
 .gallery {
     max-width: 1000px;
     margin: auto;
+
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 15px;
@@ -240,22 +335,37 @@ body {
     min-height: 150px;
     background: white;
     border: 1px solid #ddd;
+
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
+
     font-size: 45px;
+    border-radius: 8px;
 }
 
 .gallery span {
     font-size: 16px;
 }
 
+/* =========================================================
+   CONTACT
+========================================================= */
+
 .contact .cards {
     grid-template-columns: repeat(3, 1fr);
 }
 
-/* RESULT */
+.contact a {
+    color: #075e3b;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* =========================================================
+   RESULT BOX
+========================================================= */
 
 .result-box {
     max-width: 1150px;
@@ -263,7 +373,7 @@ body {
     background: white;
     padding: 25px;
     border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .result-box > h3 {
@@ -271,6 +381,10 @@ body {
     color: #075e3b;
     margin-bottom: 20px;
 }
+
+/* =========================================================
+   FORM
+========================================================= */
 
 .result-form {
     display: grid;
@@ -280,12 +394,19 @@ body {
 
 .result-form select,
 .result-form input,
+.result-form textarea,
 .result-form button {
+    width: 100%;
     min-height: 45px;
     border: 1px solid #bbb;
     border-radius: 5px;
     padding: 8px;
     font-size: 15px;
+    font-family: inherit;
+}
+
+.result-form textarea {
+    resize: vertical;
 }
 
 .result-form button {
@@ -293,17 +414,31 @@ body {
     color: white;
     cursor: pointer;
     border: none;
+    font-weight: bold;
 }
 
 .result-form button:hover {
     background: #0a8050;
 }
 
-#resultMessage {
+/* =========================================================
+   MESSAGES
+========================================================= */
+
+#resultMessage,
+#marksMessage,
+#admissionMessage,
+#studentSearchMessage,
+#dashboardMessage,
+#meritMessage {
     margin: 20px 0;
     text-align: center;
     font-weight: bold;
 }
+
+/* =========================================================
+   RESULT SUMMARY
+========================================================= */
 
 .result-summary {
     background: #f1f7f3;
@@ -311,12 +446,17 @@ body {
     padding: 15px;
     margin-top: 20px;
     text-align: center;
+    border-radius: 8px;
 }
 
 .result-summary h3 {
     color: #075e3b;
     font-size: 24px;
 }
+
+/* =========================================================
+   TABLE
+========================================================= */
 
 .result-table {
     width: 100%;
@@ -330,6 +470,7 @@ body {
     border: 1px solid #777;
     padding: 7px;
     text-align: center;
+    vertical-align: middle;
 }
 
 .result-table th {
@@ -337,10 +478,22 @@ body {
     color: white;
 }
 
+.result-table tbody tr:nth-child(even) {
+    background: #f7faf8;
+}
+
+.result-table tbody tr:hover {
+    background: #eef5f1;
+}
+
 .result-table tfoot th {
     background: #eee;
     color: #222;
 }
+
+/* =========================================================
+   PASS / FAIL
+========================================================= */
 
 .result-pass {
     color: green !important;
@@ -351,6 +504,10 @@ body {
     color: red !important;
     font-weight: bold;
 }
+
+/* =========================================================
+   PRINT BUTTON
+========================================================= */
 
 .print-button {
     display: block;
@@ -364,11 +521,17 @@ body {
     cursor: pointer;
 }
 
-/* MARKSHEET */
+/* =========================================================
+   MARKSHEET
+========================================================= */
 
 .marksheet {
     display: none;
 }
+
+/* =========================================================
+   FOOTER
+========================================================= */
 
 footer {
     background: #064d31;
@@ -382,7 +545,9 @@ footer hr {
     max-width: 700px;
 }
 
-/* MOBILE */
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
 @media (max-width: 800px) {
 
@@ -393,19 +558,32 @@ footer hr {
     .navbar ul {
         display: none;
         flex-direction: column;
+        width: 100%;
+        background: #064d31;
     }
 
     .navbar ul.active {
         display: flex;
     }
 
-    .navbar a {
+    .navbar ul li {
+        width: 100%;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .navbar ul li a {
+        width: 100%;
+        padding: 14px 16px;
         text-align: center;
-        border-top: 1px solid rgba(255,255,255,.15);
     }
 
     .logo {
         justify-content: center;
+        text-align: center;
+    }
+
+    .logo-icon {
+        font-size: 45px;
     }
 
     .logo h1 {
@@ -414,6 +592,22 @@ footer hr {
 
     .logo h2 {
         font-size: 17px;
+    }
+
+    .logo p {
+        font-size: 14px;
+    }
+
+    .top-bar {
+        font-size: 12px;
+    }
+
+    .hero {
+        min-height: 380px;
+    }
+
+    .hero-content h2 {
+        font-size: 27px;
     }
 
     .quick {
@@ -446,7 +640,64 @@ footer hr {
         text-align: center;
     }
 
+    .result-box {
+        padding: 15px;
+    }
+
+    .section {
+        padding: 40px 10px;
+    }
+
+    .section-title {
+        font-size: 24px;
+    }
 }
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .quick {
+        grid-template-columns: 1fr;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content h2 {
+        font-size: 23px;
+    }
+
+    .button {
+        display: block;
+        margin: 8px auto;
+        max-width: 240px;
+    }
+
+    .logo {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .logo h1 {
+        font-size: 19px;
+    }
+
+    .logo h2 {
+        font-size: 16px;
+    }
+}
+
+/* =========================================================
+   PRINT
+========================================================= */
 
 @media print {
 
@@ -471,74 +722,4 @@ footer hr {
         size: A4;
         margin: 0.5in;
     }
-/* ==========================================
-   MOBILE MENU
-========================================== */
-
-.menu-button {
-    display: none;
-    width: 100%;
-    padding: 12px 15px;
-    border: none;
-    background: #064d31;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    text-align: left;
-}
-
-.navbar ul {
-    max-width: 1200px;
-    margin: auto;
-    display: flex;
-    list-style: none;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.navbar ul li {
-    position: relative;
-}
-
-.navbar ul li a {
-    display: block;
-    color: white;
-    text-decoration: none;
-    padding: 10px 13px;
-}
-
-
-/* ==========================================
-   MOBILE
-========================================== */
-
-@media (max-width: 800px) {
-
-    .menu-button {
-        display: block;
-    }
-
-    .navbar ul {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-        background: #064d31;
-    }
-
-    /* JavaScript থেকে active class দেওয়া হয় */
-    .navbar ul.active {
-        display: flex;
-    }
-
-    .navbar ul li {
-        width: 100%;
-        border-bottom: 1px solid rgba(255,255,255,.15);
-    }
-
-    .navbar ul li a {
-        width: 100%;
-        padding: 14px 16px;
-        text-align: center;
-    }
-
 }
