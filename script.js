@@ -1803,13 +1803,11 @@ function generateMeritList() {
 
 
             if (
-                className !==
-                getClassCode(
-                    student.className
-                )
-            ) {
-
-                return;
+    className !==
+    getClassCode(student.className)
+) {
+    return;
+}
 
             }
 
