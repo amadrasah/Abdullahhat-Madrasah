@@ -33,6 +33,10 @@ const CLASS_LIST = {
 };
 
 
+/* =========================================================
+   EXAM LIST
+   ========================================================= */
+
 const EXAMS = [
 
     "অর্ধবার্ষিক পরীক্ষা",
@@ -45,6 +49,10 @@ const EXAMS = [
 
 ];
 
+
+/* =========================================================
+   SUBJECT LIST
+   ========================================================= */
 
 const SUBJECTS = [
 
@@ -240,7 +248,7 @@ function toggleMenu() {
 
 
 /* =========================================================
-   5. CLASS SELECT OPTION
+   5. CLASS DROPDOWN
    ========================================================= */
 
 function fillClassSelect(id, firstText) {
@@ -256,7 +264,21 @@ function fillClassSelect(id, firstText) {
 
 
     select.innerHTML =
-        `<option value="">${firstText}</option>`;
+        "";
+
+
+    const firstOption =
+        document.createElement("option");
+
+    firstOption.value =
+        "";
+
+    firstOption.textContent =
+        firstText;
+
+    select.appendChild(
+        firstOption
+    );
 
 
     Object.keys(CLASS_LIST).forEach(
@@ -271,15 +293,17 @@ function fillClassSelect(id, firstText) {
             option.textContent =
                 CLASS_LIST[code];
 
-            select.appendChild(option);
+            select.appendChild(
+                option
+            );
 
         }
     );
 
 
     if (
-        Object.keys(CLASS_LIST)
-            .includes(oldValue)
+        oldValue &&
+        Object.keys(CLASS_LIST).includes(oldValue)
     ) {
 
         select.value =
@@ -291,7 +315,7 @@ function fillClassSelect(id, firstText) {
 
 
 /* =========================================================
-   6. YEAR SELECT OPTION
+   6. YEAR DROPDOWN
    ========================================================= */
 
 function fillYearSelect(id, firstText) {
@@ -307,7 +331,21 @@ function fillYearSelect(id, firstText) {
 
 
     select.innerHTML =
-        `<option value="">${firstText}</option>`;
+        "";
+
+
+    const firstOption =
+        document.createElement("option");
+
+    firstOption.value =
+        "";
+
+    firstOption.textContent =
+        firstText;
+
+    select.appendChild(
+        firstOption
+    );
 
 
     const currentYear =
@@ -324,12 +362,14 @@ function fillYearSelect(id, firstText) {
             document.createElement("option");
 
         option.value =
-            year;
+            String(year);
 
         option.textContent =
-            year;
+            String(year);
 
-        select.appendChild(option);
+        select.appendChild(
+            option
+        );
 
     }
 
@@ -345,10 +385,79 @@ function fillYearSelect(id, firstText) {
 
 
 /* =========================================================
-   7. INITIALIZE ALL DROPDOWNS
+   7. EXAM DROPDOWN
+   ========================================================= */
+
+function fillExamSelect(id, firstText) {
+
+    const select =
+        document.getElementById(id);
+
+    if (!select) return;
+
+
+    const oldValue =
+        select.value;
+
+
+    select.innerHTML =
+        "";
+
+
+    const firstOption =
+        document.createElement("option");
+
+    firstOption.value =
+        "";
+
+    firstOption.textContent =
+        firstText;
+
+    select.appendChild(
+        firstOption
+    );
+
+
+    EXAMS.forEach(
+        function(exam) {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                exam;
+
+            option.textContent =
+                exam;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if (oldValue) {
+
+        select.value =
+            oldValue;
+
+    }
+
+}
+
+
+/* =========================================================
+   8. INITIALIZE ALL DROPDOWNS
    ========================================================= */
 
 function initializeDropdowns() {
+
+
+    /* -----------------------------------------
+       ADMISSION
+    ----------------------------------------- */
 
     fillYearSelect(
         "admissionYear",
@@ -361,6 +470,10 @@ function initializeDropdowns() {
     );
 
 
+    /* -----------------------------------------
+       STUDENT SEARCH
+    ----------------------------------------- */
+
     fillYearSelect(
         "studentSearchYear",
         "সব সন"
@@ -371,6 +484,10 @@ function initializeDropdowns() {
         "সব শ্রেণি"
     );
 
+
+    /* -----------------------------------------
+       STUDENT LIST
+    ----------------------------------------- */
 
     fillYearSelect(
         "studentListYear",
@@ -383,6 +500,10 @@ function initializeDropdowns() {
     );
 
 
+    /* -----------------------------------------
+       DASHBOARD
+    ----------------------------------------- */
+
     fillYearSelect(
         "dashboardYear",
         "সন নির্বাচন করুন"
@@ -394,6 +515,10 @@ function initializeDropdowns() {
     );
 
 
+    /* -----------------------------------------
+       MARKS
+    ----------------------------------------- */
+
     fillYearSelect(
         "marksYear",
         "সন নির্বাচন করুন"
@@ -404,10 +529,24 @@ function initializeDropdowns() {
         "শ্রেণি নির্বাচন করুন"
     );
 
+    fillExamSelect(
+        "marksExam",
+        "পরীক্ষা নির্বাচন করুন"
+    );
+
+
+    /* -----------------------------------------
+       RESULT SEARCH
+    ----------------------------------------- */
 
     fillYearSelect(
         "examYear",
         "সন নির্বাচন করুন"
+    );
+
+    fillExamSelect(
+        "examName",
+        "পরীক্ষা নির্বাচন করুন"
     );
 
     fillClassSelect(
@@ -416,9 +555,18 @@ function initializeDropdowns() {
     );
 
 
+    /* -----------------------------------------
+       MERIT LIST
+    ----------------------------------------- */
+
     fillYearSelect(
         "meritYear",
         "সন নির্বাচন করুন"
+    );
+
+    fillExamSelect(
+        "meritExam",
+        "পরীক্ষা নির্বাচন করুন"
     );
 
     fillClassSelect(
@@ -430,7 +578,7 @@ function initializeDropdowns() {
 
 
 /* =========================================================
-   8. ADMISSION - STUDENT ID
+   9. ADMISSION - STUDENT ID
    ========================================================= */
 
 function generateStudentId() {
@@ -527,7 +675,7 @@ function generateStudentId() {
 
 
 /* =========================================================
-   9. ADMISSION - AUTO ROLL
+   10. ADMISSION - AUTO ROLL
    ========================================================= */
 
 function generateAdmissionRoll() {
@@ -611,7 +759,7 @@ function generateAdmissionRoll() {
 
 
 /* =========================================================
-   10. ADMISSION FORM SAVE
+   11. ADMISSION SAVE
    ========================================================= */
 
 function saveAdmissionData() {
@@ -786,6 +934,7 @@ function saveAdmissionData() {
 
         }
 
+
         showAdmissionMessage(
             "✅ শিক্ষার্থীর তথ্য Update হয়েছে।",
             "green"
@@ -855,7 +1004,7 @@ function saveAdmissionData() {
 
 
 /* =========================================================
-   11. ADMISSION MESSAGE
+   12. ADMISSION MESSAGE
    ========================================================= */
 
 function showAdmissionMessage(
@@ -885,7 +1034,7 @@ function showAdmissionMessage(
 
 
 /* =========================================================
-   12. CLEAR ADMISSION
+   13. CLEAR ADMISSION
    ========================================================= */
 
 function clearAdmissionForm() {
@@ -959,7 +1108,7 @@ function clearAdmissionForm() {
 
 
 /* =========================================================
-   13. CANCEL ADMISSION EDIT
+   14. CANCEL EDIT
    ========================================================= */
 
 function cancelAdmissionEdit() {
@@ -975,7 +1124,7 @@ function cancelAdmissionEdit() {
 
 
 /* =========================================================
-   14. EDIT STUDENT
+   15. EDIT STUDENT
    ========================================================= */
 
 function editAdmissionStudent(id) {
@@ -993,76 +1142,75 @@ function editAdmissionStudent(id) {
     if (!student) return;
 
 
-    document.getElementById(
-        "admissionYear"
-    ).value =
-        student.year;
+    const year =
+        document.getElementById(
+            "admissionYear"
+        );
+
+    const classCode =
+        document.getElementById(
+            "admissionClass"
+        );
 
 
-    document.getElementById(
-        "admissionClass"
-    ).value =
-        student.classCode;
+    if (year)
+        year.value = student.year;
 
 
-    document.getElementById(
-        "admissionStudentId"
-    ).value =
-        student.studentId || "";
+    if (classCode)
+        classCode.value = student.classCode;
 
 
-    document.getElementById(
-        "admissionName"
-    ).value =
-        student.name || "";
+    const fields = {
+
+        admissionStudentId:
+            student.studentId || "",
+
+        admissionName:
+            student.name || "",
+
+        admissionRoll:
+            student.roll || "",
+
+        admissionFather:
+            student.fatherName || "",
+
+        admissionMother:
+            student.motherName || "",
+
+        admissionDob:
+            student.birthDate || "",
+
+        admissionGender:
+            student.gender || "",
+
+        admissionMobile:
+            student.mobile || "",
+
+        admissionAddress:
+            student.address || "",
+
+        admissionDate:
+            student.admissionDate || ""
+
+    };
 
 
-    document.getElementById(
-        "admissionRoll"
-    ).value =
-        student.roll || "";
+    Object.keys(fields).forEach(
+        function(id) {
 
+            const element =
+                document.getElementById(id);
 
-    document.getElementById(
-        "admissionFather"
-    ).value =
-        student.fatherName || "";
+            if (element) {
 
+                element.value =
+                    fields[id];
 
-    document.getElementById(
-        "admissionMother"
-    ).value =
-        student.motherName || "";
+            }
 
-
-    document.getElementById(
-        "admissionDob"
-    ).value =
-        student.birthDate || "";
-
-
-    document.getElementById(
-        "admissionGender"
-    ).value =
-        student.gender || "";
-
-
-    document.getElementById(
-        "admissionMobile"
-    ).value =
-        student.mobile || "";
-
-
-    document.getElementById(
-        "admissionAddress"
-    ).value =
-        student.address || "";
-
-
-    document.getElementById(
-        "admissionDate"
-    ).value =
-        student.admissionDate || "";
+        }
+    );
 
 
     let edit =
@@ -1130,7 +1278,7 @@ function editAdmissionStudent(id) {
 
 
 /* =========================================================
-   15. DELETE STUDENT
+   16. DELETE STUDENT
    ========================================================= */
 
 function deleteAdmissionStudent(id) {
@@ -1165,8 +1313,6 @@ function deleteAdmissionStudent(id) {
             }
         );
 
-
-    /* Delete student's marks too */
 
     if (student) {
 
@@ -1207,7 +1353,7 @@ function deleteAdmissionStudent(id) {
 
 
 /* =========================================================
-   16. ADMISSION LIST
+   17. ADMISSION LIST
    ========================================================= */
 
 function displayAdmissionStudents() {
@@ -1379,7 +1525,7 @@ function displayAdmissionStudents() {
 
 
 /* =========================================================
-   17. STUDENT SEARCH
+   18. STUDENT SEARCH
    ========================================================= */
 
 function showAdmissionStudents() {
@@ -1533,8 +1679,11 @@ function showAdmissionStudents() {
 
 
     html += `
+
             </tbody>
+
         </table>
+
     `;
 
 
@@ -1545,7 +1694,7 @@ function showAdmissionStudents() {
 
 
 /* =========================================================
-   18. PHOTO UPLOAD
+   19. PHOTO UPLOAD
    ========================================================= */
 
 function admissionPhotoUpload(event) {
@@ -1602,7 +1751,7 @@ function admissionPhotoUpload(event) {
 
 
 /* =========================================================
-   19. MARKS - STUDENT LIST
+   20. MARKS - STUDENT LIST
    ========================================================= */
 
 function updateMarksStudentList() {
@@ -1697,7 +1846,7 @@ function updateMarksStudentList() {
 
 
 /* =========================================================
-   20. MARKS - SUBJECT LIST
+   21. MARKS - SUBJECT LIST
    ========================================================= */
 
 function updateSubjectList() {
@@ -1753,7 +1902,7 @@ function updateSubjectList() {
 
 
 /* =========================================================
-   21. MARKS - INPUT SETTINGS
+   22. MARKS INPUT SETTINGS
    ========================================================= */
 
 function updateMarksInputs() {
@@ -1768,8 +1917,10 @@ function updateMarksInputs() {
         SUBJECTS.find(
             function(item) {
 
-                return item.name ===
-                    subjectName;
+                return (
+                    item.name ===
+                    subjectName
+                );
 
             }
         );
@@ -1797,7 +1948,11 @@ function updateMarksInputs() {
 
         if (mcq) {
 
-            mcq.value = "";
+            mcq.value =
+                "";
+
+            mcq.disabled =
+                false;
 
             mcq.placeholder =
                 "MCQ নম্বর";
@@ -1807,7 +1962,11 @@ function updateMarksInputs() {
 
         if (cq) {
 
-            cq.value = "";
+            cq.value =
+                "";
+
+            cq.disabled =
+                false;
 
             cq.placeholder =
                 "CQ নম্বর";
@@ -1817,7 +1976,11 @@ function updateMarksInputs() {
 
         if (practical) {
 
-            practical.value = "";
+            practical.value =
+                "";
+
+            practical.disabled =
+                false;
 
             practical.placeholder =
                 "Practical নম্বর";
@@ -1841,11 +2004,13 @@ function updateMarksInputs() {
         mcq.placeholder =
             subject.mcq === 0
                 ? "MCQ নেই"
-                : "MCQ: 0-" + subject.mcq;
+                : "MCQ: 0-" +
+                  subject.mcq;
 
         if (subject.mcq === 0) {
 
-            mcq.value = "";
+            mcq.value =
+                "";
 
         }
 
@@ -1863,11 +2028,13 @@ function updateMarksInputs() {
         cq.placeholder =
             subject.cq === 0
                 ? "CQ নেই"
-                : "CQ: 0-" + subject.cq;
+                : "CQ: 0-" +
+                  subject.cq;
 
         if (subject.cq === 0) {
 
-            cq.value = "";
+            cq.value =
+                "";
 
         }
 
@@ -1890,7 +2057,8 @@ function updateMarksInputs() {
 
         if (subject.practical === 0) {
 
-            practical.value = "";
+            practical.value =
+                "";
 
         }
 
@@ -1903,8 +2071,8 @@ function updateMarksInputs() {
 
 
 /* =========================================================
-   22. LOAD EXISTING MARKS
-========================================================= */
+   23. LOAD EXISTING MARKS
+   ========================================================= */
 
 function loadExistingMarks() {
 
@@ -1983,7 +2151,7 @@ function loadExistingMarks() {
         if (mcq) {
 
             mcq.value =
-                item.mcq || "";
+                item.mcq ?? "";
 
         }
 
@@ -1991,7 +2159,7 @@ function loadExistingMarks() {
         if (cq) {
 
             cq.value =
-                item.cq || "";
+                item.cq ?? "";
 
         }
 
@@ -1999,7 +2167,7 @@ function loadExistingMarks() {
         if (practical) {
 
             practical.value =
-                item.practical || "";
+                item.practical ?? "";
 
         }
 
@@ -2019,7 +2187,7 @@ function loadExistingMarks() {
 
 
 /* =========================================================
-   23. SAVE MARKS
+   24. SAVE MARKS
    ========================================================= */
 
 function saveMarks() {
@@ -2076,8 +2244,10 @@ function saveMarks() {
         SUBJECTS.find(
             function(item) {
 
-                return item.name ===
-                    subjectName;
+                return (
+                    item.name ===
+                    subjectName
+                );
 
             }
         );
@@ -2271,7 +2441,7 @@ function saveMarks() {
 
 
 /* =========================================================
-   24. MARKS MESSAGE
+   25. MARKS MESSAGE
    ========================================================= */
 
 function showMarksMessage(
@@ -2301,7 +2471,7 @@ function showMarksMessage(
 
 
 /* =========================================================
-   25. MARKS TABLE
+   26. MARKS TABLE
    ========================================================= */
 
 function renderMarksTable() {
@@ -2478,7 +2648,7 @@ function renderMarksTable() {
 
 
 /* =========================================================
-   26. DELETE MARKS
+   27. DELETE MARKS
    ========================================================= */
 
 function deleteMarks(id) {
@@ -2514,7 +2684,7 @@ function deleteMarks(id) {
 
 
 /* =========================================================
-   27. GRADE
+   28. GRADE
    ========================================================= */
 
 function getGrade(mark, full) {
@@ -2522,8 +2692,10 @@ function getGrade(mark, full) {
     if (!full) {
 
         return {
+
             grade: "-",
             point: 0
+
         };
 
     }
@@ -2536,8 +2708,10 @@ function getGrade(mark, full) {
     if (percentage >= 80) {
 
         return {
+
             grade: "A+",
             point: 5
+
         };
 
     }
@@ -2546,8 +2720,10 @@ function getGrade(mark, full) {
     if (percentage >= 70) {
 
         return {
+
             grade: "A",
             point: 4
+
         };
 
     }
@@ -2556,8 +2732,10 @@ function getGrade(mark, full) {
     if (percentage >= 60) {
 
         return {
+
             grade: "A-",
             point: 3.5
+
         };
 
     }
@@ -2566,8 +2744,10 @@ function getGrade(mark, full) {
     if (percentage >= 50) {
 
         return {
+
             grade: "B",
             point: 3
+
         };
 
     }
@@ -2576,8 +2756,10 @@ function getGrade(mark, full) {
     if (percentage >= 40) {
 
         return {
+
             grade: "C",
             point: 2
+
         };
 
     }
@@ -2586,23 +2768,27 @@ function getGrade(mark, full) {
     if (percentage >= 33) {
 
         return {
+
             grade: "D",
             point: 1
+
         };
 
     }
 
 
     return {
+
         grade: "F",
         point: 0
+
     };
 
 }
 
 
 /* =========================================================
-   28. PASS CHECK
+   29. PASS CHECK
    ========================================================= */
 
 function passedPart(mark, full) {
@@ -2623,7 +2809,7 @@ function passedPart(mark, full) {
 
 
 /* =========================================================
-   29. CALCULATE RESULT
+   30. CALCULATE RESULT
    ========================================================= */
 
 function calculateResult(
@@ -2691,6 +2877,7 @@ function calculateResult(
             totalMarks +=
                 total;
 
+
             totalFull +=
                 subject.full;
 
@@ -2727,9 +2914,7 @@ function calculateResult(
                 );
 
 
-            if (
-                subject.optional
-            ) {
+            if (subject.optional) {
 
                 if (
                     total >
@@ -2784,7 +2969,9 @@ function calculateResult(
                 const average =
                     points.reduce(
                         function(a, b) {
+
                             return a + b;
+
                         },
                         0
                     ) /
@@ -2860,7 +3047,7 @@ function calculateResult(
 
 
 /* =========================================================
-   30. RESULT SEARCH
+   31. RESULT SEARCH
    ========================================================= */
 
 function searchResult() {
@@ -3024,7 +3211,7 @@ function searchResult() {
             </h3>
 
             <p>
-                সন: ${year}
+                সন: ${escapeHTML(year)}
                 &nbsp; | &nbsp;
                 পরীক্ষা: ${escapeHTML(exam)}
             </p>
@@ -3033,7 +3220,8 @@ function searchResult() {
                 শ্রেণি:
                 ${escapeHTML(student.className)}
                 &nbsp; | &nbsp;
-                রোল: ${escapeHTML(student.roll)}
+                রোল:
+                ${escapeHTML(student.roll)}
             </p>
 
         </div>
@@ -3069,78 +3257,110 @@ function searchResult() {
                 <tfoot>
 
                     <tr>
+
                         <th colspan="5">
                             মোট প্রাপ্ত নম্বর
                         </th>
+
                         <th>
                             ${calculation.totalMarks}
                         </th>
+
                         <th colspan="2">
                             ${calculation.totalFull}
                         </th>
+
                     </tr>
 
+
                     <tr>
+
                         <th colspan="7">
                             আবশ্যিক বিষয়ের GPA
                         </th>
+
                         <th>
                             ${calculation.compulsoryGPA.toFixed(2)}
                         </th>
+
                     </tr>
 
+
                     <tr>
+
                         <th colspan="7">
                             কৃষির অতিরিক্ত GPA
                         </th>
+
                         <th>
                             ${calculation.agricultureBonus.toFixed(2)}
                         </th>
+
                     </tr>
 
+
                     <tr>
+
                         <th colspan="7">
                             চূড়ান্ত GPA
                         </th>
+
                         <th>
                             ${calculation.finalGPA.toFixed(2)}
                         </th>
+
                     </tr>
 
+
                     <tr>
+
                         <th colspan="7">
                             ফেল বিষয় সংখ্যা
                         </th>
+
                         <th>
                             ${calculation.failedSubjects}
                         </th>
+
                     </tr>
 
+
                     <tr>
+
                         <th colspan="7">
                             মেধাক্রম
                         </th>
+
                         <th>
                             ${merit}
                         </th>
+
                     </tr>
 
+
                     <tr>
+
                         <th colspan="7">
                             Remarks
                         </th>
+
                         <th>
                             ${remarks}
                         </th>
+
                     </tr>
 
+
                     <tr>
+
                         <th colspan="7">
                             ফলাফল
                         </th>
+
                         <th>
                             ${calculation.result}
                         </th>
+
                     </tr>
 
                 </tfoot>
@@ -3164,7 +3384,7 @@ function searchResult() {
 
 
 /* =========================================================
-   31. BUILD RESULT ROWS
+   32. BUILD RESULT ROWS
    ========================================================= */
 
 function buildResultRows(
@@ -3290,7 +3510,7 @@ function buildResultRows(
 
 
 /* =========================================================
-   32. MERIT POSITION
+   33. MERIT POSITION
    ========================================================= */
 
 function getMeritPosition(
@@ -3403,7 +3623,7 @@ function getMeritPosition(
 
 
 /* =========================================================
-   33. MERIT LIST
+   34. MERIT LIST
    ========================================================= */
 
 function showMeritList() {
@@ -3579,7 +3799,9 @@ function showMeritList() {
         </h3>
 
         <p style="text-align:center;">
-            ${year} — ${escapeHTML(exam)}
+            ${escapeHTML(year)}
+            —
+            ${escapeHTML(exam)}
         </p>
 
         <table class="result-table">
@@ -3735,7 +3957,7 @@ function showMeritList() {
 
 
 /* =========================================================
-   34. PRINT MERIT LIST
+   35. PRINT MERIT LIST
    ========================================================= */
 
 function printMeritList() {
@@ -3758,7 +3980,7 @@ function printMeritList() {
 
 
 /* =========================================================
-   35. PRINT RESULT
+   36. PRINT RESULT
    ========================================================= */
 
 function printResult() {
@@ -3781,7 +4003,7 @@ function printResult() {
 
 
 /* =========================================================
-   36. PRINT FUNCTION
+   37. PRINT FUNCTION
    ========================================================= */
 
 function printHTML(
@@ -3818,7 +4040,7 @@ function printHTML(
             <meta charset="UTF-8">
 
             <title>
-                ${title}
+                ${escapeHTML(title)}
             </title>
 
             <style>
@@ -3927,7 +4149,7 @@ function printHTML(
 
 
 /* =========================================================
-   37. DASHBOARD
+   38. DASHBOARD
    ========================================================= */
 
 function showDashboard() {
@@ -4160,6 +4382,7 @@ function showDashboard() {
 
         <hr>
 
+
         <h3 style="text-align:center;">
             📚 শ্রেণিভিত্তিক শিক্ষার্থী
         </h3>
@@ -4188,7 +4411,7 @@ function showDashboard() {
 
 
 /* =========================================================
-   38. UPDATE DASHBOARD
+   39. UPDATE DASHBOARD
    ========================================================= */
 
 function updateDashboard() {
@@ -4196,12 +4419,6 @@ function updateDashboard() {
     const year =
         document.getElementById(
             "dashboardYear"
-        )?.value;
-
-
-    const classCode =
-        document.getElementById(
-            "dashboardClass"
         )?.value;
 
 
@@ -4215,7 +4432,7 @@ function updateDashboard() {
 
 
 /* =========================================================
-   39. ESCAPE HTML
+   40. ESCAPE HTML
    ========================================================= */
 
 function escapeHTML(value) {
@@ -4248,7 +4465,7 @@ function escapeHTML(value) {
 
 
 /* =========================================================
-   40. DOM READY
+   41. DOM READY
    ========================================================= */
 
 document.addEventListener(
@@ -4257,7 +4474,7 @@ document.addEventListener(
 
 
         /* =====================================
-           DROPDOWNS
+           INITIALIZE DROPDOWNS
         ===================================== */
 
         initializeDropdowns();
@@ -4487,7 +4704,13 @@ document.addEventListener(
 
             marksExam.addEventListener(
                 "change",
-                renderMarksTable
+                function() {
+
+                    renderMarksTable();
+
+                    loadExistingMarks();
+
+                }
             );
 
         }
@@ -4513,14 +4736,21 @@ document.addEventListener(
         }
 
 
-        updateSubjectList();
-
-        renderMarksTable();
-
-
         /* =====================================
-           RESULT CLASS
+           RESULT SEARCH
         ===================================== */
+
+        const examYear =
+            document.getElementById(
+                "examYear"
+            );
+
+
+        const examName =
+            document.getElementById(
+                "examName"
+            );
+
 
         const examClass =
             document.getElementById(
@@ -4528,15 +4758,31 @@ document.addEventListener(
             );
 
 
+        if (examYear) {
+
+            examYear.addEventListener(
+                "change",
+                function() {}
+            );
+
+        }
+
+
+        if (examName) {
+
+            examName.addEventListener(
+                "change",
+                function() {}
+            );
+
+        }
+
+
         if (examClass) {
 
             examClass.addEventListener(
                 "change",
-                function() {
-
-                    /* nothing */
-
-                }
+                function() {}
             );
 
         }
@@ -4604,11 +4850,7 @@ document.addEventListener(
 
             meritYear.addEventListener(
                 "change",
-                function() {
-
-                    /* wait for button */
-
-                }
+                function() {}
             );
 
         }
@@ -4618,11 +4860,7 @@ document.addEventListener(
 
             meritExam.addEventListener(
                 "change",
-                function() {
-
-                    /* wait for button */
-
-                }
+                function() {}
             );
 
         }
@@ -4632,18 +4870,14 @@ document.addEventListener(
 
             meritClass.addEventListener(
                 "change",
-                function() {
-
-                    /* wait for button */
-
-                }
+                function() {}
             );
 
         }
 
 
         /* =====================================
-           DISPLAY
+           INITIAL DISPLAY
         ===================================== */
 
         displayAdmissionStudents();
@@ -4653,6 +4887,8 @@ document.addEventListener(
         updateMarksStudentList();
 
         updateSubjectList();
+
+        renderMarksTable();
 
 
     }
