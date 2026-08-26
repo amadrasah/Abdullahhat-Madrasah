@@ -136,11 +136,18 @@
             </a>
         </li>
 
-<li>
-    <a href="#admission">
-        📝 Admission
-    </a>
-</li>
+
+        <!-- ==============================
+             ADMISSION MENU
+        =============================== -->
+
+        <li>
+            <a href="#admission">
+                📝 Admission
+            </a>
+        </li>
+
+
         <li>
             <a href="#results">
                 📋 ফলাফল
@@ -601,6 +608,7 @@
 </section>
 
 
+
 <!-- ==========================================
      ADMISSION
 ========================================== -->
@@ -611,47 +619,112 @@
         📝 Admission বিভাগ
     </h2>
 
+
     <div class="result-box">
+
 
         <h3>
             শিক্ষার্থী ভর্তি তথ্য
         </h3>
 
+
+        <!-- ==================================
+             ADMISSION FORM
+        =================================== -->
+
         <form id="admissionForm">
+
 
             <div class="result-form">
 
-                <!-- সন -->
 
-                <select id="admissionYear" required>
+                <!-- ==========================
+                     সন
+                =========================== -->
+
+                <select
+                    id="admissionYear"
+                    required>
 
                     <option value="">
                         সন নির্বাচন করুন
                     </option>
 
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    <option value="2027">2027</option>
-                    <option value="2028">2028</option>
-                    <option value="2029">2029</option>
-                    <option value="2030">2030</option>
-                    <option value="2031">2031</option>
-                    <option value="2032">2032</option>
-                    <option value="2033">2033</option>
-                    <option value="2034">2034</option>
-                    <option value="2035">2035</option>
-                    <option value="2036">2036</option>
-                    <option value="2037">2037</option>
-                    <option value="2038">2038</option>
-                    <option value="2039">2039</option>
-                    <option value="2040">2040</option>
+                    <option value="2025">
+                        2025
+                    </option>
+
+                    <option value="2026">
+                        2026
+                    </option>
+
+                    <option value="2027">
+                        2027
+                    </option>
+
+                    <option value="2028">
+                        2028
+                    </option>
+
+                    <option value="2029">
+                        2029
+                    </option>
+
+                    <option value="2030">
+                        2030
+                    </option>
+
+                    <option value="2031">
+                        2031
+                    </option>
+
+                    <option value="2032">
+                        2032
+                    </option>
+
+                    <option value="2033">
+                        2033
+                    </option>
+
+                    <option value="2034">
+                        2034
+                    </option>
+
+                    <option value="2035">
+                        2035
+                    </option>
+
+                    <option value="2036">
+                        2036
+                    </option>
+
+                    <option value="2037">
+                        2037
+                    </option>
+
+                    <option value="2038">
+                        2038
+                    </option>
+
+                    <option value="2039">
+                        2039
+                    </option>
+
+                    <option value="2040">
+                        2040
+                    </option>
 
                 </select>
 
 
-                <!-- শ্রেণি -->
 
-                <select id="admissionClass" required>
+                <!-- ==========================
+                     শ্রেণি
+                =========================== -->
+
+                <select
+                    id="admissionClass"
+                    required>
 
                     <option value="">
                         শ্রেণি নির্বাচন করুন
@@ -720,7 +793,10 @@
                 </select>
 
 
-                <!-- Student ID -->
+
+                <!-- ==========================
+                     STUDENT ID
+                =========================== -->
 
                 <input
                     type="text"
@@ -729,7 +805,10 @@
                     readonly>
 
 
-                <!-- নাম -->
+
+                <!-- ==========================
+                     নাম
+                =========================== -->
 
                 <input
                     type="text"
@@ -738,7 +817,10 @@
                     required>
 
 
-                <!-- Roll -->
+
+                <!-- ==========================
+                     Roll
+                =========================== -->
 
                 <input
                     type="text"
@@ -747,7 +829,10 @@
                     readonly>
 
 
-                <!-- পিতার নাম -->
+
+                <!-- ==========================
+                     পিতার নাম
+                =========================== -->
 
                 <input
                     type="text"
@@ -755,7 +840,10 @@
                     placeholder="পিতার নাম">
 
 
-                <!-- মাতার নাম -->
+
+                <!-- ==========================
+                     মাতার নাম
+                =========================== -->
 
                 <input
                     type="text"
@@ -763,7 +851,10 @@
                     placeholder="মাতার নাম">
 
 
-                <!-- জন্মতারিখ -->
+
+                <!-- ==========================
+                     জন্মতারিখ
+                =========================== -->
 
                 <input
                     type="date"
@@ -771,7 +862,10 @@
                     title="জন্মতারিখ">
 
 
-                <!-- লিঙ্গ -->
+
+                <!-- ==========================
+                     লিঙ্গ
+                =========================== -->
 
                 <select id="admissionGender">
 
@@ -794,7 +888,10 @@
                 </select>
 
 
-                <!-- মোবাইল -->
+
+                <!-- ==========================
+                     মোবাইল
+                =========================== -->
 
                 <input
                     type="tel"
@@ -802,7 +899,10 @@
                     placeholder="মোবাইল নম্বর">
 
 
-                <!-- ঠিকানা -->
+
+                <!-- ==========================
+                     ঠিকানা
+                =========================== -->
 
                 <textarea
                     id="admissionAddress"
@@ -810,7 +910,10 @@
                     rows="3"></textarea>
 
 
-                <!-- ভর্তির তারিখ -->
+
+                <!-- ==========================
+                     ভর্তির তারিখ
+                =========================== -->
 
                 <input
                     type="date"
@@ -818,7 +921,10 @@
                     title="ভর্তির তারিখ">
 
 
-                <!-- ছবি -->
+
+                <!-- ==========================
+                     ছবি
+                =========================== -->
 
                 <input
                     type="file"
@@ -826,7 +932,10 @@
                     accept="image/*">
 
 
-                <!-- Save -->
+
+                <!-- ==========================
+                     SAVE
+                =========================== -->
 
                 <button
                     type="submit"
@@ -837,7 +946,10 @@
                 </button>
 
 
-                <!-- Cancel Edit -->
+
+                <!-- ==========================
+                     CANCEL EDIT
+                =========================== -->
 
                 <button
                     type="button"
@@ -849,22 +961,33 @@
 
                 </button>
 
+
             </div>
+
 
         </form>
 
 
+
+        <!-- ==============================
+             ADMISSION MESSAGE
+        =============================== -->
+
         <div
             id="admissionMessage"
             style="margin-top:15px;">
+
         </div>
+
+
+
+        <hr>
+
 
 
         <!-- ==================================
              STUDENT FILTER
         =================================== -->
-
-        <hr>
 
         <h3>
             📋 শ্রেণিভিত্তিক শিক্ষার্থী তালিকা
@@ -873,35 +996,90 @@
 
         <div class="result-form">
 
-            <select id="studentListYear"
-                    onchange="showAdmissionStudents()">
+
+            <!-- সন -->
+
+            <select
+                id="studentListYear"
+                onchange="showAdmissionStudents()">
 
                 <option value="">
                     সব সন
                 </option>
 
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-                <option value="2027">2027</option>
-                <option value="2028">2028</option>
-                <option value="2029">2029</option>
-                <option value="2030">2030</option>
-                <option value="2031">2031</option>
-                <option value="2032">2032</option>
-                <option value="2033">2033</option>
-                <option value="2034">2034</option>
-                <option value="2035">2035</option>
-                <option value="2036">2036</option>
-                <option value="2037">2037</option>
-                <option value="2038">2038</option>
-                <option value="2039">2039</option>
-                <option value="2040">2040</option>
+                <option value="2025">
+                    2025
+                </option>
+
+                <option value="2026">
+                    2026
+                </option>
+
+                <option value="2027">
+                    2027
+                </option>
+
+                <option value="2028">
+                    2028
+                </option>
+
+                <option value="2029">
+                    2029
+                </option>
+
+                <option value="2030">
+                    2030
+                </option>
+
+                <option value="2031">
+                    2031
+                </option>
+
+                <option value="2032">
+                    2032
+                </option>
+
+                <option value="2033">
+                    2033
+                </option>
+
+                <option value="2034">
+                    2034
+                </option>
+
+                <option value="2035">
+                    2035
+                </option>
+
+                <option value="2036">
+                    2036
+                </option>
+
+                <option value="2037">
+                    2037
+                </option>
+
+                <option value="2038">
+                    2038
+                </option>
+
+                <option value="2039">
+                    2039
+                </option>
+
+                <option value="2040">
+                    2040
+                </option>
 
             </select>
 
 
-            <select id="studentListClass"
-                    onchange="showAdmissionStudents()">
+
+            <!-- শ্রেণি -->
+
+            <select
+                id="studentListClass"
+                onchange="showAdmissionStudents()">
 
                 <option value="">
                     সব শ্রেণি
@@ -969,21 +1147,32 @@
 
             </select>
 
+
         </div>
 
 
-        <!-- মোট শিক্ষার্থী -->
+
+        <!-- ==============================
+             TOTAL STUDENTS
+        =============================== -->
 
         <div
             id="admissionTotalStudents"
-            style="margin:15px 0; font-size:20px; font-weight:bold;">
+            style="
+                margin:15px 0;
+                font-size:20px;
+                font-weight:bold;
+            ">
 
             মোট শিক্ষার্থী: 0 জন
 
         </div>
 
 
-        <!-- STUDENT TABLE -->
+
+        <!-- ==============================
+             STUDENT TABLE
+        =============================== -->
 
         <div style="overflow-x:auto;">
 
@@ -993,22 +1182,58 @@
 
                     <tr>
 
-                        <th>Student ID</th>
-                        <th>রোল</th>
-                        <th>ছবি</th>
-                        <th>নাম</th>
-                        <th>পিতার নাম</th>
-                        <th>মাতার নাম</th>
-                        <th>জন্মতারিখ</th>
-                        <th>লিঙ্গ</th>
-                        <th>মোবাইল</th>
-                        <th>ঠিকানা</th>
-                        <th>ভর্তির তারিখ</th>
-                        <th>Action</th>
+                        <th>
+                            Student ID
+                        </th>
+
+                        <th>
+                            রোল
+                        </th>
+
+                        <th>
+                            ছবি
+                        </th>
+
+                        <th>
+                            নাম
+                        </th>
+
+                        <th>
+                            পিতার নাম
+                        </th>
+
+                        <th>
+                            মাতার নাম
+                        </th>
+
+                        <th>
+                            জন্মতারিখ
+                        </th>
+
+                        <th>
+                            লিঙ্গ
+                        </th>
+
+                        <th>
+                            মোবাইল
+                        </th>
+
+                        <th>
+                            ঠিকানা
+                        </th>
+
+                        <th>
+                            ভর্তির তারিখ
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
 
                     </tr>
 
                 </thead>
+
 
                 <tbody id="admissionStudentTable">
 
@@ -1018,11 +1243,13 @@
 
         </div>
 
+
     </div>
 
 </section>
 
-    
+
+
 <!-- ==========================================
      ONLINE RESULTS
 ========================================== -->
@@ -1389,13 +1616,8 @@
 
 
 
-        <!-- MERIT MESSAGE -->
-
         <div id="meritMessage"></div>
 
-
-
-        <!-- MERIT OUTPUT -->
 
         <div
             id="meritOutput"
@@ -1726,11 +1948,16 @@
 
 
 <!-- ==========================================
-     JAVASCRIPT
+     JAVASCRIPT FILE
 ========================================== -->
 
 <script src="script.js"></script>
 
+
+
+<!-- ==========================================
+     MERIT LIST JAVASCRIPT
+========================================== -->
 
 <script>
 
@@ -1776,10 +2003,6 @@ function showMeritList() {
 
     }
 
-
-    /*
-       students অবজেক্টটি script.js থেকে আসবে।
-    */
 
     if (
         typeof students === "undefined"
@@ -1829,11 +2052,6 @@ function showMeritList() {
     }
 
 
-    /*
-       GPA অনুযায়ী বড় থেকে ছোট
-       GPA সমান হলে মোট নম্বর অনুযায়ী
-    */
-
     list.sort(function(a, b) {
 
         const agpa =
@@ -1876,9 +2094,13 @@ function showMeritList() {
 
 
         if (result === "PASS") {
+
             passed++;
+
         } else {
+
             failed++;
+
         }
 
 
@@ -2088,6 +2310,10 @@ function getClassCode(className) {
         "নূরানী ১ম শ্রেণি": "nurani1",
         "নূরানী ২য় শ্রেণি": "nurani2",
         "নূরানী ৩য় শ্রেণি": "nurani3",
+
+        "নূরানী ১ম জামাত": "nurani1",
+        "নূরানী ২য় জামাত": "nurani2",
+        "নূরানী ৩য় জামাত": "nurani3",
 
         "ইবতেদায়ী ৪র্থ শ্রেণি": "ebtedayi4",
         "ইবতেদায়ী ৫ম শ্রেণি": "ebtedayi5",
