@@ -471,4 +471,68 @@ footer hr {
         size: A4;
         margin: 0.5in;
     }
+}/* ==========================================
+   MOBILE MENU FIX
+========================================== */
+
+.menu-button {
+    display: none;
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    background: #087f4f;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: left;
 }
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar ul li {
+    position: relative;
+}
+
+.navbar ul li a {
+    display: block;
+    padding: 12px 10px;
+    text-decoration: none;
+}
+
+
+/* মোবাইলের জন্য */
+
+@media (max-width: 768px) {
+
+    .menu-button {
+        display: block;
+    }
+
+    .navbar ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: #ffffff;
+    }
+
+    .navbar ul.show {
+        display: flex;
+    }
+
+    .navbar ul li {
+        width: 100%;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .navbar ul li a {
+        width: 100%;
+        padding: 14px 16px;
+    }
+
+}
+
