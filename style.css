@@ -471,8 +471,8 @@ footer hr {
         size: A4;
         margin: 0.5in;
     }
-}/* ==========================================
-   MOBILE MENU FIX
+/* ==========================================
+   MOBILE MENU
 ========================================== */
 
 .menu-button {
@@ -480,7 +480,7 @@ footer hr {
     width: 100%;
     padding: 12px 15px;
     border: none;
-    background: #087f4f;
+    background: #064d31;
     color: white;
     font-size: 18px;
     cursor: pointer;
@@ -488,10 +488,12 @@ footer hr {
 }
 
 .navbar ul {
+    max-width: 1200px;
+    margin: auto;
     display: flex;
     list-style: none;
-    margin: 0;
-    padding: 0;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .navbar ul li {
@@ -500,14 +502,17 @@ footer hr {
 
 .navbar ul li a {
     display: block;
-    padding: 12px 10px;
+    color: white;
     text-decoration: none;
+    padding: 10px 13px;
 }
 
 
-/* মোবাইলের জন্য */
+/* ==========================================
+   MOBILE
+========================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 800px) {
 
     .menu-button {
         display: block;
@@ -517,22 +522,23 @@ footer hr {
         display: none;
         flex-direction: column;
         width: 100%;
-        background: #ffffff;
+        background: #064d31;
     }
 
-    .navbar ul.show {
+    /* JavaScript থেকে active class দেওয়া হয় */
+    .navbar ul.active {
         display: flex;
     }
 
     .navbar ul li {
         width: 100%;
-        border-bottom: 1px solid #ddd;
+        border-bottom: 1px solid rgba(255,255,255,.15);
     }
 
     .navbar ul li a {
         width: 100%;
         padding: 14px 16px;
+        text-align: center;
     }
 
 }
-
