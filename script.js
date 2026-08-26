@@ -1809,7 +1809,6 @@ function generateMeritList() {
     return;
 }
 
-            }
 
 
             const calculation =
