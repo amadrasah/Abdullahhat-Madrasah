@@ -286,10 +286,45 @@ function fillClassSelect(id, firstText) {
 
 }
 
-
 /* =========================================================
-   6. YEAR DROPDOWN
-   ========================================================= */
+   6. YEAR MANAGEMENT
+   একটি জায়গা থেকে সব সন নিয়ন্ত্রণ
+========================================================= */
+
+// এখানে শুধু একবার সন লিখলেই
+// সব Year dropdown-এ চলে যাবে।
+
+let YEARS =
+    JSON.parse(
+        localStorage.getItem("madrasah_years")
+    ) || [
+        "2025",
+        "2026",
+        "2027",
+        "2028"
+    ];
+
+
+// =========================================================
+// সব Year Dropdown-এর ID
+// =========================================================
+
+const YEAR_SELECT_IDS = [
+
+    "studentSearchYear",
+    "admissionYear",
+    "studentListYear",
+    "dashboardYear",
+    "marksYear",
+    "examYear",
+    "meritYear"
+
+];
+
+
+// =========================================================
+// Year Dropdown তৈরি
+// =========================================================
 
 function fillYearSelect(id, firstText) {
 
@@ -304,14 +339,8 @@ function fillYearSelect(id, firstText) {
     select.innerHTML =
         `<option value="">${firstText}</option>`;
 
-    const currentYear =
-        new Date().getFullYear();
 
-    for (
-        let year = currentYear - 5;
-        year <= currentYear + 2;
-        year++
-    ) {
+    YEARS.forEach(function(year) {
 
         const option =
             document.createElement("option");
@@ -324,14 +353,119 @@ function fillYearSelect(id, firstText) {
 
         select.appendChild(option);
 
-    }
+    });
 
-    if (oldValue) {
+
+    if (YEARS.includes(oldValue)) {
 
         select.value =
             oldValue;
 
     }
+
+}
+
+
+// =========================================================
+// সব Year Dropdown একসাথে আপডেট
+// =========================================================
+
+function loadAllYears() {
+
+    YEAR_SELECT_IDS.forEach(function(id) {
+
+        const select =
+            document.getElementById(id);
+
+        if (!select) return;
+
+
+        const firstText =
+            select.options[0]
+                ? select.options[0].textContent
+                : "সন নির্বাচন করুন";
+
+
+        fillYearSelect(
+            id,
+            firstText
+        );
+
+    });
+
+}
+
+
+// =========================================================
+// নতুন সন যোগ
+// =========================================================
+
+function addNewYear() {
+
+    const newYear =
+        prompt(
+            "নতুন সন লিখুন:\nযেমন: 2029"
+        );
+
+
+    if (!newYear) return;
+
+
+    const year =
+        newYear.trim();
+
+
+    // ৪ সংখ্যার সন কিনা
+    if (!/^\d{4}$/.test(year)) {
+
+        alert(
+            "দয়া করে ৪ সংখ্যার সন লিখুন।\nযেমন: 2029"
+        );
+
+        return;
+
+    }
+
+
+    // আগে আছে কিনা
+    if (YEARS.includes(year)) {
+
+        alert(
+            "এই সন আগে থেকেই আছে।"
+        );
+
+        return;
+
+    }
+
+
+    // নতুন সন যোগ
+    YEARS.push(year);
+
+
+    // ছোট থেকে বড়
+    YEARS.sort(function(a, b) {
+
+        return Number(a) - Number(b);
+
+    });
+
+
+    // Local Storage-এ সংরক্ষণ
+    localStorage.setItem(
+        "madrasah_years",
+        JSON.stringify(YEARS)
+    );
+
+
+    // সব জায়গায় Year আপডেট
+    loadAllYears();
+
+
+    alert(
+        year +
+        " সন সফলভাবে যোগ হয়েছে।"
+    );
 
 }
 
