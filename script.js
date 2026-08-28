@@ -5512,8 +5512,15 @@ document.addEventListener(
     }
 );
 
+   /* =========================================================
+   ABDULLAH HAT MADRASAH
+   INCOME & EXPENSE MANAGEMENT SYSTEM
+   সম্পূর্ণ JavaScript
+   ========================================================= */
+
+
 /* =========================================================
-   INCOME / EXPENSE MANAGEMENT
+   1. INCOME & EXPENSE STORAGE
 ========================================================= */
 
 let incomeExpenseData =
@@ -5521,6 +5528,57 @@ let incomeExpenseData =
         localStorage.getItem("madrasah_income_expense") || "[]"
     );
 
+
+/* =========================================================
+   2. INCOME CATEGORIES
+========================================================= */
+
+const INCOME_CATEGORIES = [
+
+    "মাসিক বেতন",
+    "পরীক্ষার ফি",
+    "১ম টিউটোরিয়াল",
+    "২য় টিউটোরিয়াল",
+    "৩য় টিউটোরিয়াল",
+    "অর্ধবার্ষিক পরীক্ষা",
+    "বার্ষিক পরীক্ষা",
+    "প্রাক-নির্বাচনী পরীক্ষা",
+    "নির্বাচনী পরীক্ষা",
+    "রেজিস্ট্রেশন ফি",
+    "ফরম ফিলাপ ফি",
+    "সরকারি অনুদান",
+    "ব্যক্তি অনুদান",
+    "অন্যান্য"
+
+];
+
+
+/* =========================================================
+   3. EXPENSE CATEGORIES
+========================================================= */
+
+const EXPENSE_CATEGORIES = [
+
+    "শিক্ষক-কর্মচারী বেতন",
+    "বিদ্যুৎ বিল",
+    "পানি বিল",
+    "ইন্টারনেট বিল",
+    "পরীক্ষার খরচ",
+    "শিক্ষা উপকরণ",
+    "অফিস খরচ",
+    "মেরামত ও রক্ষণাবেক্ষণ",
+    "পরিবহন খরচ",
+    "অনুষ্ঠান খরচ",
+    "স্টেশনারি",
+    "কর ও ফি",
+    "অন্যান্য"
+
+];
+
+
+/* =========================================================
+   4. SAVE DATA
+========================================================= */
 
 function saveIncomeExpenseData() {
 
@@ -5533,957 +5591,371 @@ function saveIncomeExpenseData() {
 
 
 /* =========================================================
-   আয়-ব্যয় প্যানেল
+   5. YEAR DROPDOWN
 ========================================================= */
 
-function showIncomeExpense() {
+function fillIncomeExpenseYears() {
 
-    const output =
-        document.getElementById("incomeExpenseOutput");
+    const yearIds = [
 
-    if (!output) return;
+        "incomeYear",
+        "expenseYear",
+        "incomeExpenseFilterYear"
 
+    ];
 
-    output.innerHTML = `
 
-        <div class="result-box">
+    const currentYear =
+        new Date().getFullYear();
 
-            <h3>💰 প্রতিষ্ঠানের আয়-ব্যয়</h3>
 
-            <div class="result-form">
+    yearIds.forEach(function(id) {
 
-                <select id="incomeExpenseYear">
+        const select =
+            document.getElementById(id);
 
-                    <option value="">
-                        সন নির্বাচন করুন
-                    </option>
+        if (!select) return;
 
-                </select>
 
+        const oldValue =
+            select.value;
 
-                <select id="incomeExpenseType">
 
-                    <option value="">
-                        ধরন নির্বাচন করুন
-                    </option>
+        select.innerHTML = `
 
-                    <option value="আয়">
-                        💰 আয়
-                    </option>
+            <option value="">
+                সন নির্বাচন করুন
+            </option>
 
-                    <option value="ব্যয়">
-                        💸 ব্যয়
-                    </option>
+        `;
 
-                </select>
 
+        for (
+            let year = currentYear - 5;
+            year <= currentYear + 2;
+            year++
+        ) {
 
-                <select id="incomeExpenseCategory">
+            const option =
+                document.createElement("option");
 
-                    <option value="">
-                        খাত নির্বাচন করুন
-                    </option>
+            option.value =
+                String(year);
 
-                    <option value="সরকারি অনুদান">
-                        সরকারি অনুদান
-                    </option>
+            option.textContent =
+                year;
 
-                    <option value="বেতন">
-                        বেতন
-                    </option>
+            select.appendChild(option);
 
-                    <option value="ভর্তি ফি">
-                        ভর্তি ফি
-                    </option>
+        }
 
-                    <option value="পরীক্ষার ফি">
-                        পরীক্ষার ফি
-                    </option>
 
-                    <option value="অন্যান্য আয়">
-                        অন্যান্য আয়
-                    </option>
+        if (oldValue) {
 
-                    <option value="পরীক্ষা ব্যবস্থাপনা">
-                        পরীক্ষা ব্যবস্থাপনা
-                    </option>
+            select.value =
+                oldValue;
 
-                    <option value="শিক্ষা উপকরণ">
-                        শিক্ষা উপকরণ
-                    </option>
+        }
 
-                    <option value="বিদ্যুৎ বিল">
-                        বিদ্যুৎ বিল
-                    </option>
-
-                    <option value="মেরামত">
-                        মেরামত
-                    </option>
-
-                    <option value="অন্যান্য ব্যয়">
-                        অন্যান্য ব্যয়
-                    </option>
-
-                </select>
-
-
-                <input
-                    type="number"
-                    id="incomeExpenseAmount"
-                    placeholder="টাকার পরিমাণ"
-                    min="0">
-
-
-                <input
-                    type="date"
-                    id="incomeExpenseDate">
-
-
-                <input
-                    type="text"
-                    id="incomeExpenseNote"
-                    placeholder="বিবরণ">
-
-
-                <button
-                    type="button"
-                    onclick="saveIncomeExpense()">
-
-                    💾 সংরক্ষণ
-
-                </button>
-
-            </div>
-
-
-            <div
-                id="incomeExpenseMessage"
-                style="margin-top:15px;">
-            </div>
-
-
-            <hr>
-
-
-            <div id="incomeExpenseSummary"></div>
-
-
-            <div style="overflow-x:auto;">
-
-                <table class="result-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>সন</th>
-                            <th>তারিখ</th>
-                            <th>ধরন</th>
-                            <th>খাত</th>
-                            <th>পরিমাণ</th>
-                            <th>বিবরণ</th>
-                            <th>Action</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody id="incomeExpenseTable">
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    `;
-
-
-    // Year dropdown পূরণ
-    fillYearSelect(
-        "incomeExpenseYear",
-        "সন নির্বাচন করুন"
-    );
-
-
-    renderIncomeExpense();
+    });
 
 }
 
 
 /* =========================================================
-   আয় / ব্যয় সংরক্ষণ
+   6. MONTH DROPDOWN
 ========================================================= */
 
-function saveIncomeExpense() {
+function fillIncomeExpenseMonths() {
 
-    const year =
-        document.getElementById(
-            "incomeExpenseYear"
-        ).value;
+    const monthIds = [
 
+        "incomeMonth",
+        "expenseMonth",
+        "incomeExpenseFilterMonth"
 
-    const type =
-        document.getElementById(
-            "incomeExpenseType"
-        ).value;
+    ];
 
 
-    const category =
-        document.getElementById(
-            "incomeExpenseCategory"
-        ).value;
+    const months = [
+
+        "জানুয়ারি",
+        "ফেব্রুয়ারি",
+        "মার্চ",
+        "এপ্রিল",
+        "মে",
+        "জুন",
+        "জুলাই",
+        "আগস্ট",
+        "সেপ্টেম্বর",
+        "অক্টোবর",
+        "নভেম্বর",
+        "ডিসেম্বর"
+
+    ];
 
 
-    const amount =
-        Number(
-            document.getElementById(
-                "incomeExpenseAmount"
-            ).value
+    monthIds.forEach(function(id) {
+
+        const select =
+            document.getElementById(id);
+
+        if (!select) return;
+
+
+        const oldValue =
+            select.value;
+
+
+        select.innerHTML = `
+
+            <option value="">
+                মাস নির্বাচন করুন
+            </option>
+
+        `;
+
+
+        months.forEach(function(month) {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                month;
+
+            option.textContent =
+                month;
+
+            select.appendChild(option);
+
+        });
+
+
+        if (oldValue) {
+
+            select.value =
+                oldValue;
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   7. INCOME CATEGORY DROPDOWN
+========================================================= */
+
+function fillIncomeCategories() {
+
+    const ids = [
+
+        "incomeCategory",
+        "incomeExpenseFilterCategory"
+
+    ];
+
+
+    ids.forEach(function(id) {
+
+        const select =
+            document.getElementById(id);
+
+        if (!select) return;
+
+
+        const oldValue =
+            select.value;
+
+
+        select.innerHTML = `
+
+            <option value="">
+                ${id === "incomeCategory"
+                    ? "আয়ের খাত নির্বাচন করুন"
+                    : "সব খাত"}
+
+        `;
+
+
+        INCOME_CATEGORIES.forEach(
+            function(category) {
+
+                const option =
+                    document.createElement("option");
+
+                option.value =
+                    category;
+
+                option.textContent =
+                    category;
+
+                select.appendChild(option);
+
+            }
         );
 
 
-    const date =
-        document.getElementById(
-            "incomeExpenseDate"
-        ).value;
+        if (oldValue) {
+
+            select.value =
+                oldValue;
+
+        }
+
+    });
+
+}
 
 
-    const note =
+/* =========================================================
+   8. EXPENSE CATEGORY DROPDOWN
+========================================================= */
+
+function fillExpenseCategories() {
+
+    const select =
         document.getElementById(
-            "incomeExpenseNote"
-        ).value.trim();
+            "expenseCategory"
+        );
+
+    if (!select) return;
+
+
+    select.innerHTML = `
+
+        <option value="">
+            ব্যয়ের খাত নির্বাচন করুন
+        </option>
+
+    `;
+
+
+    EXPENSE_CATEGORIES.forEach(
+        function(category) {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                category;
+
+            option.textContent =
+                category;
+
+            select.appendChild(option);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   9. STUDENT CLASS DROPDOWN
+========================================================= */
+
+function fillIncomeStudentClasses() {
+
+    const ids = [
+
+        "incomeClass",
+        "expenseClass"
+
+    ];
+
+
+    ids.forEach(function(id) {
+
+        const select =
+            document.getElementById(id);
+
+        if (!select) return;
+
+
+        select.innerHTML = `
+
+            <option value="">
+                শ্রেণি নির্বাচন করুন
+            </option>
+
+        `;
+
+
+        if (
+            typeof CLASS_LIST !== "undefined"
+        ) {
+
+            Object.keys(CLASS_LIST)
+                .forEach(function(code) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        code;
+
+                    option.textContent =
+                        CLASS_LIST[code];
+
+                    select.appendChild(option);
+
+                });
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   10. STUDENT NAME DROPDOWN
+========================================================= */
+
+function fillIncomeStudents(
+    classId
+) {
+
+    const studentSelect =
+        document.getElementById(
+            "incomeStudent"
+        );
+
+
+    if (!studentSelect) return;
+
+
+    studentSelect.innerHTML = `
+
+        <option value="">
+            শিক্ষার্থী নির্বাচন করুন
+        </option>
+
+    `;
+
+
+    if (!classId) return;
 
 
     if (
-        !year ||
-        !type ||
-        !category ||
-        !amount
+        typeof admissionStudents === "undefined"
     ) {
 
-        alert(
-            "সন, ধরন, খাত ও টাকার পরিমাণ পূরণ করুন।"
-        );
-
         return;
 
     }
 
 
-    const item = {
-
-        id: Date.now(),
-
-        year: year,
-
-        type: type,
-
-        category: category,
-
-        amount: amount,
-
-        date: date,
-
-        note: note
-
-    };
-
-
-    incomeExpenseData.push(item);
-
-
-    saveIncomeExpenseData();
-
-
-    document.getElementById(
-        "incomeExpenseAmount"
-    ).value = "";
-
-
-    document.getElementById(
-        "incomeExpenseNote"
-    ).value = "";
-
-
-    document.getElementById(
-        "incomeExpenseMessage"
-    ).innerHTML =
-        "✅ আয়/ব্যয়ের তথ্য সংরক্ষণ হয়েছে।";
-
-
-    renderIncomeExpense();
-
-}
-
-
-/* =========================================================
-   আয় / ব্যয় দেখানো
-========================================================= */
-
-function renderIncomeExpense() {
-
-    const table =
-        document.getElementById(
-            "incomeExpenseTable"
-        );
-
-
-    const summary =
-        document.getElementById(
-            "incomeExpenseSummary"
-        );
-
-
-    if (!table || !summary) return;
-
-
-    table.innerHTML = "";
-
-
-    let totalIncome = 0;
-    let totalExpense = 0;
-
-
-    incomeExpenseData.forEach(function(item) {
-
-        if (item.type === "আয়") {
-
-            totalIncome +=
-                Number(item.amount);
-
-        } else {
-
-            totalExpense +=
-                Number(item.amount);
-
-        }
-
-
-        const row =
-            document.createElement("tr");
-
-
-        row.innerHTML = `
-
-            <td>${item.year}</td>
-
-            <td>${item.date || "-"}</td>
-
-            <td>${item.type}</td>
-
-            <td>${item.category}</td>
-
-            <td>${Number(item.amount).toLocaleString("bn-BD")} টাকা</td>
-
-            <td>${item.note || "-"}</td>
-
-            <td>
-
-                <button
-                    type="button"
-                    onclick="deleteIncomeExpense(${item.id})">
-
-                    🗑️ Delete
-
-                </button>
-
-            </td>
-
-        `;
-
-
-        table.appendChild(row);
-
-    });
-
-
-    const balance =
-        totalIncome - totalExpense;
-
-
-    summary.innerHTML = `
-
-        <div class="cards">
-
-            <div class="card">
-
-                💰
-
-                <h3>মোট আয়</h3>
-
-                <p>
-                    ${totalIncome.toLocaleString("bn-BD")}
-                    টাকা
-                </p>
-
-            </div>
-
-
-            <div class="card">
-
-                💸
-
-                <h3>মোট ব্যয়</h3>
-
-                <p>
-                    ${totalExpense.toLocaleString("bn-BD")}
-                    টাকা
-                </p>
-
-            </div>
-
-
-            <div class="card">
-
-                🏦
-
-                <h3>অবশিষ্ট</h3>
-
-                <p>
-                    ${balance.toLocaleString("bn-BD")}
-                    টাকা
-                </p>
-
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-/* =========================================================
-/* =========================================================
-   আয় / ব্যয় DELETE
-========================================================= */
-
-function deleteIncomeExpense(id) {
-
-    if (!confirm("এই আয়/ব্যয়ের তথ্য মুছে ফেলবেন?")) {
-        return;
-    }
-
-    incomeExpenseData =
-        incomeExpenseData.filter(function(item) {
-            return item.id !== id;
-        });
-
-    saveIncomeExpenseData();
-
-    renderIncomeExpense();
-
-    filterIncomeExpense();
-
-}
-
-
-/* =========================================================
-   আয় / ব্যয় FILTER SYSTEM
-   সন + মাস + খাত + ধরন
-========================================================= */
-
-function filterIncomeExpense() {
-
-    const year =
-        document.getElementById(
-            "incomeExpenseFilterYear"
-        )?.value || "";
-
-    const month =
-        document.getElementById(
-            "incomeExpenseFilterMonth"
-        )?.value || "";
-
-    const category =
-        document.getElementById(
-            "incomeExpenseFilterCategory"
-        )?.value || "";
-
-    const type =
-        document.getElementById(
-            "incomeExpenseFilterType"
-        )?.value || "";
-
-
-    let filtered =
-        incomeExpenseData.filter(function(item) {
-
-            /* সন */
-
-            if (
-                year &&
-                String(item.year) !== String(year)
-            ) {
-                return false;
-            }
-
-
-            /* মাস */
-
-            if (
-                month &&
-                String(item.month) !== String(month)
-            ) {
-                return false;
-            }
-
-
-            /* খাত */
-
-            if (
-                category &&
-                item.category !== category
-            ) {
-                return false;
-            }
-
-
-            /* আয় / ব্যয় */
-
-            if (
-                type &&
-                item.type !== type
-            ) {
-                return false;
-            }
-
-
-            return true;
-
-        });
-
-
-    renderFilteredIncomeExpense(filtered);
-
-}
-
-
-/* =========================================================
-   FILTER RESULT
-   সন + মাস + খাত ভিত্তিক মোট হিসাব
-========================================================= */
-
-function renderFilteredIncomeExpense(data) {
-
-    const table =
-        document.getElementById(
-            "incomeExpenseTable"
-        );
-
-    const summary =
-        document.getElementById(
-            "incomeExpenseSummary"
-        );
-
-
-    if (!table || !summary) {
-        return;
-    }
-
-
-    table.innerHTML = "";
-
-
-    /* =====================================================
-       TOTAL
-    ===================================================== */
-
-    let totalIncome = 0;
-
-    let totalExpense = 0;
-
-
-    /* =====================================================
-       CATEGORY SUMMARY
-    ===================================================== */
-
-    const incomeByCategory = {};
-
-    const expenseByCategory = {};
-
-
-    data.forEach(function(item) {
-
-        const amount =
-            Number(item.amount) || 0;
-
-
-        /* মোট আয় */
-
-        if (item.type === "আয়") {
-
-            totalIncome += amount;
-
-
-            if (
-                !incomeByCategory[item.category]
-            ) {
-
-                incomeByCategory[item.category] = 0;
-
-            }
-
-
-            incomeByCategory[item.category]
-                += amount;
-
-        }
-
-
-        /* মোট ব্যয় */
-
-        else if (item.type === "ব্যয়") {
-
-            totalExpense += amount;
-
-
-            if (
-                !expenseByCategory[item.category]
-            ) {
-
-                expenseByCategory[item.category] = 0;
-
-            }
-
-
-            expenseByCategory[item.category]
-                += amount;
-
-        }
-
-
-        /* =================================================
-           TABLE ROW
-        ================================================= */
-
-        const row =
-            document.createElement("tr");
-
-
-        row.innerHTML = `
-
-            <td>
-                ${item.year || "-"}
-            </td>
-
-
-            <td>
-                ${item.month || "-"}
-            </td>
-
-
-            <td>
-                ${item.category || "-"}
-            </td>
-
-
-            <td>
-                ${item.type || "-"}
-            </td>
-
-
-            <td>
-                ${amount.toLocaleString("bn-BD")}
-                টাকা
-            </td>
-
-
-            <td>
-                ${item.note || "-"}
-            </td>
-
-
-            <td>
-
-                <button
-                    type="button"
-                    onclick="deleteIncomeExpense(${item.id})">
-
-                    🗑️ Delete
-
-                </button>
-
-            </td>
-
-        `;
-
-
-        table.appendChild(row);
-
-    });
-
-
-    /* =====================================================
-       BALANCE
-    ===================================================== */
-
-    const balance =
-        totalIncome - totalExpense;
-
-
-    /* =====================================================
-       CATEGORY HTML
-    ===================================================== */
-
-    let incomeCategoryHTML = "";
-
-    Object.keys(incomeByCategory)
-        .forEach(function(category) {
-
-            incomeCategoryHTML += `
-
-                <tr>
-
-                    <td>
-                        ${category}
-                    </td>
-
-                    <td>
-                        আয়
-                    </td>
-
-                    <td>
-                        ${incomeByCategory[category]
-                            .toLocaleString("bn-BD")}
-                        টাকা
-                    </td>
-
-                </tr>
-
-            `;
-
-        });
-
-
-    let expenseCategoryHTML = "";
-
-    Object.keys(expenseByCategory)
-        .forEach(function(category) {
-
-            expenseCategoryHTML += `
-
-                <tr>
-
-                    <td>
-                        ${category}
-                    </td>
-
-                    <td>
-                        ব্যয়
-                    </td>
-
-                    <td>
-                        ${expenseByCategory[category]
-                            .toLocaleString("bn-BD")}
-                        টাকা
-                    </td>
-
-                </tr>
-
-            `;
-
-        });
-
-
-    /* =====================================================
-       SUMMARY
-    ===================================================== */
-
-    summary.innerHTML = `
-
-        <div class="cards">
-
-
-            <!-- মোট আয় -->
-
-            <div class="card">
-
-                💰
-
-                <h3>
-                    মোট আয়
-                </h3>
-
-                <p>
-
-                    ${totalIncome
-                        .toLocaleString("bn-BD")}
-
-                    টাকা
-
-                </p>
-
-            </div>
-
-
-            <!-- মোট ব্যয় -->
-
-            <div class="card">
-
-                💸
-
-                <h3>
-                    মোট ব্যয়
-                </h3>
-
-                <p>
-
-                    ${totalExpense
-                        .toLocaleString("bn-BD")}
-
-                    টাকা
-
-                </p>
-
-            </div>
-
-
-            <!-- অবশিষ্ট -->
-
-            <div class="card">
-
-                🏦
-
-                <h3>
-                    অবশিষ্ট
-                </h3>
-
-                <p>
-
-                    ${balance
-                        .toLocaleString("bn-BD")}
-
-                    টাকা
-
-                </p>
-
-            </div>
-
-
-        </div>
-
-
-        <!-- =============================================
-             খাতভিত্তিক আয়
-        ============================================== -->
-
-        <h3 style="margin-top:25px;">
-            💰 খাতভিত্তিক মোট আয়
-        </h3>
-
-
-        <div style="overflow-x:auto;">
-
-            <table class="result-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            খাত
-                        </th>
-
-                        <th>
-                            ধরন
-                        </th>
-
-                        <th>
-                            মোট
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    ${incomeCategoryHTML || `
-
-                        <tr>
-
-                            <td
-                                colspan="3"
-                                style="text-align:center;">
-
-                                কোনো আয় পাওয়া যায়নি
-
-                            </td>
-
-                        </tr>
-
-                    `}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-
-        <!-- =============================================
-             খাতভিত্তিক ব্যয়
-        ============================================== -->
-
-        <h3 style="margin-top:25px;">
-            💸 খাতভিত্তিক মোট ব্যয়
-        </h3>
-
-
-        <div style="overflow-x:auto;">
-
-            <table class="result-table">
-
-                <thead>
-
-                    <tr>
-
-                        <th>
-                            খাত
-                        </th>
-
-                        <th>
-                            ধরন
-                        </th>
-
-                        <th>
-                            মোট
-                        </th>
-
-                    </tr>
-
-                </thead>
-
-
-                <tbody>
-
-                    ${expenseCategoryHTML || `
-
-                        <tr>
-
-                            <td
-                                colspan="3"
-                                style="text-align:center;">
-
-                                কোনো ব্যয় পাওয়া যায়নি
-
-                            </td>
-
-                        </tr>
-
-                    `}
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    `;
-
-}
+    const students =
+        admissionStudents.filter(
+            function(student) {
+
+                return (
+                    student.classCode === classId ||
+                    student.className ===
+                    
