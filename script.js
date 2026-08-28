@@ -5957,35 +5957,533 @@ function renderIncomeExpense() {
 
 
 /* =========================================================
-   আয় / ব্যয় Delete
+/* =========================================================
+   আয় / ব্যয় DELETE
 ========================================================= */
 
 function deleteIncomeExpense(id) {
 
-    if (
-        !confirm(
-            "এই আয়/ব্যয়ের তথ্য মুছে ফেলবেন?"
-        )
-    ) {
-
+    if (!confirm("এই আয়/ব্যয়ের তথ্য মুছে ফেলবেন?")) {
         return;
-
     }
 
-
     incomeExpenseData =
-        incomeExpenseData.filter(
-            function(item) {
-
-                return item.id !== id;
-
-            }
-        );
-
+        incomeExpenseData.filter(function(item) {
+            return item.id !== id;
+        });
 
     saveIncomeExpenseData();
 
-
     renderIncomeExpense();
+
+    filterIncomeExpense();
+
+}
+
+
+/* =========================================================
+   আয় / ব্যয় FILTER SYSTEM
+   সন + মাস + খাত + ধরন
+========================================================= */
+
+function filterIncomeExpense() {
+
+    const year =
+        document.getElementById(
+            "incomeExpenseFilterYear"
+        )?.value || "";
+
+    const month =
+        document.getElementById(
+            "incomeExpenseFilterMonth"
+        )?.value || "";
+
+    const category =
+        document.getElementById(
+            "incomeExpenseFilterCategory"
+        )?.value || "";
+
+    const type =
+        document.getElementById(
+            "incomeExpenseFilterType"
+        )?.value || "";
+
+
+    let filtered =
+        incomeExpenseData.filter(function(item) {
+
+            /* সন */
+
+            if (
+                year &&
+                String(item.year) !== String(year)
+            ) {
+                return false;
+            }
+
+
+            /* মাস */
+
+            if (
+                month &&
+                String(item.month) !== String(month)
+            ) {
+                return false;
+            }
+
+
+            /* খাত */
+
+            if (
+                category &&
+                item.category !== category
+            ) {
+                return false;
+            }
+
+
+            /* আয় / ব্যয় */
+
+            if (
+                type &&
+                item.type !== type
+            ) {
+                return false;
+            }
+
+
+            return true;
+
+        });
+
+
+    renderFilteredIncomeExpense(filtered);
+
+}
+
+
+/* =========================================================
+   FILTER RESULT
+   সন + মাস + খাত ভিত্তিক মোট হিসাব
+========================================================= */
+
+function renderFilteredIncomeExpense(data) {
+
+    const table =
+        document.getElementById(
+            "incomeExpenseTable"
+        );
+
+    const summary =
+        document.getElementById(
+            "incomeExpenseSummary"
+        );
+
+
+    if (!table || !summary) {
+        return;
+    }
+
+
+    table.innerHTML = "";
+
+
+    /* =====================================================
+       TOTAL
+    ===================================================== */
+
+    let totalIncome = 0;
+
+    let totalExpense = 0;
+
+
+    /* =====================================================
+       CATEGORY SUMMARY
+    ===================================================== */
+
+    const incomeByCategory = {};
+
+    const expenseByCategory = {};
+
+
+    data.forEach(function(item) {
+
+        const amount =
+            Number(item.amount) || 0;
+
+
+        /* মোট আয় */
+
+        if (item.type === "আয়") {
+
+            totalIncome += amount;
+
+
+            if (
+                !incomeByCategory[item.category]
+            ) {
+
+                incomeByCategory[item.category] = 0;
+
+            }
+
+
+            incomeByCategory[item.category]
+                += amount;
+
+        }
+
+
+        /* মোট ব্যয় */
+
+        else if (item.type === "ব্যয়") {
+
+            totalExpense += amount;
+
+
+            if (
+                !expenseByCategory[item.category]
+            ) {
+
+                expenseByCategory[item.category] = 0;
+
+            }
+
+
+            expenseByCategory[item.category]
+                += amount;
+
+        }
+
+
+        /* =================================================
+           TABLE ROW
+        ================================================= */
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>
+                ${item.year || "-"}
+            </td>
+
+
+            <td>
+                ${item.month || "-"}
+            </td>
+
+
+            <td>
+                ${item.category || "-"}
+            </td>
+
+
+            <td>
+                ${item.type || "-"}
+            </td>
+
+
+            <td>
+                ${amount.toLocaleString("bn-BD")}
+                টাকা
+            </td>
+
+
+            <td>
+                ${item.note || "-"}
+            </td>
+
+
+            <td>
+
+                <button
+                    type="button"
+                    onclick="deleteIncomeExpense(${item.id})">
+
+                    🗑️ Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+
+    /* =====================================================
+       BALANCE
+    ===================================================== */
+
+    const balance =
+        totalIncome - totalExpense;
+
+
+    /* =====================================================
+       CATEGORY HTML
+    ===================================================== */
+
+    let incomeCategoryHTML = "";
+
+    Object.keys(incomeByCategory)
+        .forEach(function(category) {
+
+            incomeCategoryHTML += `
+
+                <tr>
+
+                    <td>
+                        ${category}
+                    </td>
+
+                    <td>
+                        আয়
+                    </td>
+
+                    <td>
+                        ${incomeByCategory[category]
+                            .toLocaleString("bn-BD")}
+                        টাকা
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+    let expenseCategoryHTML = "";
+
+    Object.keys(expenseByCategory)
+        .forEach(function(category) {
+
+            expenseCategoryHTML += `
+
+                <tr>
+
+                    <td>
+                        ${category}
+                    </td>
+
+                    <td>
+                        ব্যয়
+                    </td>
+
+                    <td>
+                        ${expenseByCategory[category]
+                            .toLocaleString("bn-BD")}
+                        টাকা
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+    /* =====================================================
+       SUMMARY
+    ===================================================== */
+
+    summary.innerHTML = `
+
+        <div class="cards">
+
+
+            <!-- মোট আয় -->
+
+            <div class="card">
+
+                💰
+
+                <h3>
+                    মোট আয়
+                </h3>
+
+                <p>
+
+                    ${totalIncome
+                        .toLocaleString("bn-BD")}
+
+                    টাকা
+
+                </p>
+
+            </div>
+
+
+            <!-- মোট ব্যয় -->
+
+            <div class="card">
+
+                💸
+
+                <h3>
+                    মোট ব্যয়
+                </h3>
+
+                <p>
+
+                    ${totalExpense
+                        .toLocaleString("bn-BD")}
+
+                    টাকা
+
+                </p>
+
+            </div>
+
+
+            <!-- অবশিষ্ট -->
+
+            <div class="card">
+
+                🏦
+
+                <h3>
+                    অবশিষ্ট
+                </h3>
+
+                <p>
+
+                    ${balance
+                        .toLocaleString("bn-BD")}
+
+                    টাকা
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =============================================
+             খাতভিত্তিক আয়
+        ============================================== -->
+
+        <h3 style="margin-top:25px;">
+            💰 খাতভিত্তিক মোট আয়
+        </h3>
+
+
+        <div style="overflow-x:auto;">
+
+            <table class="result-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            খাত
+                        </th>
+
+                        <th>
+                            ধরন
+                        </th>
+
+                        <th>
+                            মোট
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    ${incomeCategoryHTML || `
+
+                        <tr>
+
+                            <td
+                                colspan="3"
+                                style="text-align:center;">
+
+                                কোনো আয় পাওয়া যায়নি
+
+                            </td>
+
+                        </tr>
+
+                    `}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =============================================
+             খাতভিত্তিক ব্যয়
+        ============================================== -->
+
+        <h3 style="margin-top:25px;">
+            💸 খাতভিত্তিক মোট ব্যয়
+        </h3>
+
+
+        <div style="overflow-x:auto;">
+
+            <table class="result-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            খাত
+                        </th>
+
+                        <th>
+                            ধরন
+                        </th>
+
+                        <th>
+                            মোট
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    ${expenseCategoryHTML || `
+
+                        <tr>
+
+                            <td
+                                colspan="3"
+                                style="text-align:center;">
+
+                                কোনো ব্যয় পাওয়া যায়নি
+
+                            </td>
+
+                        </tr>
+
+                    `}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    `;
 
 }
