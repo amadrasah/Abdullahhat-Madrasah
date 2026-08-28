@@ -5512,12 +5512,6 @@ document.addEventListener(
     }
 );
 
-   /* =========================================================
-   ABDULLAH HAT MADRASAH
-   INCOME & EXPENSE MANAGEMENT SYSTEM
-   সম্পূর্ণ JavaScript
-   ========================================================= */
-
 
 /* =========================================================
    1. INCOME & EXPENSE STORAGE
