@@ -5511,3 +5511,481 @@ document.addEventListener(
 
     }
 );
+
+/* =========================================================
+   INCOME / EXPENSE MANAGEMENT
+========================================================= */
+
+let incomeExpenseData =
+    JSON.parse(
+        localStorage.getItem("madrasah_income_expense") || "[]"
+    );
+
+
+function saveIncomeExpenseData() {
+
+    localStorage.setItem(
+        "madrasah_income_expense",
+        JSON.stringify(incomeExpenseData)
+    );
+
+}
+
+
+/* =========================================================
+   আয়-ব্যয় প্যানেল
+========================================================= */
+
+function showIncomeExpense() {
+
+    const output =
+        document.getElementById("incomeExpenseOutput");
+
+    if (!output) return;
+
+
+    output.innerHTML = `
+
+        <div class="result-box">
+
+            <h3>💰 প্রতিষ্ঠানের আয়-ব্যয়</h3>
+
+            <div class="result-form">
+
+                <select id="incomeExpenseYear">
+
+                    <option value="">
+                        সন নির্বাচন করুন
+                    </option>
+
+                </select>
+
+
+                <select id="incomeExpenseType">
+
+                    <option value="">
+                        ধরন নির্বাচন করুন
+                    </option>
+
+                    <option value="আয়">
+                        💰 আয়
+                    </option>
+
+                    <option value="ব্যয়">
+                        💸 ব্যয়
+                    </option>
+
+                </select>
+
+
+                <select id="incomeExpenseCategory">
+
+                    <option value="">
+                        খাত নির্বাচন করুন
+                    </option>
+
+                    <option value="সরকারি অনুদান">
+                        সরকারি অনুদান
+                    </option>
+
+                    <option value="বেতন">
+                        বেতন
+                    </option>
+
+                    <option value="ভর্তি ফি">
+                        ভর্তি ফি
+                    </option>
+
+                    <option value="পরীক্ষার ফি">
+                        পরীক্ষার ফি
+                    </option>
+
+                    <option value="অন্যান্য আয়">
+                        অন্যান্য আয়
+                    </option>
+
+                    <option value="পরীক্ষা ব্যবস্থাপনা">
+                        পরীক্ষা ব্যবস্থাপনা
+                    </option>
+
+                    <option value="শিক্ষা উপকরণ">
+                        শিক্ষা উপকরণ
+                    </option>
+
+                    <option value="বিদ্যুৎ বিল">
+                        বিদ্যুৎ বিল
+                    </option>
+
+                    <option value="মেরামত">
+                        মেরামত
+                    </option>
+
+                    <option value="অন্যান্য ব্যয়">
+                        অন্যান্য ব্যয়
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="number"
+                    id="incomeExpenseAmount"
+                    placeholder="টাকার পরিমাণ"
+                    min="0">
+
+
+                <input
+                    type="date"
+                    id="incomeExpenseDate">
+
+
+                <input
+                    type="text"
+                    id="incomeExpenseNote"
+                    placeholder="বিবরণ">
+
+
+                <button
+                    type="button"
+                    onclick="saveIncomeExpense()">
+
+                    💾 সংরক্ষণ
+
+                </button>
+
+            </div>
+
+
+            <div
+                id="incomeExpenseMessage"
+                style="margin-top:15px;">
+            </div>
+
+
+            <hr>
+
+
+            <div id="incomeExpenseSummary"></div>
+
+
+            <div style="overflow-x:auto;">
+
+                <table class="result-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>সন</th>
+                            <th>তারিখ</th>
+                            <th>ধরন</th>
+                            <th>খাত</th>
+                            <th>পরিমাণ</th>
+                            <th>বিবরণ</th>
+                            <th>Action</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="incomeExpenseTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    // Year dropdown পূরণ
+    fillYearSelect(
+        "incomeExpenseYear",
+        "সন নির্বাচন করুন"
+    );
+
+
+    renderIncomeExpense();
+
+}
+
+
+/* =========================================================
+   আয় / ব্যয় সংরক্ষণ
+========================================================= */
+
+function saveIncomeExpense() {
+
+    const year =
+        document.getElementById(
+            "incomeExpenseYear"
+        ).value;
+
+
+    const type =
+        document.getElementById(
+            "incomeExpenseType"
+        ).value;
+
+
+    const category =
+        document.getElementById(
+            "incomeExpenseCategory"
+        ).value;
+
+
+    const amount =
+        Number(
+            document.getElementById(
+                "incomeExpenseAmount"
+            ).value
+        );
+
+
+    const date =
+        document.getElementById(
+            "incomeExpenseDate"
+        ).value;
+
+
+    const note =
+        document.getElementById(
+            "incomeExpenseNote"
+        ).value.trim();
+
+
+    if (
+        !year ||
+        !type ||
+        !category ||
+        !amount
+    ) {
+
+        alert(
+            "সন, ধরন, খাত ও টাকার পরিমাণ পূরণ করুন।"
+        );
+
+        return;
+
+    }
+
+
+    const item = {
+
+        id: Date.now(),
+
+        year: year,
+
+        type: type,
+
+        category: category,
+
+        amount: amount,
+
+        date: date,
+
+        note: note
+
+    };
+
+
+    incomeExpenseData.push(item);
+
+
+    saveIncomeExpenseData();
+
+
+    document.getElementById(
+        "incomeExpenseAmount"
+    ).value = "";
+
+
+    document.getElementById(
+        "incomeExpenseNote"
+    ).value = "";
+
+
+    document.getElementById(
+        "incomeExpenseMessage"
+    ).innerHTML =
+        "✅ আয়/ব্যয়ের তথ্য সংরক্ষণ হয়েছে।";
+
+
+    renderIncomeExpense();
+
+}
+
+
+/* =========================================================
+   আয় / ব্যয় দেখানো
+========================================================= */
+
+function renderIncomeExpense() {
+
+    const table =
+        document.getElementById(
+            "incomeExpenseTable"
+        );
+
+
+    const summary =
+        document.getElementById(
+            "incomeExpenseSummary"
+        );
+
+
+    if (!table || !summary) return;
+
+
+    table.innerHTML = "";
+
+
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+
+    incomeExpenseData.forEach(function(item) {
+
+        if (item.type === "আয়") {
+
+            totalIncome +=
+                Number(item.amount);
+
+        } else {
+
+            totalExpense +=
+                Number(item.amount);
+
+        }
+
+
+        const row =
+            document.createElement("tr");
+
+
+        row.innerHTML = `
+
+            <td>${item.year}</td>
+
+            <td>${item.date || "-"}</td>
+
+            <td>${item.type}</td>
+
+            <td>${item.category}</td>
+
+            <td>${Number(item.amount).toLocaleString("bn-BD")} টাকা</td>
+
+            <td>${item.note || "-"}</td>
+
+            <td>
+
+                <button
+                    type="button"
+                    onclick="deleteIncomeExpense(${item.id})">
+
+                    🗑️ Delete
+
+                </button>
+
+            </td>
+
+        `;
+
+
+        table.appendChild(row);
+
+    });
+
+
+    const balance =
+        totalIncome - totalExpense;
+
+
+    summary.innerHTML = `
+
+        <div class="cards">
+
+            <div class="card">
+
+                💰
+
+                <h3>মোট আয়</h3>
+
+                <p>
+                    ${totalIncome.toLocaleString("bn-BD")}
+                    টাকা
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                💸
+
+                <h3>মোট ব্যয়</h3>
+
+                <p>
+                    ${totalExpense.toLocaleString("bn-BD")}
+                    টাকা
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                🏦
+
+                <h3>অবশিষ্ট</h3>
+
+                <p>
+                    ${balance.toLocaleString("bn-BD")}
+                    টাকা
+                </p>
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   আয় / ব্যয় Delete
+========================================================= */
+
+function deleteIncomeExpense(id) {
+
+    if (
+        !confirm(
+            "এই আয়/ব্যয়ের তথ্য মুছে ফেলবেন?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    incomeExpenseData =
+        incomeExpenseData.filter(
+            function(item) {
+
+                return item.id !== id;
+
+            }
+        );
+
+
+    saveIncomeExpenseData();
+
+
+    renderIncomeExpense();
+
+}
