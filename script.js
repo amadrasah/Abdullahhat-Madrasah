@@ -5976,3 +5976,54 @@ function fillIncomeStudents(classId) {
 
 }
                     
+/* =========================================================
+   INCOME & EXPENSE DROPDOWN INITIALIZATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        /* YEAR */
+        fillIncomeExpenseYears();
+
+
+        /* MONTH */
+        fillIncomeExpenseMonths();
+
+
+        /* INCOME CATEGORY */
+        fillIncomeCategories();
+
+
+        /* EXPENSE CATEGORY */
+        fillExpenseCategories();
+
+
+        /* CLASS */
+        fillIncomeStudentClasses();
+
+
+        /* STUDENT */
+        const incomeClass =
+            document.getElementById(
+                "incomeClass"
+            );
+
+        if (incomeClass) {
+
+            incomeClass.addEventListener(
+                "change",
+                function () {
+
+                    fillIncomeStudents(
+                        this.value
+                    );
+
+                }
+            );
+
+        }
+
+    }
+);
