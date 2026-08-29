@@ -5528,7 +5528,7 @@ let incomeExpenseData =
 ========================================================= */
 
 const INCOME_CATEGORIES = [
-const incomeCategories = [
+
     "মাসিক বেতন",
     "পরীক্ষার ফি",
     "প্রথম টিউটোরিয়াল",
@@ -5549,7 +5549,6 @@ const incomeCategories = [
     "বেসরকারি অনুদান",
     "দান",
     "অন্যান্য আয়"
-];
 
 ];
 
@@ -5664,6 +5663,7 @@ function fillIncomeExpenseYears() {
 
 
 /* =========================================================
+/* =========================================================
    6. MONTH DROPDOWN
 ========================================================= */
 
@@ -5777,6 +5777,7 @@ function fillIncomeCategories() {
                 ${id === "incomeCategory"
                     ? "আয়ের খাত নির্বাচন করুন"
                     : "সব খাত"}
+            </option>
 
         `;
 
@@ -5809,6 +5810,7 @@ function fillIncomeCategories() {
     });
 
 }
+
 
 
 /* =========================================================
@@ -5915,48 +5917,62 @@ function fillIncomeStudentClasses() {
 
 
 /* =========================================================
+/* =========================================================
    10. STUDENT NAME DROPDOWN
 ========================================================= */
 
-function fillIncomeStudents(
-    classId
-) {
+function fillIncomeStudents(classId) {
 
     const studentSelect =
-        document.getElementById(
-            "incomeStudent"
-        );
-
+        document.getElementById("incomeStudent");
 
     if (!studentSelect) return;
 
 
     studentSelect.innerHTML = `
-
         <option value="">
             শিক্ষার্থী নির্বাচন করুন
         </option>
-
     `;
 
 
     if (!classId) return;
 
 
-    if (
-        typeof admissionStudents === "undefined"
-    ) {
-
+    if (typeof admissionStudents === "undefined") {
         return;
-
     }
 
 
     const students =
-        admissionStudents.filter(
-            function(student) {
+        admissionStudents.filter(function(student) {
 
-                return (
-                    student.classCode === classId ||
-                    student.className ===
+            return (
+                student.classCode === classId ||
+                student.className === CLASS_LIST[classId]
+            );
+
+        });
+
+
+    students.forEach(function(student) {
+
+        const option =
+            document.createElement("option");
+
+        option.value =
+            student.studentId ||
+            student.id ||
+            student.roll ||
+            "";
+
+        option.textContent =
+            (student.roll ? student.roll + " - " : "") +
+            (student.name || "নাম নেই");
+
+        studentSelect.appendChild(option);
+
+    });
+
+}
                     
