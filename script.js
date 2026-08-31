@@ -5512,15 +5512,40 @@ document.addEventListener(
     }
 );
 
-
 /* =========================================================
-   1. INCOME & EXPENSE STORAGE
+   INCOME & EXPENSE MANAGEMENT
+   COMPLETE VERSION
 ========================================================= */
 
-let incomeExpenseData =
-    JSON.parse(
-        localStorage.getItem("madrasah_income_expense") || "[]"
+
+/* =========================================================
+   1. STORAGE
+========================================================= */
+
+let incomeExpenseData = [];
+
+try {
+
+    incomeExpenseData = JSON.parse(
+        localStorage.getItem(
+            "madrasah_income_expense"
+        ) || "[]"
     );
+
+    if (!Array.isArray(incomeExpenseData)) {
+        incomeExpenseData = [];
+    }
+
+} catch (error) {
+
+    console.error(
+        "Income Expense Load Error:",
+        error
+    );
+
+    incomeExpenseData = [];
+
+}
 
 
 /* =========================================================
@@ -5577,14 +5602,16 @@ const EXPENSE_CATEGORIES = [
 
 
 /* =========================================================
-   4. SAVE DATA
+   4. SAVE STORAGE
 ========================================================= */
 
 function saveIncomeExpenseData() {
 
     localStorage.setItem(
         "madrasah_income_expense",
-        JSON.stringify(incomeExpenseData)
+        JSON.stringify(
+            incomeExpenseData
+        )
     );
 
 }
@@ -5637,7 +5664,9 @@ function fillIncomeExpenseYears() {
         ) {
 
             const option =
-                document.createElement("option");
+                document.createElement(
+                    "option"
+                );
 
             option.value =
                 String(year);
@@ -5645,7 +5674,9 @@ function fillIncomeExpenseYears() {
             option.textContent =
                 year;
 
-            select.appendChild(option);
+            select.appendChild(
+                option
+            );
 
         }
 
@@ -5719,7 +5750,9 @@ function fillIncomeExpenseMonths() {
         months.forEach(function(month) {
 
             const option =
-                document.createElement("option");
+                document.createElement(
+                    "option"
+                );
 
             option.value =
                 month;
@@ -5727,7 +5760,9 @@ function fillIncomeExpenseMonths() {
             option.textContent =
                 month;
 
-            select.appendChild(option);
+            select.appendChild(
+                option
+            );
 
         });
 
@@ -5752,6 +5787,7 @@ function fillIncomeCategories() {
 
     const ids = [
 
+        "incomeHead",
         "incomeCategory",
         "incomeExpenseFilterCategory"
 
@@ -5770,12 +5806,19 @@ function fillIncomeCategories() {
             select.value;
 
 
+        const filter =
+            id ===
+            "incomeExpenseFilterCategory";
+
+
         select.innerHTML = `
 
             <option value="">
-                ${id === "incomeCategory"
-                    ? "আয়ের খাত নির্বাচন করুন"
-                    : "সব খাত"}
+                ${
+                    filter
+                        ? "সব খাত"
+                        : "আয়ের খাত নির্বাচন করুন"
+                }
             </option>
 
         `;
@@ -5785,7 +5828,9 @@ function fillIncomeCategories() {
             function(category) {
 
                 const option =
-                    document.createElement("option");
+                    document.createElement(
+                        "option"
+                    );
 
                 option.value =
                     category;
@@ -5793,7 +5838,9 @@ function fillIncomeCategories() {
                 option.textContent =
                     category;
 
-                select.appendChild(option);
+                select.appendChild(
+                    option
+                );
 
             }
         );
@@ -5811,52 +5858,87 @@ function fillIncomeCategories() {
 }
 
 
-
 /* =========================================================
    8. EXPENSE CATEGORY DROPDOWN
 ========================================================= */
 
 function fillExpenseCategories() {
 
-    const select =
-        document.getElementById(
-            "expenseCategory"
+    const ids = [
+
+        "expenseHead",
+        "expenseCategory",
+        "expenseExpenseFilterCategory"
+
+    ];
+
+
+    ids.forEach(function(id) {
+
+        const select =
+            document.getElementById(id);
+
+        if (!select) return;
+
+
+        const oldValue =
+            select.value;
+
+
+        const filter =
+            id ===
+            "expenseExpenseFilterCategory";
+
+
+        select.innerHTML = `
+
+            <option value="">
+                ${
+                    filter
+                        ? "সব খাত"
+                        : "ব্যয়ের খাত নির্বাচন করুন"
+                }
+            </option>
+
+        `;
+
+
+        EXPENSE_CATEGORIES.forEach(
+            function(category) {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    category;
+
+                option.textContent =
+                    category;
+
+                select.appendChild(
+                    option
+                );
+
+            }
         );
 
-    if (!select) return;
 
+        if (oldValue) {
 
-    select.innerHTML = `
-
-        <option value="">
-            ব্যয়ের খাত নির্বাচন করুন
-        </option>
-
-    `;
-
-
-    EXPENSE_CATEGORIES.forEach(
-        function(category) {
-
-            const option =
-                document.createElement("option");
-
-            option.value =
-                category;
-
-            option.textContent =
-                category;
-
-            select.appendChild(option);
+            select.value =
+                oldValue;
 
         }
-    );
+
+    });
 
 }
 
 
 /* =========================================================
-   9. STUDENT CLASS DROPDOWN
+   9. CLASS DROPDOWN
 ========================================================= */
 
 function fillIncomeStudentClasses() {
@@ -5877,6 +5959,10 @@ function fillIncomeStudentClasses() {
         if (!select) return;
 
 
+        const oldValue =
+            select.value;
+
+
         select.innerHTML = `
 
             <option value="">
@@ -5887,26 +5973,40 @@ function fillIncomeStudentClasses() {
 
 
         if (
-            typeof CLASS_LIST !== "undefined"
+            typeof CLASS_LIST ===
+            "undefined"
         ) {
 
-            Object.keys(CLASS_LIST)
-                .forEach(function(code) {
+            return;
 
-                    const option =
-                        document.createElement(
-                            "option"
-                        );
+        }
 
-                    option.value =
-                        code;
 
-                    option.textContent =
-                        CLASS_LIST[code];
+        Object.keys(CLASS_LIST)
+            .forEach(function(code) {
 
-                    select.appendChild(option);
+                const option =
+                    document.createElement(
+                        "option"
+                    );
 
-                });
+                option.value =
+                    code;
+
+                option.textContent =
+                    CLASS_LIST[code];
+
+                select.appendChild(
+                    option
+                );
+
+            });
+
+
+        if (oldValue) {
+
+            select.value =
+                oldValue;
 
         }
 
@@ -5916,113 +6016,1493 @@ function fillIncomeStudentClasses() {
 
 
 /* =========================================================
-/* =========================================================
-   10. STUDENT NAME DROPDOWN
+   10. STUDENT SEARCH
+   CLASS + ROLL
 ========================================================= */
 
-function fillIncomeStudents(classId) {
+function fillIncomeStudents(
+    classId
+) {
 
-    const studentSelect =
-        document.getElementById("incomeStudent");
+    const nameInput =
+        document.getElementById(
+            "incomeStudentName"
+        );
 
-    if (!studentSelect) return;
-
-
-    studentSelect.innerHTML = `
-        <option value="">
-            শিক্ষার্থী নির্বাচন করুন
-        </option>
-    `;
-
-
-    if (!classId) return;
+    const idInput =
+        document.getElementById(
+            "incomeStudentId"
+        );
 
 
-    if (typeof admissionStudents === "undefined") {
-        return;
+    if (nameInput) {
+
+        nameInput.value = "";
+
     }
 
 
-    const students =
-        admissionStudents.filter(function(student) {
+    if (idInput) {
 
-            return (
-                student.classCode === classId ||
-                student.className === CLASS_LIST[classId]
-            );
+        idInput.value = "";
 
-        });
+    }
+
+}
 
 
-    students.forEach(function(student) {
+/* =========================================================
+   FIND STUDENT BY ROLL
+========================================================= */
 
-        const option =
-            document.createElement("option");
+function findIncomeStudent() {
 
-        option.value =
+    const classId =
+        document.getElementById(
+            "incomeClass"
+        )?.value || "";
+
+
+    const roll =
+        document.getElementById(
+            "incomeRoll"
+        )?.value.trim() || "";
+
+
+    const nameInput =
+        document.getElementById(
+            "incomeStudentName"
+        );
+
+
+    const idInput =
+        document.getElementById(
+            "incomeStudentId"
+        );
+
+
+    if (nameInput) {
+
+        nameInput.value = "";
+
+    }
+
+
+    if (idInput) {
+
+        idInput.value = "";
+
+    }
+
+
+    if (
+        !classId ||
+        !roll
+    ) {
+
+        return;
+
+    }
+
+
+    if (
+        typeof admissionStudents ===
+        "undefined"
+    ) {
+
+        return;
+
+    }
+
+
+    const student =
+        admissionStudents.find(
+            function(student) {
+
+                const sameClass =
+
+                    String(
+                        student.classCode
+                    ) ===
+                    String(classId)
+
+                    ||
+
+                    String(
+                        student.className
+                    ) ===
+                    String(
+                        CLASS_LIST[classId]
+                    );
+
+
+                const sameRoll =
+
+                    String(
+                        student.roll
+                    ) ===
+                    String(roll);
+
+
+                return (
+                    sameClass &&
+                    sameRoll
+                );
+
+            }
+        );
+
+
+    if (!student) {
+
+        if (nameInput) {
+
+            nameInput.value =
+                "শিক্ষার্থী পাওয়া যায়নি";
+
+        }
+
+        return;
+
+    }
+
+
+    if (nameInput) {
+
+        nameInput.value =
+            student.name || "";
+
+    }
+
+
+    if (idInput) {
+
+        idInput.value =
             student.studentId ||
             student.id ||
-            student.roll ||
             "";
 
-        option.textContent =
-            (student.roll ? student.roll + " - " : "") +
-            (student.name || "নাম নেই");
+    }
 
-        studentSelect.appendChild(option);
+}
+
+
+/* =========================================================
+   11. OPEN INCOME FORM
+========================================================= */
+
+function openIncomeForm() {
+
+    const incomeBox =
+        document.getElementById(
+            "incomeFormBox"
+        );
+
+
+    const expenseBox =
+        document.getElementById(
+            "expenseFormBox"
+        );
+
+
+    if (incomeBox) {
+
+        incomeBox.style.display =
+            "block";
+
+    }
+
+
+    if (expenseBox) {
+
+        expenseBox.style.display =
+            "none";
+
+    }
+
+
+    fillIncomeExpenseYears();
+
+    fillIncomeExpenseMonths();
+
+    fillIncomeCategories();
+
+    fillIncomeStudentClasses();
+
+}
+
+
+/* =========================================================
+   12. OPEN EXPENSE FORM
+========================================================= */
+
+function openExpenseForm() {
+
+    const incomeBox =
+        document.getElementById(
+            "incomeFormBox"
+        );
+
+
+    const expenseBox =
+        document.getElementById(
+            "expenseFormBox"
+        );
+
+
+    if (incomeBox) {
+
+        incomeBox.style.display =
+            "none";
+
+    }
+
+
+    if (expenseBox) {
+
+        expenseBox.style.display =
+            "block";
+
+    }
+
+
+    fillIncomeExpenseYears();
+
+    fillIncomeExpenseMonths();
+
+    fillExpenseCategories();
+
+}
+
+
+/* =========================================================
+   13. SUBMIT INCOME
+========================================================= */
+
+function submitIncome() {
+
+    const year =
+        document.getElementById(
+            "incomeYear"
+        )?.value || "";
+
+
+    const month =
+        document.getElementById(
+            "incomeMonth"
+        )?.value || "";
+
+
+    const category =
+        document.getElementById(
+            "incomeHead"
+        )?.value || "";
+
+
+    const classId =
+        document.getElementById(
+            "incomeClass"
+        )?.value || "";
+
+
+    const roll =
+        document.getElementById(
+            "incomeRoll"
+        )?.value.trim() || "";
+
+
+    const studentName =
+        document.getElementById(
+            "incomeStudentName"
+        )?.value || "";
+
+
+    const studentId =
+        document.getElementById(
+            "incomeStudentId"
+        )?.value || "";
+
+
+    const amount =
+        Number(
+            document.getElementById(
+                "incomeAmount"
+            )?.value || 0
+        );
+
+
+    if (!year) {
+
+        alert(
+            "সন নির্বাচন করুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (!month) {
+
+        alert(
+            "মাস নির্বাচন করুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (!category) {
+
+        alert(
+            "আয়ের খাত নির্বাচন করুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (!classId) {
+
+        alert(
+            "শ্রেণি নির্বাচন করুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (!roll) {
+
+        alert(
+            "রোল নম্বর লিখুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !studentName ||
+        studentName ===
+        "শিক্ষার্থী পাওয়া যায়নি"
+    ) {
+
+        alert(
+            "সঠিক শিক্ষার্থী পাওয়া যায়নি।"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !amount ||
+        amount <= 0
+    ) {
+
+        alert(
+            "সঠিক টাকার পরিমাণ লিখুন।"
+        );
+
+        return;
+
+    }
+
+
+    const entry = {
+
+        id:
+            Date.now().toString(),
+
+        type:
+            "income",
+
+        year:
+            year,
+
+        month:
+            month,
+
+        category:
+            category,
+
+        classCode:
+            classId,
+
+        className:
+            CLASS_LIST[classId] ||
+            "",
+
+        roll:
+            roll,
+
+        studentName:
+            studentName,
+
+        studentId:
+            studentId,
+
+        amount:
+            amount,
+
+        date:
+            new Date().toISOString()
+
+    };
+
+
+    incomeExpenseData.push(
+        entry
+    );
+
+
+    saveIncomeExpenseData();
+
+
+    alert(
+        "আয় সফলভাবে সংরক্ষণ হয়েছে।"
+    );
+
+
+    clearIncomeForm();
+
+    renderIncomeExpenseSummary();
+
+    renderIncomeExpenseTable();
+
+}
+
+
+/* =========================================================
+   14. SUBMIT EXPENSE
+========================================================= */
+
+function submitExpense() {
+
+    const year =
+        document.getElementById(
+            "expenseYear"
+        )?.value || "";
+
+
+    const month =
+        document.getElementById(
+            "expenseMonth"
+        )?.value || "";
+
+
+    const category =
+        document.getElementById(
+            "expenseHead"
+        )?.value || "";
+
+
+    const amount =
+        Number(
+            document.getElementById(
+                "expenseAmount"
+            )?.value || 0
+        );
+
+
+    if (!year) {
+
+        alert(
+            "সন নির্বাচন করুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (!month) {
+
+        alert(
+            "মাস নির্বাচন করুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (!category) {
+
+        alert(
+            "ব্যয়ের খাত নির্বাচন করুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !amount ||
+        amount <= 0
+    ) {
+
+        alert(
+            "সঠিক টাকার পরিমাণ লিখুন।"
+        );
+
+        return;
+
+    }
+
+
+    const entry = {
+
+        id:
+            Date.now().toString(),
+
+        type:
+            "expense",
+
+        year:
+            year,
+
+        month:
+            month,
+
+        category:
+            category,
+
+        amount:
+            amount,
+
+        date:
+            new Date().toISOString()
+
+    };
+
+
+    incomeExpenseData.push(
+        entry
+    );
+
+
+    saveIncomeExpenseData();
+
+
+    alert(
+        "ব্যয় সফলভাবে সংরক্ষণ হয়েছে।"
+    );
+
+
+    clearExpenseForm();
+
+    renderIncomeExpenseSummary();
+
+    renderIncomeExpenseTable();
+
+}
+
+
+/* =========================================================
+   15. CLEAR INCOME FORM
+========================================================= */
+
+function clearIncomeForm() {
+
+    const ids = [
+
+        "incomeYear",
+        "incomeMonth",
+        "incomeHead",
+        "incomeClass",
+        "incomeRoll",
+        "incomeStudentName",
+        "incomeStudentId",
+        "incomeAmount"
+
+    ];
+
+
+    ids.forEach(function(id) {
+
+        const element =
+            document.getElementById(id);
+
+        if (!element) return;
+
+
+        element.value = "";
 
     });
 
 }
-                    
+
+
 /* =========================================================
-   INCOME & EXPENSE DROPDOWN INITIALIZATION
+   16. CLEAR EXPENSE FORM
+========================================================= */
+
+function clearExpenseForm() {
+
+    const ids = [
+
+        "expenseYear",
+        "expenseMonth",
+        "expenseHead",
+        "expenseAmount"
+
+    ];
+
+
+    ids.forEach(function(id) {
+
+        const element =
+            document.getElementById(id);
+
+        if (!element) return;
+
+
+        element.value = "";
+
+    });
+
+}
+
+
+/* =========================================================
+   17. SUMMARY
+========================================================= */
+
+function renderIncomeExpenseSummary() {
+
+    const box =
+        document.getElementById(
+            "incomeExpenseSummary"
+        );
+
+
+    if (!box) return;
+
+
+    let totalIncome = 0;
+
+    let totalExpense = 0;
+
+
+    incomeExpenseData.forEach(
+        function(item) {
+
+            const amount =
+                Number(
+                    item.amount || 0
+                );
+
+
+            if (
+                item.type ===
+                "income"
+            ) {
+
+                totalIncome +=
+                    amount;
+
+            }
+
+
+            if (
+                item.type ===
+                "expense"
+            ) {
+
+                totalExpense +=
+                    amount;
+
+            }
+
+        }
+    );
+
+
+    const balance =
+        totalIncome -
+        totalExpense;
+
+
+    box.innerHTML = `
+
+        <div class="finance-summary">
+
+            <div>
+                <strong>
+                    মোট আয়
+                </strong>
+
+                <br>
+
+                ${totalIncome.toLocaleString(
+                    "bn-BD"
+                )} টাকা
+
+            </div>
+
+
+            <div>
+                <strong>
+                    মোট ব্যয়
+                </strong>
+
+                <br>
+
+                ${totalExpense.toLocaleString(
+                    "bn-BD"
+                )} টাকা
+
+            </div>
+
+
+            <div>
+                <strong>
+                    বর্তমান ব্যালেন্স
+                </strong>
+
+                <br>
+
+                ${balance.toLocaleString(
+                    "bn-BD"
+                )} টাকা
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   18. TRANSACTION TABLE
+========================================================= */
+
+function renderIncomeExpenseTable() {
+
+    const table =
+        document.getElementById(
+            "incomeExpenseTable"
+        );
+
+
+    if (!table) return;
+
+
+    if (
+        incomeExpenseData.length ===
+        0
+    ) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="8">
+
+                    এখনো কোনো আয়-ব্যয়ের
+                    তথ্য নেই।
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    table.innerHTML = "";
+
+
+    const data =
+        incomeExpenseData
+            .slice()
+            .reverse();
+
+
+    data.forEach(
+        function(item) {
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const typeText =
+                item.type ===
+                "income"
+                    ? "আয়"
+                    : "ব্যয়";
+
+
+            const classText =
+                item.className ||
+                "";
+
+
+            const studentText =
+                item.studentName
+                    ? item.studentName
+                    : "-";
+
+
+            tr.innerHTML = `
+
+                <td>
+                    ${item.year || ""}
+                </td>
+
+                <td>
+                    ${item.month || ""}
+                </td>
+
+                <td>
+                    ${typeText}
+                </td>
+
+                <td>
+                    ${item.category || ""}
+                </td>
+
+                <td>
+                    ${classText}
+                </td>
+
+                <td>
+                    ${item.roll || "-"}
+                </td>
+
+                <td>
+                    ${studentText}
+                </td>
+
+                <td>
+                    ${Number(
+                        item.amount || 0
+                    ).toLocaleString(
+                        "bn-BD"
+                    )}
+                </td>
+
+            `;
+
+
+            table.appendChild(
+                tr
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   19. FILTER
+========================================================= */
+
+function filterIncomeExpense() {
+
+    const year =
+        document.getElementById(
+            "incomeExpenseFilterYear"
+        )?.value || "";
+
+
+    const month =
+        document.getElementById(
+            "incomeExpenseFilterMonth"
+        )?.value || "";
+
+
+    const category =
+        document.getElementById(
+            "incomeExpenseFilterCategory"
+        )?.value || "";
+
+
+    const table =
+        document.getElementById(
+            "incomeExpenseTable"
+        );
+
+
+    if (!table) return;
+
+
+    let filtered =
+        incomeExpenseData.slice();
+
+
+    if (year) {
+
+        filtered =
+            filtered.filter(
+                function(item) {
+
+                    return String(
+                        item.year
+                    ) === String(
+                        year
+                    );
+
+                }
+            );
+
+    }
+
+
+    if (month) {
+
+        filtered =
+            filtered.filter(
+                function(item) {
+
+                    return (
+                        item.month ===
+                        month
+                    );
+
+                }
+            );
+
+    }
+
+
+    if (category) {
+
+        filtered =
+            filtered.filter(
+                function(item) {
+
+                    return (
+                        item.category ===
+                        category
+                    );
+
+                }
+            );
+
+    }
+
+
+    table.innerHTML = "";
+
+
+    if (
+        filtered.length ===
+        0
+    ) {
+
+        table.innerHTML = `
+
+            <tr>
+
+                <td colspan="8">
+
+                    কোনো তথ্য পাওয়া যায়নি।
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtered
+        .slice()
+        .reverse()
+        .forEach(
+            function(item) {
+
+                const tr =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                const typeText =
+                    item.type ===
+                    "income"
+                        ? "আয়"
+                        : "ব্যয়";
+
+
+                tr.innerHTML = `
+
+                    <td>
+                        ${item.year || ""}
+                    </td>
+
+                    <td>
+                        ${item.month || ""}
+                    </td>
+
+                    <td>
+                        ${typeText}
+                    </td>
+
+                    <td>
+                        ${item.category || ""}
+                    </td>
+
+                    <td>
+                        ${item.className || "-"}
+                    </td>
+
+                    <td>
+                        ${item.roll || "-"}
+                    </td>
+
+                    <td>
+                        ${item.studentName || "-"}
+                    </td>
+
+                    <td>
+                        ${Number(
+                            item.amount || 0
+                        ).toLocaleString(
+                            "bn-BD"
+                        )}
+                    </td>
+
+                `;
+
+
+                table.appendChild(
+                    tr
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   20. SHOW INCOME & EXPENSE
+========================================================= */
+
+function showIncomeExpense() {
+
+    const output =
+        document.getElementById(
+            "incomeExpenseOutput"
+        );
+
+
+    if (!output) {
+
+        console.error(
+            "incomeExpenseOutput পাওয়া যায়নি।"
+        );
+
+        return;
+
+    }
+
+
+    output.innerHTML = `
+
+        <div class="income-expense-panel">
+
+
+            <h2>
+                💰 প্রতিষ্ঠানের আয়-ব্যয়
+            </h2>
+
+
+            <!-- =====================
+                 BUTTONS
+            ====================== -->
+
+            <div>
+
+                <button
+                    type="button"
+                    onclick="openIncomeForm()"
+                >
+                    💰 আয় গ্রহণ
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="openExpenseForm()"
+                >
+                    💸 ব্যয় প্রদান
+                </button>
+
+            </div>
+
+
+            <!-- =====================
+                 SUMMARY
+            ====================== -->
+
+            <div
+                id="incomeExpenseSummary"
+                style="
+                    margin-top:20px;
+                "
+            >
+            </div>
+
+
+            <!-- =====================
+                 INCOME FORM
+            ====================== -->
+
+            <div
+                id="incomeFormBox"
+                style="
+                    display:none;
+                    margin-top:20px;
+                "
+            >
+
+                <h3>
+                    💰 আয় গ্রহণ
+                </h3>
+
+
+                <select id="incomeYear">
+
+                    <option value="">
+                        সন নির্বাচন করুন
+                    </option>
+
+                </select>
+
+
+                <select id="incomeMonth">
+
+                    <option value="">
+                        মাস নির্বাচন করুন
+                    </option>
+
+                </select>
+
+
+                <select id="incomeHead">
+
+                    <option value="">
+                        আয়ের খাত নির্বাচন করুন
+                    </option>
+
+                </select>
+
+
+                <select
+                    id="incomeClass"
+                    onchange="fillIncomeStudents(this.value)"
+                >
+
+                    <option value="">
+                        শ্রেণি নির্বাচন করুন
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="text"
+                    id="incomeRoll"
+                    placeholder="রোল নম্বর লিখুন"
+                    oninput="findIncomeStudent()"
+                >
+
+
+                <input
+                    type="text"
+                    id="incomeStudentName"
+                    placeholder="শিক্ষার্থীর নাম"
+                    readonly
+                >
+
+
+                <input
+                    type="text"
+                    id="incomeStudentId"
+                    placeholder="Student ID"
+                    readonly
+                >
+
+
+                <input
+                    type="number"
+                    id="incomeAmount"
+                    min="0"
+                    placeholder="টাকার পরিমাণ"
+                >
+
+
+                <button
+                    type="button"
+                    onclick="submitIncome()"
+                >
+                    💾 আয় সংরক্ষণ
+                </button>
+
+
+            </div>
+
+
+            <!-- =====================
+                 EXPENSE FORM
+            ====================== -->
+
+            <div
+                id="expenseFormBox"
+                style="
+                    display:none;
+                    margin-top:20px;
+                "
+            >
+
+                <h3>
+                    💸 ব্যয় প্রদান
+                </h3>
+
+
+                <select id="expenseYear">
+
+                    <option value="">
+                        সন নির্বাচন করুন
+                    </option>
+
+                </select>
+
+
+                <select id="expenseMonth">
+
+                    <option value="">
+                        মাস নির্বাচন করুন
+                    </option>
+
+                </select>
+
+
+                <select id="expenseHead">
+
+                    <option value="">
+                        ব্যয়ের খাত নির্বাচন করুন
+                    </option>
+
+                </select>
+
+
+                <input
+                    type="number"
+                    id="expenseAmount"
+                    min="0"
+                    placeholder="টাকার পরিমাণ"
+                >
+
+
+                <button
+                    type="button"
+                    onclick="submitExpense()"
+                >
+                    💾 ব্যয় সংরক্ষণ
+                </button>
+
+
+            </div>
+
+
+            <!-- =====================
+                 FILTER
+            ====================== -->
+
+            <div
+                style="
+                    margin-top:25px;
+                "
+            >
+
+                <h3>
+                    📊 আয়-ব্যয় তালিকা
+                </h3>
+
+
+                <select
+                    id="incomeExpenseFilterYear"
+                    onchange="filterIncomeExpense()"
+                >
+
+                    <option value="">
+                        সব সন
+                    </option>
+
+                </select>
+
+
+                <select
+                    id="incomeExpenseFilterMonth"
+                    onchange="filterIncomeExpense()"
+                >
+
+                    <option value="">
+                        সব মাস
+                    </option>
+
+                </select>
+
+
+                <select
+                    id="incomeExpenseFilterCategory"
+                    onchange="filterIncomeExpense()"
+                >
+
+                    <option value="">
+                        সব খাত
+                    </option>
+
+                </select>
+
+
+                <button
+                    type="button"
+                    onclick="renderIncomeExpenseTable()"
+                >
+                    🔄 সব দেখুন
+                </button>
+
+
+                <div
+                    style="
+                        overflow-x:auto;
+                        margin-top:15px;
+                    "
+                >
+
+                    <table
+                        border="1"
+                        width="100%"
+                    >
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    সন
+                                </th>
+
+                                <th>
+                                    মাস
+                                </th>
+
+                                <th>
+                                    ধরন
+                                </th>
+
+                                <th>
+                                    খাত
+                                </th>
+
+                                <th>
+                                    শ্রেণি
+                                </th>
+
+                                <th>
+                                    রোল
+                                </th>
+
+                                <th>
+                                    শিক্ষার্থী
+                                </th>
+
+                                <th>
+                                    টাকা
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody
+                            id="incomeExpenseTable"
+                        >
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    /* DROPDOWNS */
+
+    fillIncomeExpenseYears();
+
+    fillIncomeExpenseMonths();
+
+    fillIncomeCategories();
+
+    fillExpenseCategories();
+
+    fillIncomeStudentClasses();
+
+
+    /* DISPLAY */
+
+    renderIncomeExpenseSummary();
+
+    renderIncomeExpenseTable();
+
+}
+
+
+/* =========================================================
+   21. INITIALIZATION
 ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
     function () {
 
-        /* YEAR */
+        /*
+         * এখানে শুধু Income & Expense
+         * এর initialization।
+         *
+         * Dashboard-এর অন্য dropdown
+         * স্পর্শ করা হচ্ছে না।
+         */
+
         fillIncomeExpenseYears();
 
-
-        /* MONTH */
         fillIncomeExpenseMonths();
 
-
-        /* INCOME CATEGORY */
         fillIncomeCategories();
 
-
-        /* EXPENSE CATEGORY */
         fillExpenseCategories();
 
-
-        /* CLASS */
         fillIncomeStudentClasses();
-
-
-        /* STUDENT */
-        const incomeClass =
-            document.getElementById(
-                "incomeClass"
-            );
-
-        if (incomeClass) {
-
-            incomeClass.addEventListener(
-                "change",
-                function () {
-
-                    fillIncomeStudents(
-                        this.value
-                    );
-
-                }
-            );
-
-        }
 
     }
 );
