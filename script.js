@@ -7623,3 +7623,738 @@ document.addEventListener(
 
     }
 );
+
+/* =========================================================
+   TEACHERS & STAFF MANAGEMENT
+========================================================= */
+
+
+/* =========================================================
+   1. STORAGE
+========================================================= */
+
+let teacherStaffData = [];
+
+try {
+
+    teacherStaffData = JSON.parse(
+        localStorage.getItem(
+            "madrasah_teacher_staff"
+        ) || "[]"
+    );
+
+    if (!Array.isArray(teacherStaffData)) {
+
+        teacherStaffData = [];
+
+    }
+
+} catch (error) {
+
+    console.error(
+        "Teacher data error:",
+        error
+    );
+
+    teacherStaffData = [];
+
+}
+
+
+/* =========================================================
+   2. SAVE STORAGE
+========================================================= */
+
+function saveTeacherStaffData() {
+
+    localStorage.setItem(
+        "madrasah_teacher_staff",
+        JSON.stringify(
+            teacherStaffData
+        )
+    );
+
+}
+
+
+/* =========================================================
+   3. OPEN FORM
+========================================================= */
+
+function openTeacherForm() {
+
+    const form =
+        document.getElementById(
+            "teacherFormBox"
+        );
+
+    if (!form) return;
+
+    form.style.display = "block";
+
+}
+
+
+/* =========================================================
+   4. CANCEL FORM
+========================================================= */
+
+function cancelTeacherForm() {
+
+    const form =
+        document.getElementById(
+            "teacherFormBox"
+        );
+
+    if (form) {
+
+        form.style.display = "none";
+
+    }
+
+
+    clearTeacherForm();
+
+}
+
+
+/* =========================================================
+   5. CLEAR FORM
+========================================================= */
+
+function clearTeacherForm() {
+
+    const ids = [
+
+        "teacherName",
+        "teacherType",
+        "teacherDesignation",
+        "teacherSubject",
+        "teacherQualification",
+        "teacherMobile",
+        "teacherJoinDate",
+        "teacherAddress",
+        "teacherPhoto",
+        "teacherEditId"
+
+    ];
+
+
+    ids.forEach(function(id) {
+
+        const element =
+            document.getElementById(id);
+
+        if (!element) return;
+
+
+        if (
+            element.type ===
+            "file"
+        ) {
+
+            element.value = "";
+
+        } else {
+
+            element.value = "";
+
+        }
+
+    });
+
+}
+
+
+/* =========================================================
+   6. SAVE TEACHER / STAFF
+========================================================= */
+
+function saveTeacher() {
+
+    const name =
+        document.getElementById(
+            "teacherName"
+        )?.value.trim() || "";
+
+
+    const type =
+        document.getElementById(
+            "teacherType"
+        )?.value || "";
+
+
+    const designation =
+        document.getElementById(
+            "teacherDesignation"
+        )?.value.trim() || "";
+
+
+    const subject =
+        document.getElementById(
+            "teacherSubject"
+        )?.value.trim() || "";
+
+
+    const qualification =
+        document.getElementById(
+            "teacherQualification"
+        )?.value.trim() || "";
+
+
+    const mobile =
+        document.getElementById(
+            "teacherMobile"
+        )?.value.trim() || "";
+
+
+    const joinDate =
+        document.getElementById(
+            "teacherJoinDate"
+        )?.value || "";
+
+
+    const address =
+        document.getElementById(
+            "teacherAddress"
+        )?.value.trim() || "";
+
+
+    const editId =
+        document.getElementById(
+            "teacherEditId"
+        )?.value || "";
+
+
+    if (!name) {
+
+        alert(
+            "নাম লিখুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (!type) {
+
+        alert(
+            "শিক্ষক অথবা কর্মচারী নির্বাচন করুন।"
+        );
+
+        return;
+
+    }
+
+
+    const photoInput =
+        document.getElementById(
+            "teacherPhoto"
+        );
+
+
+    const file =
+        photoInput?.files?.[0];
+
+
+    function saveRecord(photoData) {
+
+        const record = {
+
+            id:
+                editId ||
+                Date.now().toString(),
+
+            name:
+                name,
+
+            type:
+                type,
+
+            designation:
+                designation,
+
+            subject:
+                subject,
+
+            qualification:
+                qualification,
+
+            mobile:
+                mobile,
+
+            joinDate:
+                joinDate,
+
+            address:
+                address,
+
+            photo:
+                photoData || ""
+
+        };
+
+
+        if (editId) {
+
+            const index =
+                teacherStaffData.findIndex(
+                    function(item) {
+
+                        return (
+                            String(item.id) ===
+                            String(editId)
+                        );
+
+                    }
+                );
+
+
+            if (index !== -1) {
+
+                teacherStaffData[index] =
+                    record;
+
+            }
+
+        } else {
+
+            teacherStaffData.push(
+                record
+            );
+
+        }
+
+
+        saveTeacherStaffData();
+
+        clearTeacherForm();
+
+        const form =
+            document.getElementById(
+                "teacherFormBox"
+            );
+
+        if (form) {
+
+            form.style.display =
+                "none";
+
+        }
+
+
+        displayTeacherStaff();
+
+        alert(
+            editId
+                ? "তথ্য সফলভাবে সংশোধন হয়েছে।"
+                : "তথ্য সফলভাবে সংরক্ষণ হয়েছে।"
+        );
+
+    }
+
+
+    if (file) {
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload =
+            function(event) {
+
+                saveRecord(
+                    event.target.result
+                );
+
+            };
+
+
+        reader.readAsDataURL(
+            file
+        );
+
+    } else {
+
+        let oldPhoto = "";
+
+
+        if (editId) {
+
+            const oldRecord =
+                teacherStaffData.find(
+                    function(item) {
+
+                        return (
+                            String(item.id) ===
+                            String(editId)
+                        );
+
+                    }
+                );
+
+
+            if (oldRecord) {
+
+                oldPhoto =
+                    oldRecord.photo ||
+                    "";
+
+            }
+
+        }
+
+
+        saveRecord(
+            oldPhoto
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   7. DISPLAY LIST
+========================================================= */
+
+function displayTeacherStaff() {
+
+    const list =
+        document.getElementById(
+            "teacherList"
+        );
+
+
+    if (!list) return;
+
+
+    list.innerHTML = "";
+
+
+    if (
+        teacherStaffData.length ===
+        0
+    ) {
+
+        list.innerHTML = `
+
+            <div style="
+                text-align:center;
+                padding:20px;
+                border:1px solid #ddd;
+                border-radius:8px;
+                background:#fff;
+            ">
+
+                👨‍🏫 এখনো কোনো
+                শিক্ষক-কর্মচারীর তথ্য
+                যোগ করা হয়নি।
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    teacherStaffData.forEach(
+        function(item) {
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.style.cssText = `
+                padding:15px;
+                border:1px solid #ddd;
+                border-radius:10px;
+                background:#fff;
+            `;
+
+
+            const photo =
+                item.photo
+                    ? `
+                        <img
+                            src="${item.photo}"
+                            alt="ছবি"
+                            style="
+                                width:100px;
+                                height:120px;
+                                object-fit:cover;
+                                border-radius:6px;
+                                display:block;
+                                margin:0 auto 10px;
+                            "
+                        >
+                    `
+                    : `
+                        <div style="
+                            width:100px;
+                            height:120px;
+                            margin:0 auto 10px;
+                            display:flex;
+                            align-items:center;
+                            justify-content:center;
+                            border:1px solid #ddd;
+                            border-radius:6px;
+                            font-size:40px;
+                        ">
+                            👤
+                        </div>
+                    `;
+
+
+            card.innerHTML = `
+
+                ${photo}
+
+
+                <h3 style="
+                    text-align:center;
+                    margin:5px 0;
+                ">
+
+                    ${item.name || ""}
+
+                </h3>
+
+
+                <p>
+                    <strong>
+                        ধরন:
+                    </strong>
+
+                    ${item.type || "-"}
+                </p>
+
+
+                <p>
+                    <strong>
+                        পদবি:
+                    </strong>
+
+                    ${item.designation || "-"}
+                </p>
+
+
+                <p>
+                    <strong>
+                        বিষয়:
+                    </strong>
+
+                    ${item.subject || "-"}
+                </p>
+
+
+                <p>
+                    <strong>
+                        যোগ্যতা:
+                    </strong>
+
+                    ${item.qualification || "-"}
+                </p>
+
+
+                <p>
+                    <strong>
+                        মোবাইল:
+                    </strong>
+
+                    ${item.mobile || "-"}
+                </p>
+
+
+                <p>
+                    <strong>
+                        যোগদানের তারিখ:
+                    </strong>
+
+                    ${item.joinDate || "-"}
+                </p>
+
+
+                <p>
+                    <strong>
+                        ঠিকানা:
+                    </strong>
+
+                    ${item.address || "-"}
+                </p>
+
+
+                <div style="
+                    display:flex;
+                    gap:8px;
+                    flex-wrap:wrap;
+                    margin-top:10px;
+                ">
+
+                    <button
+                        type="button"
+                        onclick="editTeacher('${item.id}')"
+                    >
+
+                        ✏️ সম্পাদনা
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        onclick="deleteTeacher('${item.id}')"
+                    >
+
+                        🗑️ মুছে ফেলুন
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            list.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   8. EDIT
+========================================================= */
+
+function editTeacher(id) {
+
+    const item =
+        teacherStaffData.find(
+            function(record) {
+
+                return (
+                    String(record.id) ===
+                    String(id)
+                );
+
+            }
+        );
+
+
+    if (!item) return;
+
+
+    document.getElementById(
+        "teacherName"
+    ).value =
+        item.name || "";
+
+
+    document.getElementById(
+        "teacherType"
+    ).value =
+        item.type || "";
+
+
+    document.getElementById(
+        "teacherDesignation"
+    ).value =
+        item.designation || "";
+
+
+    document.getElementById(
+        "teacherSubject"
+    ).value =
+        item.subject || "";
+
+
+    document.getElementById(
+        "teacherQualification"
+    ).value =
+        item.qualification || "";
+
+
+    document.getElementById(
+        "teacherMobile"
+    ).value =
+        item.mobile || "";
+
+
+    document.getElementById(
+        "teacherJoinDate"
+    ).value =
+        item.joinDate || "";
+
+
+    document.getElementById(
+        "teacherAddress"
+    ).value =
+        item.address || "";
+
+
+    document.getElementById(
+        "teacherEditId"
+    ).value =
+        item.id;
+
+
+    openTeacherForm();
+
+}
+
+
+/* =========================================================
+   9. DELETE
+========================================================= */
+
+function deleteTeacher(id) {
+
+    const ok =
+        confirm(
+            "এই শিক্ষক-কর্মচারীর তথ্য মুছে ফেলবেন?"
+        );
+
+
+    if (!ok) return;
+
+
+    teacherStaffData =
+        teacherStaffData.filter(
+            function(item) {
+
+                return (
+                    String(item.id) !==
+                    String(id)
+                );
+
+            }
+        );
+
+
+    saveTeacherStaffData();
+
+    displayTeacherStaff();
+
+}
+
+
+/* =========================================================
+   10. INITIALIZE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        displayTeacherStaff();
+
+    }
+);
