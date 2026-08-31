@@ -190,7 +190,6 @@
 </nav>
 
 
-
 <!-- =====================================================
      NOTICE
 ===================================================== -->
@@ -201,7 +200,10 @@
         📢 নোটিশ:
     </strong>
 
-    <marquee>
+    <marquee
+        id="noticeMarquee"
+        behavior="scroll"
+        direction="left">
 
         Abdullah Hat Islamia Fazil (Degree)
         Madrasah-এর অফিসিয়াল ওয়েবসাইটে
@@ -210,6 +212,134 @@
     </marquee>
 
 </div>
+
+
+<!-- =====================================================
+     NOTICE MANAGEMENT
+===================================================== -->
+
+<section
+    id="noticeManagement"
+    class="section light"
+>
+
+    <h2 class="section-title">
+        📢 নোটিশ বোর্ড
+    </h2>
+
+
+    <!-- ==============================
+         ADD NOTICE BUTTON
+    =============================== -->
+
+    <div style="
+        text-align:center;
+        margin-bottom:20px;
+    ">
+
+        <button
+            type="button"
+            onclick="openNoticeForm()">
+
+            ➕ নতুন নোটিশ যোগ করুন
+
+        </button>
+
+    </div>
+
+
+    <!-- ==============================
+         NOTICE FORM
+    =============================== -->
+
+    <div
+        id="noticeFormBox"
+        style="
+            display:none;
+            max-width:700px;
+            margin:0 auto 25px;
+            padding:20px;
+            border:1px solid #ddd;
+            border-radius:10px;
+            background:#fff;
+        "
+    >
+
+        <h3>
+            📝 নোটিশ লিখুন
+        </h3>
+
+
+        <input
+            type="text"
+            id="noticeTitle"
+            placeholder="নোটিশের শিরোনাম"
+        >
+
+
+        <textarea
+            id="noticeText"
+            rows="6"
+            placeholder="নোটিশের বিস্তারিত লিখুন..."
+        ></textarea>
+
+
+        <input
+            type="date"
+            id="noticeDate"
+        >
+
+
+        <div style="
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            margin-top:15px;
+        ">
+
+            <button
+                type="button"
+                onclick="saveNotice()">
+
+                💾 নোটিশ সংরক্ষণ
+
+            </button>
+
+
+            <button
+                type="button"
+                onclick="
+                    document.getElementById(
+                        'noticeFormBox'
+                    ).style.display='none';
+                "
+            >
+
+                ❌ বাতিল
+
+            </button>
+
+        </div>
+
+
+        <input
+            type="hidden"
+            id="noticeEditId"
+        >
+
+    </div>
+
+
+    <!-- ==============================
+         NOTICE LIST
+    =============================== -->
+
+    <div
+        id="noticeList"
+    >
+    </div>
+
+</section>
 
 
 <!-- =====================================================
