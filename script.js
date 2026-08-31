@@ -8358,3 +8358,583 @@ document.addEventListener(
 
     }
 );
+
+/* =========================================================
+   NOTICE BOARD MANAGEMENT
+========================================================= */
+
+
+/* =========================================================
+   1. NOTICE STORAGE
+========================================================= */
+
+let noticeData = [];
+
+try {
+
+    noticeData = JSON.parse(
+        localStorage.getItem(
+            "madrasah_notices"
+        ) || "[]"
+    );
+
+
+    if (!Array.isArray(noticeData)) {
+
+        noticeData = [];
+
+    }
+
+} catch (error) {
+
+    console.error(
+        "Notice data error:",
+        error
+    );
+
+    noticeData = [];
+
+}
+
+
+/* =========================================================
+   2. SAVE NOTICE DATA
+========================================================= */
+
+function saveNoticeData() {
+
+    localStorage.setItem(
+        "madrasah_notices",
+        JSON.stringify(
+            noticeData
+        )
+    );
+
+}
+
+
+/* =========================================================
+   3. OPEN NOTICE FORM
+========================================================= */
+
+function openNoticeForm() {
+
+    const form =
+        document.getElementById(
+            "noticeFormBox"
+        );
+
+    if (!form) return;
+
+
+    form.style.display =
+        "block";
+
+
+    const dateInput =
+        document.getElementById(
+            "noticeDate"
+        );
+
+
+    if (
+        dateInput &&
+        !dateInput.value
+    ) {
+
+        dateInput.value =
+            new Date()
+                .toISOString()
+                .split("T")[0];
+
+    }
+
+}
+
+
+/* =========================================================
+   4. SAVE NOTICE
+========================================================= */
+
+function saveNotice() {
+
+    const title =
+        document.getElementById(
+            "noticeTitle"
+        )?.value.trim() || "";
+
+
+    const text =
+        document.getElementById(
+            "noticeText"
+        )?.value.trim() || "";
+
+
+    const date =
+        document.getElementById(
+            "noticeDate"
+        )?.value || "";
+
+
+    const editId =
+        document.getElementById(
+            "noticeEditId"
+        )?.value || "";
+
+
+    if (!title) {
+
+        alert(
+            "নোটিশের শিরোনাম লিখুন।"
+        );
+
+        return;
+
+    }
+
+
+    if (!text) {
+
+        alert(
+            "নোটিশের বিস্তারিত লিখুন।"
+        );
+
+        return;
+
+    }
+
+
+    const record = {
+
+        id:
+            editId ||
+            Date.now().toString(),
+
+        title:
+            title,
+
+        text:
+            text,
+
+        date:
+            date ||
+            new Date()
+                .toISOString()
+                .split("T")[0]
+
+    };
+
+
+    if (editId) {
+
+        const index =
+            noticeData.findIndex(
+                function(item) {
+
+                    return (
+                        String(item.id) ===
+                        String(editId)
+                    );
+
+                }
+            );
+
+
+        if (index !== -1) {
+
+            noticeData[index] =
+                record;
+
+        }
+
+    } else {
+
+        noticeData.push(
+            record
+        );
+
+    }
+
+
+    saveNoticeData();
+
+
+    clearNoticeForm();
+
+    closeNoticeForm();
+
+    displayNotices();
+
+    updateTopNotice();
+
+
+    alert(
+        editId
+            ? "নোটিশ সফলভাবে সংশোধন হয়েছে।"
+            : "নোটিশ সফলভাবে সংরক্ষণ হয়েছে।"
+    );
+
+}
+
+
+/* =========================================================
+   5. CLEAR FORM
+========================================================= */
+
+function clearNoticeForm() {
+
+    const title =
+        document.getElementById(
+            "noticeTitle"
+        );
+
+
+    const text =
+        document.getElementById(
+            "noticeText"
+        );
+
+
+    const date =
+        document.getElementById(
+            "noticeDate"
+        );
+
+
+    const editId =
+        document.getElementById(
+            "noticeEditId"
+        );
+
+
+    if (title) {
+
+        title.value = "";
+
+    }
+
+
+    if (text) {
+
+        text.value = "";
+
+    }
+
+
+    if (date) {
+
+        date.value = "";
+
+    }
+
+
+    if (editId) {
+
+        editId.value = "";
+
+    }
+
+}
+
+
+/* =========================================================
+   6. CLOSE FORM
+========================================================= */
+
+function closeNoticeForm() {
+
+    const form =
+        document.getElementById(
+            "noticeFormBox"
+        );
+
+
+    if (form) {
+
+        form.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   7. DISPLAY NOTICE LIST
+========================================================= */
+
+function displayNotices() {
+
+    const list =
+        document.getElementById(
+            "noticeList"
+        );
+
+
+    if (!list) return;
+
+
+    list.innerHTML = "";
+
+
+    if (
+        noticeData.length ===
+        0
+    ) {
+
+        list.innerHTML = `
+
+            <div style="
+                text-align:center;
+                padding:20px;
+                border:1px solid #ddd;
+                border-radius:8px;
+                background:#fff;
+            ">
+
+                📢 এখনো কোনো নোটিশ
+                যোগ করা হয়নি।
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    noticeData
+        .slice()
+        .reverse()
+        .forEach(
+            function(item) {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.style.cssText = `
+                    margin-bottom:15px;
+                    padding:15px;
+                    border:1px solid #ddd;
+                    border-radius:10px;
+                    background:#fff;
+                `;
+
+
+                card.innerHTML = `
+
+                    <h3>
+                        📢 ${item.title || ""}
+                    </h3>
+
+
+                    <p style="
+                        white-space:pre-wrap;
+                    ">
+                        ${item.text || ""}
+                    </p>
+
+
+                    <small>
+                        📅 ${item.date || "-"}
+                    </small>
+
+
+                    <div style="
+                        margin-top:12px;
+                        display:flex;
+                        gap:8px;
+                        flex-wrap:wrap;
+                    ">
+
+                        <button
+                            type="button"
+                            onclick="
+                                editNotice(
+                                    '${item.id}'
+                                )
+                            "
+                        >
+
+                            ✏️ সম্পাদনা
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="
+                                deleteNotice(
+                                    '${item.id}'
+                                )
+                            "
+                        >
+
+                            🗑️ মুছে ফেলুন
+
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(
+                    card
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   8. EDIT NOTICE
+========================================================= */
+
+function editNotice(id) {
+
+    const item =
+        noticeData.find(
+            function(record) {
+
+                return (
+                    String(record.id) ===
+                    String(id)
+                );
+
+            }
+        );
+
+
+    if (!item) return;
+
+
+    document.getElementById(
+        "noticeTitle"
+    ).value =
+        item.title || "";
+
+
+    document.getElementById(
+        "noticeText"
+    ).value =
+        item.text || "";
+
+
+    document.getElementById(
+        "noticeDate"
+    ).value =
+        item.date || "";
+
+
+    document.getElementById(
+        "noticeEditId"
+    ).value =
+        item.id;
+
+
+    openNoticeForm();
+
+}
+
+
+/* =========================================================
+   9. DELETE NOTICE
+========================================================= */
+
+function deleteNotice(id) {
+
+    const ok =
+        confirm(
+            "এই নোটিশটি মুছে ফেলবেন?"
+        );
+
+
+    if (!ok) return;
+
+
+    noticeData =
+        noticeData.filter(
+            function(item) {
+
+                return (
+                    String(item.id) !==
+                    String(id)
+                );
+
+            }
+        );
+
+
+    saveNoticeData();
+
+    displayNotices();
+
+    updateTopNotice();
+
+}
+
+
+/* =========================================================
+   10. UPDATE TOP MARQUEE
+========================================================= */
+
+function updateTopNotice() {
+
+    const marquee =
+        document.getElementById(
+            "noticeMarquee"
+        );
+
+
+    if (!marquee) return;
+
+
+    if (
+        noticeData.length ===
+        0
+    ) {
+
+        marquee.textContent =
+            "Abdullah Hat Islamia Fazil (Degree) Madrasah-এর অফিসিয়াল ওয়েবসাইটে আপনাকে স্বাগতম।";
+
+        return;
+
+    }
+
+
+    const latest =
+        noticeData[
+            noticeData.length - 1
+        ];
+
+
+    marquee.textContent =
+        "📢 " +
+        latest.title +
+        " — " +
+        latest.text;
+
+}
+
+
+/* =========================================================
+   11. NOTICE INITIALIZATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        displayNotices();
+
+        updateTopNotice();
+
+    }
+);
