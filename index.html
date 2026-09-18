@@ -1746,7 +1746,6 @@
 </section>
 
 
-
 <!-- =====================================================
      DOWNLOAD
 ===================================================== -->
@@ -1757,55 +1756,194 @@
         📄 প্রয়োজনীয় ফর্ম / ডাউনলোড
     </h2>
 
-
     <div class="cards">
 
-
-        <div class="card">
-
+        <!-- ভর্তি ফর্ম -->
+        <div class="card download-card">
             📄
+            <h3>ভর্তি ফর্ম</h3>
+            <p>ভর্তি ফর্ম ডাউনলোড করুন</p>
 
-            <h3>
-                ভর্তি ফর্ম
-            </h3>
-
-            <p>
-                ডাউনলোড করুন
-            </p>
-
+            <a href="downloads/admission-form.pdf"
+               download
+               class="button">
+                ⬇️ ডাউনলোড
+            </a>
         </div>
 
 
-        <div class="card">
+        <!-- ফলাফল / মার্কশিট -->
+        <div class="card download-card">
+            📊
+            <h3>ফলাফল / মার্কশিট</h3>
+            <p>ফলাফল ও মার্কশিট</p>
 
+            <a href="downloads/result-marksheet.pdf"
+               download
+               class="button">
+                ⬇️ ডাউনলোড
+            </a>
+        </div>
+
+
+        <!-- ছাড়পত্র / TC -->
+        <div class="card download-card">
             📑
+            <h3>ছাড়পত্র / TC</h3>
+            <p>ছাড়পত্রের ফরম</p>
 
-            <h3>
-                প্রয়োজনীয় ফর্ম
-            </h3>
-
-            <p>
-                ডাউনলোড করুন
-            </p>
-
+            <a href="downloads/tc-form.pdf"
+               download
+               class="button">
+                ⬇️ ডাউনলোড
+            </a>
         </div>
 
 
-        <div class="card">
+        <!-- সার্টিফিকেট -->
+        <div class="card download-card">
+            🏆
+            <h3>সার্টিফিকেট</h3>
+            <p>সার্টিফিকেটের ফরম</p>
 
+            <a href="downloads/certificate.pdf"
+               download
+               class="button">
+                ⬇️ ডাউনলোড
+            </a>
+        </div>
+
+
+        <!-- প্রশংসা পত্র -->
+        <div class="card download-card">
+            🏅
+            <h3>প্রশংসা পত্র</h3>
+            <p>প্রশংসা পত্রের ফরম</p>
+
+            <a href="downloads/testimonial.pdf"
+               download
+               class="button">
+                ⬇️ ডাউনলোড
+            </a>
+        </div>
+
+
+        <!-- সিলেবাস -->
+        <div class="card download-card">
             📚
+            <h3>সিলেবাস</h3>
+            <p>শ্রেণিভিত্তিক সিলেবাস</p>
 
-            <h3>
-                সিলেবাস
-            </h3>
-
-            <p>
-                ডাউনলোড করুন
-            </p>
-
+            <a href="downloads/syllabus.pdf"
+               download
+               class="button">
+                ⬇️ ডাউনলোড
+            </a>
         </div>
 
 
+        <!-- অন্যান্য ফরম / নোটিশ -->
+        <div class="card download-card">
+            📋
+            <h3>অন্যান্য ফরম / নোটিশ</h3>
+            <p>প্রয়োজনীয় অন্যান্য ফাইল</p>
+
+            <a href="downloads/other-form.pdf"
+               download
+               class="button">
+                ⬇️ ডাউনলোড
+            </a>
+        </div>
+
+
+        <!-- নতুন ফরম যোগ -->
+        <div class="card download-card">
+
+            ➕
+
+            <h3>
+                নতুন ফরম যোগ করুন
+            </h3>
+
+            <p>
+                পরবর্তীতে নতুন ফরম/ফাইল যোগ করার জন্য
+            </p>
+
+            <button type="button"
+                    class="button"
+                    onclick="openDownloadAdmin()">
+                ⚙️ ফরম যোগ করুন
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         DOWNLOAD ADMIN
+    ================================================= -->
+
+    <div id="downloadAdminBox"
+         style="display:none;
+                max-width:700px;
+                margin:30px auto;
+                padding:20px;
+                background:#fff;
+                border:1px solid #ddd;
+                border-radius:10px;">
+
+        <h3 style="text-align:center;">
+            ➕ নতুন ফরম / ডকুমেন্ট যোগ করুন
+        </h3>
+
+        <input
+            type="text"
+            id="downloadTitle"
+            placeholder="ফরম / ডকুমেন্টের নাম"
+            style="width:100%;padding:10px;margin:8px 0;"
+        >
+
+        <input
+            type="file"
+            id="downloadFile"
+            accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            style="width:100%;padding:10px;margin:8px 0;"
+        >
+
+        <div style="display:flex;
+                    gap:10px;
+                    flex-wrap:wrap;
+                    margin-top:15px;">
+
+            <button type="button"
+                    class="button"
+                    onclick="saveDownloadFile()">
+                💾 সংরক্ষণ
+            </button>
+
+            <button type="button"
+                    class="button"
+                    onclick="closeDownloadAdmin()">
+                ❌ বাতিল
+            </button>
+
+        </div>
+
+        <div id="downloadAdminMessage"
+             style="margin-top:15px;">
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         ADDED FILE LIST
+    ================================================= -->
+
+    <div id="customDownloadList"
+         style="max-width:900px;
+                margin:30px auto;">
     </div>
 
 </section>
