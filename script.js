@@ -8938,3 +8938,345 @@ document.addEventListener(
 
     }
 );
+
+/* =====================================================
+   DOWNLOAD MANAGEMENT
+===================================================== */
+
+const DOWNLOAD_STORAGE_KEY = "madrasah_custom_downloads";
+
+
+function getCustomDownloads() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(DOWNLOAD_STORAGE_KEY)
+        ) || [];
+
+    } catch (error) {
+
+        return [];
+
+    }
+
+}
+
+
+/* =====================================================
+   OPEN DOWNLOAD ADMIN
+===================================================== */
+
+function openDownloadAdmin() {
+
+    const box =
+        document.getElementById("downloadAdminBox");
+
+    if (!box) return;
+
+    box.style.display = "block";
+
+    box.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
+}
+
+
+/* =====================================================
+   CLOSE DOWNLOAD ADMIN
+===================================================== */
+
+function closeDownloadAdmin() {
+
+    const box =
+        document.getElementById("downloadAdminBox");
+
+    if (!box) return;
+
+    box.style.display = "none";
+
+}
+
+
+/* =====================================================
+   SAVE NEW DOWNLOAD
+===================================================== */
+
+function saveDownloadFile() {
+
+    const title =
+        document.getElementById("downloadTitle");
+
+    const fileInput =
+        document.getElementById("downloadFile");
+
+    const message =
+        document.getElementById("downloadAdminMessage");
+
+
+    if (!title || !fileInput || !message) return;
+
+
+    const file = fileInput.files[0];
+
+
+    if (!title.value.trim()) {
+
+        message.innerHTML =
+            "❌ ফরম / ডকুমেন্টের নাম লিখুন।";
+
+        return;
+
+    }
+
+
+    if (!file) {
+
+        message.innerHTML =
+            "❌ একটি ফাইল নির্বাচন করুন।";
+
+        return;
+
+    }
+
+
+    const reader = new FileReader();
+
+
+    reader.onload = function(event) {
+
+        const downloads =
+            getCustomDownloads();
+
+
+        const newFile = {
+
+            id: Date.now(),
+
+            title: title.value.trim(),
+
+            fileName: file.name,
+
+            fileType: file.type,
+
+            fileData: event.target.result,
+
+            date: new Date().toLocaleDateString("bn-BD")
+
+        };
+
+
+        downloads.push(newFile);
+
+
+        try {
+
+            localStorage.setItem(
+                DOWNLOAD_STORAGE_KEY,
+                JSON.stringify(downloads)
+            );
+
+        } catch (error) {
+
+            message.innerHTML =
+                "❌ ফাইলটি অনেক বড় হওয়ায় সংরক্ষণ করা যায়নি।";
+
+            return;
+
+        }
+
+
+        title.value = "";
+
+        fileInput.value = "";
+
+
+        message.innerHTML =
+            "✅ ফাইল সফলভাবে যোগ হয়েছে।";
+
+
+        renderCustomDownloads();
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+/* =====================================================
+   SHOW CUSTOM DOWNLOADS
+===================================================== */
+
+function renderCustomDownloads() {
+
+    const container =
+        document.getElementById("customDownloadList");
+
+    if (!container) return;
+
+
+    const downloads =
+        getCustomDownloads();
+
+
+    if (downloads.length === 0) {
+
+        container.innerHTML = "";
+
+        return;
+
+    }
+
+
+    let html = `
+
+        <div style="
+            background:#fff;
+            padding:20px;
+            border-radius:10px;
+            border:1px solid #ddd;
+        ">
+
+            <h3 style="text-align:center;">
+                📂 অতিরিক্ত ফরম / ডকুমেন্ট
+            </h3>
+
+    `;
+
+
+    downloads.forEach(function(item) {
+
+        html += `
+
+            <div style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:10px;
+                flex-wrap:wrap;
+                padding:12px;
+                margin:8px 0;
+                border-bottom:1px solid #eee;
+            ">
+
+                <div>
+
+                    📄 <strong>
+                        ${escapeDownloadHTML(item.title)}
+                    </strong>
+
+                    <small style="display:block;">
+                        ${escapeDownloadHTML(item.fileName)}
+                    </small>
+
+                </div>
+
+
+                <div style="
+                    display:flex;
+                    gap:8px;
+                    flex-wrap:wrap;
+                ">
+
+                    <a
+                        href="${item.fileData}"
+                        download="${escapeDownloadHTML(item.fileName)}"
+                        class="button"
+                    >
+                        ⬇️ ডাউনলোড
+                    </a>
+
+
+                    <button
+                        type="button"
+                        class="button"
+                        onclick="deleteDownloadFile(${item.id})"
+                    >
+                        🗑️ মুছুন
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    html += `</div>`;
+
+
+    container.innerHTML = html;
+
+}
+
+
+/* =====================================================
+   DELETE DOWNLOAD
+===================================================== */
+
+function deleteDownloadFile(id) {
+
+    if (!confirm("এই ফাইলটি মুছে ফেলতে চান?")) {
+
+        return;
+
+    }
+
+
+    let downloads =
+        getCustomDownloads();
+
+
+    downloads =
+        downloads.filter(function(item) {
+
+            return item.id !== id;
+
+        });
+
+
+    localStorage.setItem(
+        DOWNLOAD_STORAGE_KEY,
+        JSON.stringify(downloads)
+    );
+
+
+    renderCustomDownloads();
+
+}
+
+
+/* =====================================================
+   HTML SECURITY
+===================================================== */
+
+function escapeDownloadHTML(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   DOWNLOAD INIT
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        renderCustomDownloads();
+
+    }
+);
