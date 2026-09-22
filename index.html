@@ -17,6 +17,70 @@
 
     <link rel="stylesheet" href="style.css">
 
+
+<style id="income-expense-receipt-style">
+    .income-receipt {
+        width: 190mm;
+        min-height: 125mm;
+        box-sizing: border-box;
+        padding: 9mm;
+        margin: 20px auto;
+        border: 1.5px solid #075e3a;
+        background: #fff;
+        font-family: Arial, "Noto Sans Bengali", sans-serif;
+    }
+    .income-receipt .receipt-header {
+        text-align: center;
+        border-bottom: 1px solid #999;
+        padding-bottom: 5px;
+        margin-bottom: 8px;
+    }
+    .income-receipt table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 8px;
+    }
+    .income-receipt th,
+    .income-receipt td {
+        border: 1px solid #777;
+        padding: 5px;
+        text-align: left;
+    }
+    .income-receipt .receipt-sign {
+        display:flex;
+        justify-content:space-between;
+        margin-top:20px;
+    }
+    @media print {
+        @page {
+            size: A5 portrait;
+            margin: 5mm;
+        }
+        body * {
+            visibility:hidden !important;
+        }
+        #incomeExpenseReceipt,
+        #incomeExpenseReceipt * {
+            visibility:visible !important;
+        }
+        #incomeExpenseReceipt {
+            display:block !important;
+            position:absolute;
+            left:0;
+            top:0;
+            width:100%;
+            margin:0;
+        }
+        .income-receipt {
+            width:100%;
+            min-height:0;
+            margin:0;
+            border:1.5px solid #075e3a;
+            page-break-inside:avoid;
+        }
+    }
+</style>
+
 </head>
 
 
@@ -138,17 +202,18 @@
         </li>
 
         <li>
-            <li>
-    <a href="#dashboard">
-        📊 Dashboard
-    </a>
+            <a href="#dashboard">
+                📊 Dashboard
+            </a>
+        </li>
 
-<li>
-<li>
-    <a href="#incomeExpense">
-        💰 আয়–ব্যয়
-    </a>
-</li>
+        <li>
+            <a href="#incomeExpense">
+                💰 আয়–ব্যয়
+            </a>
+        </li>
+
+        <li>
             <a href="#marks">
                 ✍️ নম্বর প্রদান
             </a>
@@ -1200,79 +1265,8 @@
             
 
 <!-- =====================================================
-     DASHBOARD
-===================================================== -->
-
-<section id="dashboard" class="section">
-
-    <h2 class="section-title">
-        📊 Dashboard
-    </h2>
-
-
-    <div class="result-box">
-
-        <h3>
-            প্রতিষ্ঠানের Dashboard
-        </h3>
-
-
-        <div class="result-form">
-
-
-            <!-- YEAR -->
-
-            <select id="dashboardYear">
-
-                <option value="">
-                    সন নির্বাচন করুন
-                </option>
-
-            </select>
-
-
-            <!-- CLASS -->
-
-            <select id="dashboardClass">
-
-                <option value="">
-                    শ্রেণি নির্বাচন করুন
-                </option>
-
-            </select>
-
-
-            <button
-                type="button"
-                onclick="showDashboard()">
-
-                📊 Dashboard দেখুন
-
-            </button>
-
-        </div>
-
-     <!-- =====================================================
-     INCOME / EXPENSE BUTTON
-===================================================== -->
-
-<div
-    id="incomeExpenseOutput"
-    style="margin-top:20px;">
-</div>
-
-
-<!-- DASHBOARD MESSAGE -->
-
-<div id="dashboardMessage"></div>
-
-
-<!-- DASHBOARD OUTPUT -->
-
-<div id="dashboardOutput"></div>
-
-<!-- =====================================================
      INCOME & EXPENSE MANAGEMENT
+     Admission-এর পর, Dashboard-এর আগে
 ===================================================== -->
 
 <section id="incomeExpense" class="section light">
@@ -1283,19 +1277,257 @@
 
     <div class="result-box">
 
-        <h3>
+        <h3 style="text-align:center;">
             প্রতিষ্ঠানের আয়–ব্যয় ব্যবস্থাপনা
         </h3>
 
-        <div
-            id="incomeExpenseOutput"
-            style="margin-top:20px;">
+        <div style="
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            justify-content:center;
+            margin:15px 0 20px;
+        ">
+
+            <button type="button" onclick="openIncomeForm()">
+                💰 আয় গ্রহণ
+            </button>
+
+            <button type="button" onclick="openExpenseForm()">
+                💸 ব্যয় প্রদান
+            </button>
+
         </div>
+
+        <div id="incomeExpenseSummary"></div>
+
+        <!-- INCOME -->
+        <div id="incomeFormBox" style="
+            display:none;
+            margin-top:20px;
+            padding:18px;
+            border:1px solid #ddd;
+            border-radius:10px;
+            background:#fff;
+        ">
+
+            <h3 style="text-align:center;">💰 আয় গ্রহণ</h3>
+
+            <div class="result-form">
+
+                <select id="incomeYear">
+                    <option value="">সন নির্বাচন করুন</option>
+                </select>
+
+                <select id="incomeMonth">
+                    <option value="">মাস নির্বাচন করুন</option>
+                </select>
+
+                <select id="incomeHead">
+                    <option value="">আয়ের খাত নির্বাচন করুন</option>
+                </select>
+
+                <select id="incomeClass">
+                    <option value="">শ্রেণি নির্বাচন করুন</option>
+                </select>
+
+                <input type="text"
+                       id="incomeRoll"
+                       inputmode="numeric"
+                       placeholder="রোল নম্বর লিখুন">
+
+                <input type="text"
+                       id="incomeStudentName"
+                       placeholder="শিক্ষার্থীর নাম"
+                       readonly>
+
+                <input type="text"
+                       id="incomeStudentId"
+                       placeholder="Student ID"
+                       readonly>
+
+                <input type="number"
+                       id="incomeAmount"
+                       min="0"
+                       step="1"
+                       placeholder="টাকার পরিমাণ">
+
+            </div>
+
+            <div style="
+                display:flex;
+                gap:10px;
+                flex-wrap:wrap;
+                justify-content:center;
+                margin-top:12px;
+            ">
+
+                <button type="button" onclick="submitIncome()">
+                    💾 আয় সংরক্ষণ ও রসিদ
+                </button>
+
+                <button type="button" onclick="clearIncomeForm()">
+                    ❌ পরিষ্কার
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- EXPENSE -->
+        <div id="expenseFormBox" style="
+            display:none;
+            margin-top:20px;
+            padding:18px;
+            border:1px solid #ddd;
+            border-radius:10px;
+            background:#fff;
+        ">
+
+            <h3 style="text-align:center;">💸 ব্যয় প্রদান</h3>
+
+            <div class="result-form">
+
+                <select id="expenseYear">
+                    <option value="">সন নির্বাচন করুন</option>
+                </select>
+
+                <select id="expenseMonth">
+                    <option value="">মাস নির্বাচন করুন</option>
+                </select>
+
+                <select id="expenseHead">
+                    <option value="">ব্যয়ের খাত নির্বাচন করুন</option>
+                </select>
+
+                <input type="number"
+                       id="expenseAmount"
+                       min="0"
+                       step="1"
+                       placeholder="টাকার পরিমাণ">
+
+            </div>
+
+            <div style="
+                display:flex;
+                gap:10px;
+                flex-wrap:wrap;
+                justify-content:center;
+                margin-top:12px;
+            ">
+
+                <button type="button" onclick="submitExpense()">
+                    💾 ব্যয় সংরক্ষণ ও রসিদ
+                </button>
+
+                <button type="button" onclick="clearExpenseForm()">
+                    ❌ পরিষ্কার
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- LIST -->
+        <div style="margin-top:25px;">
+
+            <h3 style="text-align:center;">📊 আয়–ব্যয়ের তালিকা</h3>
+
+            <div class="result-form">
+
+                <select id="incomeExpenseFilterYear"
+                        onchange="filterIncomeExpense()">
+                    <option value="">সব সন</option>
+                </select>
+
+                <select id="incomeExpenseFilterMonth"
+                        onchange="filterIncomeExpense()">
+                    <option value="">সব মাস</option>
+                </select>
+
+                <select id="incomeExpenseFilterCategory"
+                        onchange="filterIncomeExpense()">
+                    <option value="">সব খাত</option>
+                </select>
+
+                <button type="button" onclick="renderIncomeExpenseTable()">
+                    🔄 সব দেখুন
+                </button>
+
+            </div>
+
+            <div style="overflow-x:auto;margin-top:15px;">
+
+                <table class="result-table" id="incomeExpenseRecordTable">
+
+                    <thead>
+                        <tr>
+                            <th>রসিদ নং</th>
+                            <th>সন</th>
+                            <th>মাস</th>
+                            <th>ধরন</th>
+                            <th>খাত</th>
+                            <th>শ্রেণি</th>
+                            <th>রোল</th>
+                            <th>শিক্ষার্থী</th>
+                            <th>টাকা</th>
+                            <th>রসিদ</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="incomeExpenseTable"></tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <div id="incomeExpenseReceipt" style="display:none;"></div>
 
     </div>
 
 </section>
-   
+
+
+<!-- =====================================================
+     DASHBOARD
+===================================================== -->
+
+<section id="dashboard" class="section">
+
+    <h2 class="section-title">
+        📊 Dashboard
+    </h2>
+
+    <div class="result-box">
+
+        <h3>প্রতিষ্ঠানের Dashboard</h3>
+
+        <div class="result-form">
+
+            <select id="dashboardYear">
+                <option value="">সন নির্বাচন করুন</option>
+            </select>
+
+            <select id="dashboardClass">
+                <option value="">শ্রেণি নির্বাচন করুন</option>
+            </select>
+
+            <button type="button" onclick="showDashboard()">
+                📊 Dashboard দেখুন
+            </button>
+
+        </div>
+
+        <div id="dashboardMessage"></div>
+        <div id="dashboardOutput"></div>
+
+    </div>
+
+</section>
+
+
 <!-- =====================================================
      EXAM / MARKS ENTRY
 ===================================================== -->
