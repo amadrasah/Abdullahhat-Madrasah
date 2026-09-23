@@ -284,29 +284,130 @@ function fillClassSelect(id, firstText) {
 
 }
 
-
 /* =========================================================
    6. YEAR MANAGEMENT
    একটি জায়গা থেকে সব সন নিয়ন্ত্রণ
 ========================================================= */
 
-// এখানে শুধু একবার সন লিখলেই
-// সব Year dropdown-এ চলে যাবে।
 
-let YEARS =
-    JSON.parse(
-        localStorage.getItem("madrasah_years")
-    ) || [
+/*
+   =========================================================
+   YEAR STORAGE
+   =========================================================
+   
+   এখানে সনের মূল তালিকা থাকবে।
+   একবার নতুন সন যোগ করলে পুরো Software-এর
+   সব Year Dropdown এই তালিকা থেকেই নেবে।
+*/
+
+let YEARS = [];
+
+try {
+
+    YEARS =
+        JSON.parse(
+            localStorage.getItem(
+                "madrasah_years"
+            )
+        );
+
+    if (
+        !Array.isArray(YEARS) ||
+        YEARS.length === 0
+    ) {
+
+        YEARS = [
+            "2025",
+            "2026",
+            "2027",
+            "2028"
+        ];
+
+    }
+
+} catch (error) {
+
+    console.error(
+        "Year data error:",
+        error
+    );
+
+    YEARS = [
         "2025",
         "2026",
         "2027",
         "2028"
     ];
 
+}
 
-/* =========================================================
-   সব Year Dropdown-এর ID
-========================================================= */
+
+/*
+   =========================================================
+   YEAR CLEAN + SORT
+   =========================================================
+   
+   একই সন একাধিকবার থাকলে একটি রাখা হবে।
+   তারপর ছোট থেকে বড় ক্রমে সাজানো হবে।
+*/
+
+YEARS = YEARS
+    .map(function(year) {
+
+        return String(year).trim();
+
+    })
+    .filter(function(year) {
+
+        return /^\d{4}$/.test(year);
+
+    })
+    .filter(function(
+        year,
+        index,
+        array
+    ) {
+
+        return array.indexOf(year) === index;
+
+    });
+
+YEARS.sort(function(a, b) {
+
+    return Number(a) - Number(b);
+
+});
+
+
+/*
+   =========================================================
+   YEAR STORAGE SAVE
+   =========================================================
+*/
+
+function saveYears() {
+
+    localStorage.setItem(
+        "madrasah_years",
+        JSON.stringify(YEARS)
+    );
+
+}
+
+
+/*
+   প্রথমবার Year Storage না থাকলে
+   Default Year সংরক্ষণ
+*/
+
+saveYears();
+
+
+/*
+   =========================================================
+   MAIN YEAR DROPDOWN IDs
+   =========================================================
+*/
 
 const YEAR_SELECT_IDS = [
 
@@ -321,41 +422,111 @@ const YEAR_SELECT_IDS = [
 ];
 
 
-/* =========================================================
-   Year Dropdown তৈরি
-========================================================= */
+/*
+   =========================================================
+   INCOME & EXPENSE YEAR DROPDOWN IDs
+   =========================================================
+*/
 
-function fillYearSelect(id, firstText) {
+const INCOME_EXPENSE_YEAR_SELECT_IDS = [
+
+    "incomeYear",
+    "expenseYear",
+    "incomeExpenseFilterYear"
+
+];
+
+
+/*
+   =========================================================
+   ALL YEAR DROPDOWN IDs
+   =========================================================
+   
+   Software-এর সব Year dropdown এখন
+   একই YEARS তালিকা ব্যবহার করবে।
+*/
+
+const ALL_YEAR_SELECT_IDS = [
+
+    ...YEAR_SELECT_IDS,
+
+    ...INCOME_EXPENSE_YEAR_SELECT_IDS
+
+];
+
+
+/*
+   =========================================================
+   YEAR DROPDOWN তৈরি
+   =========================================================
+*/
+
+function fillYearSelect(
+    id,
+    firstText
+) {
 
     const select =
         document.getElementById(id);
 
     if (!select) return;
 
+
     const oldValue =
         select.value;
 
-    select.innerHTML =
-        `<option value="">${firstText}</option>`;
+
+    select.innerHTML = "";
 
 
-    YEARS.forEach(function(year) {
+    const firstOption =
+        document.createElement(
+            "option"
+        );
 
-        const option =
-            document.createElement("option");
+    firstOption.value = "";
 
-        option.value =
-            year;
+    firstOption.textContent =
+        firstText ||
+        "সন নির্বাচন করুন";
 
-        option.textContent =
-            year;
-
-        select.appendChild(option);
-
-    });
+    select.appendChild(
+        firstOption
+    );
 
 
-    if (YEARS.includes(oldValue)) {
+    YEARS.forEach(
+        function(year) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                year;
+
+            option.textContent =
+                year;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    /*
+       আগে কোনো সন নির্বাচিত থাকলে
+       সেটি আবার ধরে রাখবে
+    */
+
+    if (
+        YEARS.includes(
+            oldValue
+        )
+    ) {
 
         select.value =
             oldValue;
@@ -365,45 +536,176 @@ function fillYearSelect(id, firstText) {
 }
 
 
-/* =========================================================
+/*
+   =========================================================
+   INCOME & EXPENSE YEAR DROPDOWN
+   =========================================================
+   
+   আগে এখানে current year থেকে
+   -5 থেকে +2 পর্যন্ত সন তৈরি হতো।
+   
+   এখন আর সেটা হবে না।
+   এখানেও মূল YEARS ব্যবহার হবে।
+*/
+
+function fillIncomeExpenseYears() {
+
+    INCOME_EXPENSE_YEAR_SELECT_IDS.forEach(
+        function(id) {
+
+            const select =
+                document.getElementById(id);
+
+            if (!select) return;
+
+
+            const oldValue =
+                select.value;
+
+
+            select.innerHTML = "";
+
+
+            const firstOption =
+                document.createElement(
+                    "option"
+                );
+
+            firstOption.value = "";
+
+
+            /*
+               Filter dropdown-এর জন্য
+               "সব সন" রাখা হবে।
+            */
+
+            if (
+                id ===
+                "incomeExpenseFilterYear"
+            ) {
+
+                firstOption.textContent =
+                    "সব সন";
+
+            } else {
+
+                firstOption.textContent =
+                    "সন নির্বাচন করুন";
+
+            }
+
+
+            select.appendChild(
+                firstOption
+            );
+
+
+            YEARS.forEach(
+                function(year) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+                    option.value =
+                        year;
+
+                    option.textContent =
+                        year;
+
+                    select.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+            /*
+               আগে নির্বাচিত সন থাকলে
+               সেটি ধরে রাখবে
+            */
+
+            if (
+                YEARS.includes(
+                    oldValue
+                )
+            ) {
+
+                select.value =
+                    oldValue;
+
+            }
+
+        }
+    );
+
+}
+
+
+/*
+   =========================================================
    সব Year Dropdown একসাথে আপডেট
-========================================================= */
+   =========================================================
+   
+   নতুন সন যোগ করার পর এই function চলবে।
+*/
 
 function loadAllYears() {
 
-    /* মূল Year dropdown */
-    YEAR_SELECT_IDS.forEach(function(id) {
+    /*
+       Main Year dropdown
+    */
 
-        const select =
-            document.getElementById(id);
+    YEAR_SELECT_IDS.forEach(
+        function(id) {
 
-        if (!select) return;
+            const select =
+                document.getElementById(id);
 
-
-        const firstText =
-            select.options[0]
-                ? select.options[0].textContent
-                : "সন নির্বাচন করুন";
+            if (!select) return;
 
 
-        fillYearSelect(
-            id,
-            firstText
-        );
+            /*
+               বর্তমানে প্রথম option-এ
+               যে লেখা আছে সেটি রাখা হবে।
+            */
 
-    });
+            const firstText =
+                select.options[0]
+                    ? select.options[0]
+                        .textContent
+                    : "সন নির্বাচন করুন";
 
 
-    /* Income & Expense-এর Year */
+            fillYearSelect(
+                id,
+                firstText
+            );
+
+        }
+    );
+
+
+    /*
+       Income & Expense-এর Year
+    */
+
     fillIncomeExpenseYears();
 
 }
 
 
-
-/* =========================================================
+/*
+   =========================================================
    নতুন সন যোগ
-========================================================= */
+   =========================================================
+   
+   Software-এর যেকোনো জায়গা থেকে
+   addNewYear() call করলে এখান থেকেই
+   নতুন সন যুক্ত হবে।
+*/
 
 function addNewYear() {
 
@@ -413,15 +715,32 @@ function addNewYear() {
         );
 
 
-    if (!newYear) return;
+    /*
+       Cancel করলে কিছু হবে না
+    */
+
+    if (
+        newYear === null
+    ) {
+
+        return;
+
+    }
 
 
     const year =
-        newYear.trim();
+        String(
+            newYear
+        ).trim();
 
 
-    // ৪ সংখ্যার সন কিনা
-    if (!/^\d{4}$/.test(year)) {
+    /*
+       ৪ সংখ্যার সন কিনা
+    */
+
+    if (
+        !/^\d{4}$/.test(year)
+    ) {
 
         alert(
             "দয়া করে ৪ সংখ্যার সন লিখুন।\nযেমন: 2029"
@@ -432,8 +751,13 @@ function addNewYear() {
     }
 
 
-    // আগে আছে কিনা
-    if (YEARS.includes(year)) {
+    /*
+       একই সন আগে থেকেই আছে কিনা
+    */
+
+    if (
+        YEARS.includes(year)
+    ) {
 
         alert(
             "এই সন আগে থেকেই আছে।"
@@ -444,22 +768,52 @@ function addNewYear() {
     }
 
 
+    /*
+       নতুন সন যোগ
+    */
+
     YEARS.push(year);
 
-    YEARS.sort();
 
-    localStorage.setItem(
-        "madrasah_years",
-        JSON.stringify(YEARS)
+    /*
+       ছোট থেকে বড়
+    */
+
+    YEARS.sort(
+        function(a, b) {
+
+            return (
+                Number(a) -
+                Number(b)
+            );
+
+        }
     );
 
+
+    /*
+       Local Storage-এ সংরক্ষণ
+    */
+
+    saveYears();
+
+
+    /*
+       Software-এর সব জায়গার
+       Year Dropdown একসাথে আপডেট
+    */
 
     loadAllYears();
 
 
+    /*
+       সফলতার বার্তা
+    */
+
     alert(
-        "নতুন সন সফলভাবে যোগ হয়েছে: " +
-        year
+        year +
+        " সন সফলভাবে যোগ হয়েছে।\n\n" +
+        "এখন এই সন Software-এর সব Year dropdown-এ পাওয়া যাবে।"
     );
 
 }
