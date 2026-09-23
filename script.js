@@ -371,6 +371,7 @@ function fillYearSelect(id, firstText) {
 
 function loadAllYears() {
 
+    /* মূল Year dropdown */
     YEAR_SELECT_IDS.forEach(function(id) {
 
         const select =
@@ -392,7 +393,12 @@ function loadAllYears() {
 
     });
 
+
+    /* Income & Expense-এর Year */
+    fillIncomeExpenseYears();
+
 }
+
 
 
 /* =========================================================
