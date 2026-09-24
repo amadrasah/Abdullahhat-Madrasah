@@ -1,342 +1,205 @@
 /* =========================================================
-   INCOME–EXPENSE FIX
-   Abdullah Hat Islamia Fazil (Degree) Madrasah
-
-   IMPORTANT:
-   This file is an ADD-ON.
-   Do NOT delete or replace script(3).js
+   ABDULLAH HAT ISLAMIA FAZIL (DEGREE) MADRASAH
+   INCOME & EXPENSE FIX
+   ---------------------------------------------------------
+   This file is loaded AFTER script(3).js
+   Main script remains unchanged.
 ========================================================= */
 
 (function () {
 
+    "use strict";
+
+
     /* =====================================================
-       1. NON-STUDENT INCOME CATEGORIES
-       এগুলোর জন্য শিক্ষার্থীর তথ্য বাধ্যতামূলক নয়
+       1. CATEGORIES THAT DO NOT REQUIRE STUDENT
     ===================================================== */
 
-    const NON_STUDENT_INCOME_CATEGORIES = new Set([
+    const NON_STUDENT_INCOME_CATEGORIES = [
         "সরকারি অনুদান",
         "বেসরকারি অনুদান",
         "দান",
         "অন্যান্য আয়"
-    ]);
+    ];
 
 
     /* =====================================================
-       2. STUDENT LOOKUP
-       সন + শ্রেণি + রোল দিয়ে শিক্ষার্থী খুঁজবে
+       2. HELPER
+    ===================================================== */
+
+    function getValue(id) {
+
+        const element =
+            document.getElementById(id);
+
+        return element
+            ? String(element.value || "").trim()
+            : "";
+
+    }
+
+
+    function setValue(id, value) {
+
+        const element =
+            document.getElementById(id);
+
+        if (element) {
+
+            element.value =
+                value == null ? "" : value;
+
+        }
+
+    }
+
+
+    function escapeHTML(value) {
+
+        if (
+            typeof window.escapeHTML ===
+            "function"
+        ) {
+
+            return window.escapeHTML(
+                String(value == null ? "" : value)
+            );
+
+        }
+
+        return String(value == null ? "" : value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =====================================================
+       3. CHECK WHETHER CATEGORY IS NON-STUDENT INCOME
+    ===================================================== */
+
+    function isNonStudentIncomeCategory(category) {
+
+        return NON_STUDENT_INCOME_CATEGORIES
+            .indexOf(category) !== -1;
+
+    }
+
+
+    /* =====================================================
+       4. FIND STUDENT
+          YEAR + CLASS + ROLL
     ===================================================== */
 
     window.findIncomeStudent = function () {
 
         const year =
-            document.getElementById("incomeYear")?.value || "";
+            getValue("incomeYear");
 
         const classId =
-            document.getElementById("incomeClass")?.value || "";
+            getValue("incomeClass");
 
         const roll =
-            document.getElementById("incomeRoll")?.value.trim() || "";
+            getValue("incomeRoll");
 
         const nameInput =
-            document.getElementById("incomeStudentName");
+            document.getElementById(
+                "incomeStudentName"
+            );
 
         const idInput =
-            document.getElementById("incomeStudentId");
+            document.getElementById(
+                "incomeStudentId"
+            );
 
 
-        if (nameInput) nameInput.value = "";
-        if (idInput) idInput.value = "";
+        if (nameInput) {
 
+            nameInput.value = "";
 
-        if (!year || !classId || !roll) {
-            return;
+        }
+
+        if (idInput) {
+
+            idInput.value = "";
+
         }
 
 
-        let students = [];
+        if (!classId || !roll) {
 
-        if (typeof admissionStudents !== "undefined") {
-            students = admissionStudents || [];
+            return;
+
+        }
+
+
+        if (
+            typeof admissionStudents ===
+            "undefined"
+        ) {
+
+            if (nameInput) {
+
+                nameInput.value =
+                    "শিক্ষার্থী পাওয়া যায়নি";
+
+            }
+
+            return;
+
         }
 
 
         const className =
-            typeof CLASS_LIST !== "undefined"
-                ? (CLASS_LIST[classId] || "")
+            (
+                typeof CLASS_LIST !==
+                "undefined"
+            )
+                ? (
+                    CLASS_LIST[classId] ||
+                    ""
+                )
                 : "";
 
 
-        const student = students.find(function (student) {
-
-            const sameYear =
-                String(student.year || "") ===
-                String(year);
-
-            const sameClass =
-                String(student.classCode || "") ===
-                    String(classId)
-                ||
-                String(student.className || "") ===
-                    String(className);
-
-            const sameRoll =
-                String(student.roll || "") ===
-                String(roll);
-
-
-            return (
-                sameYear &&
-                sameClass &&
-                sameRoll
-            );
-
-        });
-
-
-        if (!student) {
-
-            if (nameInput) {
-                nameInput.value =
-                    "শিক্ষার্থী পাওয়া যায়নি";
-            }
-
-            return;
-        }
-
-
-        if (nameInput) {
-            nameInput.value =
-                student.name || "";
-        }
-
-
-        if (idInput) {
-            idInput.value =
-                student.studentId ||
-                student.id ||
-                "";
-        }
-
-    };
-
-
-    /* =====================================================
-       3. CATEGORY CHANGE
-       শিক্ষার্থী-সংক্রান্ত খাত হলে তথ্য নেওয়া যাবে।
-       কিন্তু অনুদান/দান/অন্যান্য আয়ে বাধ্যতামূলক নয়।
-    ===================================================== */
-
-    window.updateIncomeStudentRequirement = function () {
-
-        const category =
-            document.getElementById("incomeHead")?.value || "";
-
-        const classInput =
-            document.getElementById("incomeClass");
-
-        const rollInput =
-            document.getElementById("incomeRoll");
-
-        const nameInput =
-            document.getElementById("incomeStudentName");
-
-        const idInput =
-            document.getElementById("incomeStudentId");
-
-
-        const optional =
-            NON_STUDENT_INCOME_CATEGORIES.has(category);
-
-
-        if (optional) {
-
-            /*
-             * শিক্ষার্থীর তথ্য OPTIONAL
-             */
-
-            if (classInput) {
-                classInput.removeAttribute("required");
-            }
-
-            if (rollInput) {
-                rollInput.removeAttribute("required");
-            }
-
-            if (nameInput) {
-                nameInput.removeAttribute("required");
-            }
-
-            if (idInput) {
-                idInput.removeAttribute("required");
-            }
-
-
-            /*
-             * placeholder পরিবর্তন
-             */
-
-            if (classInput) {
-                classInput.title =
-                    "এই আয়ের ক্ষেত্রে শ্রেণি দেওয়া বাধ্যতামূলক নয়";
-            }
-
-            if (rollInput) {
-                rollInput.placeholder =
-                    "রোল নম্বর (ঐচ্ছিক)";
-            }
-
-        } else {
-
-            /*
-             * শিক্ষার্থী-ভিত্তিক আয়
-             */
-
-            if (classInput) {
-                classInput.setAttribute("required", "required");
-                classInput.title =
-                    "শিক্ষার্থী-ভিত্তিক আয়ের জন্য শ্রেণি নির্বাচন করুন";
-            }
-
-            if (rollInput) {
-                rollInput.setAttribute("required", "required");
-                rollInput.placeholder =
-                    "রোল নম্বর লিখুন";
-            }
-
-        }
-
-    };
-
-
-    /* =====================================================
-       4. SUBMIT INCOME
-       নতুন সংরক্ষণ ব্যবস্থা
-    ===================================================== */
-
-    window.submitIncome = function () {
-
-        const year =
-            document.getElementById("incomeYear")?.value || "";
-
-        const month =
-            document.getElementById("incomeMonth")?.value || "";
-
-        const category =
-            document.getElementById("incomeHead")?.value || "";
-
-        const classId =
-            document.getElementById("incomeClass")?.value || "";
-
-        const roll =
-            document.getElementById("incomeRoll")?.value.trim() || "";
-
-        const nameInput =
-            document.getElementById("incomeStudentName");
-
-        const idInput =
-            document.getElementById("incomeStudentId");
-
-        const amount =
-            Number(
-                document.getElementById("incomeAmount")?.value || 0
-            );
-
-
-        let studentName =
-            nameInput?.value || "";
-
-        let studentId =
-            idInput?.value || "";
-
-
-        /* ---------------------------------------------
-           BASIC VALIDATION
-        --------------------------------------------- */
-
-        if (!year) {
-            alert("সন নির্বাচন করুন।");
-            return;
-        }
-
-
-        if (!month) {
-            alert("মাস নির্বাচন করুন।");
-            return;
-        }
-
-
-        if (!category) {
-            alert("আয়ের খাত নির্বাচন করুন।");
-            return;
-        }
-
-
-        if (!amount || amount <= 0) {
-            alert("টাকার পরিমাণ লিখুন।");
-            return;
-        }
-
-
-        /* ---------------------------------------------
-           STUDENT REQUIRED OR OPTIONAL?
-        --------------------------------------------- */
-
-        const studentOptional =
-            NON_STUDENT_INCOME_CATEGORIES.has(category);
-
-
-        /*
-         * যদি শিক্ষার্থী-ভিত্তিক আয় হয়
-         */
-
-        if (!studentOptional) {
-
-            if (!classId) {
-                alert("শ্রেণি নির্বাচন করুন।");
-                return;
-            }
-
-
-            if (!roll) {
-                alert("রোল নম্বর লিখুন।");
-                return;
-            }
-
-
-            /*
-             * আবার সরাসরি database থেকে lookup
-             */
-
-            let students = [];
-
-            if (typeof admissionStudents !== "undefined") {
-                students = admissionStudents || [];
-            }
-
-
-            const className =
-                typeof CLASS_LIST !== "undefined"
-                    ? (CLASS_LIST[classId] || "")
-                    : "";
-
-
-            const student =
-                students.find(function (s) {
+        const student =
+            admissionStudents.find(
+                function (student) {
 
                     const sameYear =
-                        String(s.year || "") ===
+                        !year ||
+                        String(
+                            student.year ||
+                            student.admissionYear ||
+                            ""
+                        ) ===
                         String(year);
 
+
                     const sameClass =
-                        String(s.classCode || "") ===
-                            String(classId)
+                        String(
+                            student.classCode ||
+                            ""
+                        ) ===
+                        String(classId)
+
                         ||
-                        String(s.className || "") ===
-                            String(className);
+
+                        String(
+                            student.className ||
+                            ""
+                        ) ===
+                        String(className);
+
 
                     const sameRoll =
-                        String(s.roll || "") ===
+                        String(
+                            student.roll ||
+                            ""
+                        ) ===
                         String(roll);
 
 
@@ -346,133 +209,280 @@
                         sameRoll
                     );
 
-                });
+                }
+            );
 
 
-            if (!student) {
+        if (!student) {
 
-                alert(
-                    "সন, শ্রেণি ও রোল অনুযায়ী শিক্ষার্থী পাওয়া যায়নি।"
-                );
+            if (nameInput) {
 
-                return;
+                nameInput.value =
+                    "শিক্ষার্থী পাওয়া যায়নি";
+
             }
 
+            return;
 
-            studentName =
+        }
+
+
+        if (nameInput) {
+
+            nameInput.value =
                 student.name || "";
 
-            studentId =
+        }
+
+
+        if (idInput) {
+
+            idInput.value =
                 student.studentId ||
                 student.id ||
                 "";
 
+        }
 
-            if (!studentName) {
-                alert("শিক্ষার্থীর নাম পাওয়া যায়নি।");
-                return;
-            }
+    };
 
 
-            if (!studentId) {
-                alert("Student ID পাওয়া যায়নি।");
-                return;
-            }
+    /* =====================================================
+       5. CATEGORY CHANGE
+          Student information becomes optional
+          for non-student income.
+    ===================================================== */
+
+    function updateIncomeStudentRequirement() {
+
+        const category =
+            getValue("incomeHead");
+
+        const classInput =
+            document.getElementById(
+                "incomeClass"
+            );
+
+        const rollInput =
+            document.getElementById(
+                "incomeRoll"
+            );
+
+
+        const optional =
+            isNonStudentIncomeCategory(
+                category
+            );
+
+
+        if (classInput) {
+
+            classInput.removeAttribute(
+                "required"
+            );
+
+        }
+
+        if (rollInput) {
+
+            rollInput.removeAttribute(
+                "required"
+            );
 
         }
 
 
-        /* ---------------------------------------------
-           OPTIONAL INCOME
-           যেমন অনুদান/দান/অন্যান্য আয়
+        /*
+           For student-related income,
+           fields are visually kept as normal.
+           Validation is handled in submitIncome().
+        */
 
-           যদি শ্রেণি + রোল দেওয়া থাকে,
-           তাহলে শিক্ষার্থীকেও যুক্ত করা হবে।
-           না দিলে সমস্যা নেই।
-        --------------------------------------------- */
 
         if (
-            studentOptional &&
-            classId &&
-            roll
+            optional &&
+            document.getElementById(
+                "incomeStudentName"
+            )
         ) {
 
-            let students = [];
+            setValue(
+                "incomeStudentName",
+                ""
+            );
 
-            if (typeof admissionStudents !== "undefined") {
-                students = admissionStudents || [];
-            }
+            setValue(
+                "incomeStudentId",
+                ""
+            );
 
+        }
 
-            const className =
-                typeof CLASS_LIST !== "undefined"
-                    ? (CLASS_LIST[classId] || "")
-                    : "";
-
-
-            const student =
-                students.find(function (s) {
-
-                    return (
-                        String(s.year || "") === String(year) &&
-                        (
-                            String(s.classCode || "") ===
-                                String(classId)
-                            ||
-                            String(s.className || "") ===
-                                String(className)
-                        ) &&
-                        String(s.roll || "") ===
-                            String(roll)
-                    );
-
-                });
+    }
 
 
-            if (student) {
+    /* =====================================================
+       6. SUBMIT INCOME
+    ===================================================== */
 
-                studentName =
-                    student.name || "";
+    window.submitIncome = function () {
 
-                studentId =
-                    student.studentId ||
-                    student.id ||
-                    "";
+        const year =
+            getValue("incomeYear");
 
-            }
+        const month =
+            getValue("incomeMonth");
+
+        const category =
+            getValue("incomeHead");
+
+        const classId =
+            getValue("incomeClass");
+
+        const roll =
+            getValue("incomeRoll");
+
+        const studentName =
+            getValue("incomeStudentName");
+
+        const studentId =
+            getValue("incomeStudentId");
+
+        const amount =
+            Number(
+                document.getElementById(
+                    "incomeAmount"
+                )?.value || 0
+            );
+
+
+        /* -----------------------------------------------
+           BASIC VALIDATION
+        ----------------------------------------------- */
+
+        if (!year) {
+
+            alert(
+                "সন নির্বাচন করুন।"
+            );
+
+            return;
 
         }
 
 
-        /* ---------------------------------------------
-           RECEIPT NUMBER
-        --------------------------------------------- */
+        if (!month) {
 
-        let receiptNo = "";
+            alert(
+                "মাস নির্বাচন করুন।"
+            );
+
+            return;
+
+        }
+
+
+        if (!category) {
+
+            alert(
+                "আয়ের খাত নির্বাচন করুন।"
+            );
+
+            return;
+
+        }
+
 
         if (
-            typeof getNextIncomeExpenseReceiptNo ===
-            "function"
+            !amount ||
+            amount <= 0
         ) {
 
-            receiptNo =
-                getNextIncomeExpenseReceiptNo(
-                    year,
-                    month
+            alert(
+                "টাকার পরিমাণ লিখুন।"
+            );
+
+            return;
+
+        }
+
+
+        /* -----------------------------------------------
+           STUDENT / NON-STUDENT VALIDATION
+        ----------------------------------------------- */
+
+        const nonStudent =
+            isNonStudentIncomeCategory(
+                category
+            );
+
+
+        if (!nonStudent) {
+
+            if (!classId) {
+
+                alert(
+                    "শ্রেণি নির্বাচন করুন।"
                 );
 
-        } else {
+                return;
 
-            receiptNo =
-                "INC-" +
-                Date.now();
+            }
+
+
+            if (!roll) {
+
+                alert(
+                    "রোল নম্বর লিখুন।"
+                );
+
+                return;
+
+            }
+
+
+            if (
+                !studentName ||
+                studentName ===
+                "শিক্ষার্থী পাওয়া যায়নি"
+            ) {
+
+                /*
+                   Try searching one more time
+                   before rejecting.
+                */
+
+                window.findIncomeStudent();
+
+
+                const foundName =
+                    getValue(
+                        "incomeStudentName"
+                    );
+
+
+                if (
+                    !foundName ||
+                    foundName ===
+                    "শিক্ষার্থী পাওয়া যায়নি"
+                ) {
+
+                    alert(
+                        "সঠিক শিক্ষার্থী নির্বাচন করুন।"
+                    );
+
+                    return;
+
+                }
+
+            }
 
         }
 
 
-        /* ---------------------------------------------
+        /* -----------------------------------------------
            ENTRY
-        --------------------------------------------- */
+        ----------------------------------------------- */
 
         const entry = {
 
@@ -492,27 +502,38 @@
                 category,
 
             classCode:
-                classId,
+                classId || "",
 
             className:
-                typeof CLASS_LIST !== "undefined"
-                    ? (CLASS_LIST[classId] || "")
+                (
+                    typeof CLASS_LIST !==
+                    "undefined"
+                )
+                    ? (
+                        CLASS_LIST[classId] ||
+                        ""
+                    )
                     : "",
 
             roll:
-                roll,
+                roll || "",
 
             studentName:
-                studentName,
+                nonStudent
+                    ? ""
+                    : getValue(
+                        "incomeStudentName"
+                    ),
 
             studentId:
-                studentId,
+                nonStudent
+                    ? ""
+                    : getValue(
+                        "incomeStudentId"
+                    ),
 
             amount:
                 amount,
-
-            receiptNo:
-                receiptNo,
 
             date:
                 new Date().toISOString()
@@ -520,9 +541,9 @@
         };
 
 
-        /* ---------------------------------------------
+        /* -----------------------------------------------
            SAVE
-        --------------------------------------------- */
+        ----------------------------------------------- */
 
         if (
             typeof incomeExpenseData ===
@@ -530,44 +551,36 @@
         ) {
 
             alert(
-                "আয়-ব্যয়ের ডাটা সিস্টেম পাওয়া যায়নি।"
+                "আয়–ব্যয়ের ডাটা পাওয়া যায়নি।"
             );
 
             return;
+
         }
 
 
-        incomeExpenseData.push(entry);
+        incomeExpenseData.push(
+            entry
+        );
 
 
         if (
             typeof saveIncomeExpenseData ===
             "function"
         ) {
+
             saveIncomeExpenseData();
+
         }
 
-
-        /* ---------------------------------------------
-           SUCCESS
-        --------------------------------------------- */
-
-        alert(
-            "আয় সফলভাবে সংরক্ষণ হয়েছে।\n\n" +
-            "রসিদ নং: " +
-            receiptNo
-        );
-
-
-        /*
-         * Summary/Table refresh
-         */
 
         if (
             typeof renderIncomeExpenseSummary ===
             "function"
         ) {
+
             renderIncomeExpenseSummary();
+
         }
 
 
@@ -575,44 +588,36 @@
             typeof renderIncomeExpenseTable ===
             "function"
         ) {
+
             renderIncomeExpenseTable();
+
         }
+
+
+        alert(
+            "আয় সফলভাবে সংরক্ষণ হয়েছে।"
+        );
 
 
         /*
-         * রসিদ সরাসরি প্রিন্ট
-         */
+           Automatically print receipt
+        */
 
-        if (
-            typeof printIncomeExpenseReceipt ===
-            "function"
-        ) {
-
-            setTimeout(function () {
-
-                printIncomeExpenseReceipt(
-                    entry.id
-                );
-
-            }, 300);
-
-        }
+        window.printIncomeExpenseReceipt(
+            entry.id
+        );
 
 
-        /* ---------------------------------------------
-           FORM CLEAR
-        --------------------------------------------- */
+        /* -----------------------------------------------
+           CLEAR FORM AFTER SAVE
+        ----------------------------------------------- */
 
         if (
             typeof clearIncomeForm ===
             "function"
         ) {
 
-            setTimeout(function () {
-
-                clearIncomeForm();
-
-            }, 500);
+            clearIncomeForm();
 
         }
 
@@ -620,27 +625,736 @@
 
 
     /* =====================================================
-       5. EVENT LISTENERS
+       7. FORMAT DATE
+    ===================================================== */
+
+    function formatReceiptDate(dateValue) {
+
+        const date =
+            new Date(
+                dateValue || Date.now()
+            );
+
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return "";
+
+        }
+
+
+        const day =
+            String(
+                date.getDate()
+            ).padStart(2, "0");
+
+
+        const month =
+            String(
+                date.getMonth() + 1
+            ).padStart(2, "0");
+
+
+        const year =
+            date.getFullYear();
+
+
+        return (
+            day +
+            "-" +
+            month +
+            "-" +
+            year
+        );
+
+    }
+
+
+    /* =====================================================
+       8. CREATE RECEIPT HTML
+    ===================================================== */
+
+    window.createReceiptHTML = function (item) {
+
+        if (!item) {
+
+            return "";
+
+        }
+
+
+        const receiptDate =
+            formatReceiptDate(
+                item.date
+            );
+
+
+        const typeText =
+            item.type === "income"
+                ? "আয় গ্রহণের রসিদ"
+                : "ব্যয় প্রদানের রসিদ";
+
+
+        const studentRow =
+            item.studentName
+                ? `
+                    <tr>
+                        <td>শিক্ষার্থীর নাম</td>
+                        <td>
+                            ${escapeHTML(
+                                item.studentName
+                            )}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Student ID</td>
+                        <td>
+                            ${escapeHTML(
+                                item.studentId || "-"
+                            )}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>শ্রেণি</td>
+                        <td>
+                            ${escapeHTML(
+                                item.className || "-"
+                            )}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>রোল</td>
+                        <td>
+                            ${escapeHTML(
+                                item.roll || "-"
+                            )}
+                        </td>
+                    </tr>
+                `
+                : `
+                    <tr>
+                        <td>প্রতিষ্ঠানিক আয়</td>
+                        <td>
+                            ${escapeHTML(
+                                item.category || ""
+                            )}
+                        </td>
+                    </tr>
+                `;
+
+
+        return `
+
+<!DOCTYPE html>
+
+<html lang="bn">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+    ${escapeHTML(typeText)}
+</title>
+
+
+<style>
+
+@page {
+
+    size: A5 portrait;
+
+    margin: 5mm;
+
+}
+
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+
+html,
+body {
+
+    margin: 0;
+
+    padding: 0;
+
+    font-family:
+        "Noto Sans Bengali",
+        "SolaimanLipi",
+        Arial,
+        sans-serif;
+
+}
+
+
+body {
+
+    background: white;
+
+}
+
+
+.income-receipt {
+
+    width: 100%;
+
+    min-height: 200mm;
+
+    border: 1px solid #000;
+
+    padding: 8mm;
+
+    position: relative;
+
+}
+
+
+.receipt-header {
+
+    text-align: center;
+
+    border-bottom:
+        1px solid #000;
+
+    padding-bottom: 4mm;
+
+    margin-bottom: 5mm;
+
+}
+
+
+.receipt-header h2 {
+
+    margin: 0;
+
+    font-size: 18px;
+
+}
+
+
+.receipt-header h3 {
+
+    margin: 2mm 0 0;
+
+    font-size: 14px;
+
+}
+
+
+.receipt-header p {
+
+    margin: 1mm 0;
+
+    font-size: 11px;
+
+}
+
+
+.receipt-title {
+
+    text-align: center;
+
+    margin: 4mm 0;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    text-decoration: underline;
+
+}
+
+
+.receipt-info {
+
+    width: 100%;
+
+    border-collapse: collapse;
+
+    font-size: 12px;
+
+}
+
+
+.receipt-info td {
+
+    border:
+        1px solid #000;
+
+    padding: 2.5mm;
+
+}
+
+
+.receipt-info td:first-child {
+
+    width: 38%;
+
+    font-weight: bold;
+
+}
+
+
+.amount-box {
+
+    margin-top: 5mm;
+
+    border:
+        1px solid #000;
+
+    padding: 4mm;
+
+    text-align: center;
+
+    font-size: 15px;
+
+    font-weight: bold;
+
+}
+
+
+.receipt-footer {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: flex-end;
+
+    margin-top: 30mm;
+
+    font-size: 11px;
+
+}
+
+
+.receipt-date {
+
+    text-align: left;
+
+    min-width: 35mm;
+
+}
+
+
+.receiver-sign {
+
+    text-align: center;
+
+    min-width: 40mm;
+
+}
+
+
+.principal-sign {
+
+    text-align: center;
+
+    min-width: 40mm;
+
+}
+
+
+.signature-line {
+
+    margin-top: 7mm;
+
+    border-top:
+        1px solid #000;
+
+    padding-top: 1.5mm;
+
+}
+
+
+.receipt-copy {
+
+    margin-top: 8mm;
+
+    text-align: center;
+
+    font-size: 9px;
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+<div class="income-receipt">
+
+
+    <!-- HEADER -->
+
+    <div class="receipt-header">
+
+        <h2>
+            Abdullah Hat Islamia
+            Fazil (Degree) Madrasah
+        </h2>
+
+        <h3>
+            আব্দুল্লাহ্ হাট ইসলামীয়া
+            ফাজিল (ডিগ্রী) মাদ্রাসা
+        </h3>
+
+        <p>
+            নাটেশ্বর, সোনাইমুড়ী,
+            নোয়াখালী
+        </p>
+
+        <p>
+            মোবাইল:
+            01814-716405
+        </p>
+
+    </div>
+
+
+    <!-- TITLE -->
+
+    <div class="receipt-title">
+
+        ${escapeHTML(typeText)}
+
+    </div>
+
+
+    <!-- RECEIPT INFORMATION -->
+
+    <table class="receipt-info">
+
+        <tr>
+
+            <td>
+                রসিদ নং
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    item.receiptNo ||
+                    item.id ||
+                    ""
+                )}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>
+                তারিখ
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    receiptDate
+                )}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>
+                সন
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    item.year || ""
+                )}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>
+                মাস
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    item.month || ""
+                )}
+            </td>
+
+        </tr>
+
+
+        <tr>
+
+            <td>
+                আয়ের খাত
+            </td>
+
+            <td>
+                ${escapeHTML(
+                    item.category || ""
+                )}
+            </td>
+
+        </tr>
+
+
+        ${studentRow}
+
+    </table>
+
+
+    <!-- AMOUNT -->
+
+    <div class="amount-box">
+
+        মোট টাকা:
+        ${Number(
+            item.amount || 0
+        ).toLocaleString("bn-BD")}
+        টাকা
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="receipt-footer">
+
+
+        <div class="receipt-date">
+
+            তারিখ:
+
+            ${escapeHTML(
+                receiptDate
+            )}
+
+        </div>
+
+
+        <div class="receiver-sign">
+
+            গ্রহণকারীর স্বাক্ষর
+
+            <div class="signature-line">
+
+                __________________
+
+            </div>
+
+        </div>
+
+
+        <div class="principal-sign">
+
+            অধ্যক্ষের স্বাক্ষর
+
+            <div class="signature-line">
+
+                __________________
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="receipt-copy">
+
+        সংরক্ষণের জন্য রসিদটি রেখে দিন।
+
+    </div>
+
+
+</div>
+
+</body>
+
+</html>
+
+`;
+
+    };
+
+
+    /* =====================================================
+       9. PRINT RECEIPT
+    ===================================================== */
+
+    window.printIncomeExpenseReceipt = function (id) {
+
+        if (
+            typeof incomeExpenseData ===
+            "undefined"
+        ) {
+
+            alert(
+                "আয়–ব্যয়ের ডাটা পাওয়া যায়নি।"
+            );
+
+            return;
+
+        }
+
+
+        const item =
+            incomeExpenseData.find(
+                function (entry) {
+
+                    return String(
+                        entry.id
+                    ) ===
+                    String(id);
+
+                }
+            );
+
+
+        if (!item) {
+
+            alert(
+                "রসিদের তথ্য পাওয়া যায়নি।"
+            );
+
+            return;
+
+        }
+
+
+        /*
+           If receipt number does not exist,
+           create a simple number.
+        */
+
+        if (!item.receiptNo) {
+
+            item.receiptNo =
+                String(
+                    item.year || ""
+                ) +
+                "-" +
+                String(
+                    item.month || ""
+                ) +
+                "-" +
+                String(
+                    item.id
+                ).slice(-5);
+
+
+            if (
+                typeof saveIncomeExpenseData ===
+                "function"
+            ) {
+
+                saveIncomeExpenseData();
+
+            }
+
+        }
+
+
+        const receiptHTML =
+            window.createReceiptHTML(
+                item
+            );
+
+
+        const printWindow =
+            window.open(
+                "",
+                "_blank",
+                "width=700,height=900"
+            );
+
+
+        if (!printWindow) {
+
+            alert(
+                "রসিদ প্রিন্ট উইন্ডো খোলা যাচ্ছে না। ব্রাউজারের Pop-up অনুমতি দিন।"
+            );
+
+            return;
+
+        }
+
+
+        printWindow.document.open();
+
+        printWindow.document.write(
+            receiptHTML
+        );
+
+        printWindow.document.close();
+
+
+        printWindow.focus();
+
+
+        setTimeout(
+            function () {
+
+                printWindow.print();
+
+            },
+            500
+        );
+
+    };
+
+
+    /* =====================================================
+       10. EVENT LISTENERS
     ===================================================== */
 
     function attachIncomeFixEvents() {
 
-        const head =
-            document.getElementById("incomeHead");
+        const category =
+            document.getElementById(
+                "incomeHead"
+            );
 
-        const year =
-            document.getElementById("incomeYear");
-
-        const classInput =
-            document.getElementById("incomeClass");
+        const classSelect =
+            document.getElementById(
+                "incomeClass"
+            );
 
         const rollInput =
-            document.getElementById("incomeRoll");
+            document.getElementById(
+                "incomeRoll"
+            );
+
+        const yearSelect =
+            document.getElementById(
+                "incomeYear"
+            );
 
 
-        if (head) {
+        if (category) {
 
-            head.addEventListener(
+            category.addEventListener(
                 "change",
                 function () {
 
@@ -652,40 +1366,21 @@
         }
 
 
-        if (year) {
+        if (classSelect) {
 
-            year.addEventListener(
+            classSelect.addEventListener(
                 "change",
                 function () {
 
-                    const name =
-                        document.getElementById(
-                            "incomeStudentName"
-                        );
+                    setValue(
+                        "incomeStudentName",
+                        ""
+                    );
 
-                    const id =
-                        document.getElementById(
-                            "incomeStudentId"
-                        );
-
-                    if (name) name.value = "";
-                    if (id) id.value = "";
-
-                    findIncomeStudent();
-
-                }
-            );
-
-        }
-
-
-        if (classInput) {
-
-            classInput.addEventListener(
-                "change",
-                function () {
-
-                    findIncomeStudent();
+                    setValue(
+                        "incomeStudentId",
+                        ""
+                    );
 
                 }
             );
@@ -696,10 +1391,59 @@
         if (rollInput) {
 
             rollInput.addEventListener(
-                "input",
+                "change",
                 function () {
 
-                    findIncomeStudent();
+                    window.findIncomeStudent();
+
+                }
+            );
+
+
+            rollInput.addEventListener(
+                "blur",
+                function () {
+
+                    window.findIncomeStudent();
+
+                }
+            );
+
+
+            rollInput.addEventListener(
+                "keyup",
+                function (event) {
+
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
+
+                        window.findIncomeStudent();
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        if (yearSelect) {
+
+            yearSelect.addEventListener(
+                "change",
+                function () {
+
+                    setValue(
+                        "incomeStudentName",
+                        ""
+                    );
+
+                    setValue(
+                        "incomeStudentId",
+                        ""
+                    );
 
                 }
             );
@@ -713,445 +1457,7 @@
 
 
     /* =====================================================
-       6. A5 RECEIPT PRINT FIX
-
-       A4-এর অর্ধেক = A5
-       148mm × 210mm
-    ===================================================== */
-
-    window.printIncomeExpenseReceipt =
-        function (id) {
-
-            let data = [];
-
-            if (
-                typeof incomeExpenseData !==
-                "undefined"
-            ) {
-                data = incomeExpenseData || [];
-            }
-
-
-            const item =
-                data.find(function (record) {
-
-                    return String(record.id) ===
-                        String(id);
-
-                });
-
-
-            if (!item) {
-
-                alert(
-                    "রসিদের তথ্য পাওয়া যায়নি।"
-                );
-
-                return;
-            }
-
-
-            const win =
-                window.open(
-                    "",
-                    "_blank",
-                    "width=700,height=900"
-                );
-
-
-            if (!win) {
-
-                alert(
-                    "রসিদ প্রিন্ট করার জন্য Pop-up অনুমতি দিন।"
-                );
-
-                return;
-            }
-
-
-            const safe =
-                function (value) {
-
-                    if (
-                        typeof escapeHTML ===
-                        "function"
-                    ) {
-                        return escapeHTML(
-                            String(value || "")
-                        );
-                    }
-
-                    return String(value || "")
-                        .replace(/&/g, "&amp;")
-                        .replace(/</g, "&lt;")
-                        .replace(/>/g, "&gt;")
-                        .replace(/"/g, "&quot;")
-                        .replace(/'/g, "&#039;");
-
-                };
-
-
-            const studentPart =
-                item.studentName
-                    ? `
-                        <tr>
-                            <th>শিক্ষার্থীর নাম</th>
-                            <td>${safe(item.studentName)}</td>
-                        </tr>
-
-                        <tr>
-                            <th>শ্রেণি</th>
-                            <td>${safe(item.className)}</td>
-                        </tr>
-
-                        <tr>
-                            <th>রোল</th>
-                            <td>${safe(item.roll)}</td>
-                        </tr>
-
-                        <tr>
-                            <th>Student ID</th>
-                            <td>${safe(item.studentId)}</td>
-                        </tr>
-                    `
-                    : `
-                        <tr>
-                            <th>লেনদেনের ধরন</th>
-                            <td>প্রাতিষ্ঠানিক আয়</td>
-                        </tr>
-                    `;
-
-
-            win.document.write(`
-
-<!DOCTYPE html>
-
-<html lang="bn">
-
-<head>
-
-<meta charset="UTF-8">
-
-<title>
-আয় রসিদ - ${safe(item.receiptNo)}
-</title>
-
-<style>
-
-@page {
-    size: A5 portrait;
-    margin: 5mm;
-}
-
-* {
-    box-sizing: border-box;
-}
-
-html,
-body {
-    margin: 0;
-    padding: 0;
-    width: 148mm;
-    min-height: 210mm;
-}
-
-body {
-    font-family:
-        Arial,
-        "Noto Sans Bengali",
-        sans-serif;
-
-    background: #fff;
-}
-
-.receipt {
-
-    width: 148mm;
-
-    min-height: 200mm;
-
-    padding: 8mm;
-
-    border:
-        1.5px solid
-        #075e3a;
-
-}
-
-.header {
-
-    text-align: center;
-
-    border-bottom:
-        1px solid
-        #777;
-
-    padding-bottom: 6px;
-
-    margin-bottom: 10px;
-
-}
-
-.header h2 {
-
-    margin:
-        0 0 4px 0;
-
-    font-size: 19px;
-
-}
-
-.header h3 {
-
-    margin:
-        0 0 3px 0;
-
-    font-size: 15px;
-
-}
-
-.header p {
-
-    margin: 2px 0;
-
-    font-size: 11px;
-
-}
-
-.receipt-title {
-
-    text-align: center;
-
-    font-size: 16px;
-
-    font-weight: bold;
-
-    margin:
-        8px 0;
-
-}
-
-.info {
-
-    display: flex;
-
-    justify-content:
-        space-between;
-
-    font-size: 11px;
-
-    margin-bottom: 8px;
-
-}
-
-table {
-
-    width: 100%;
-
-    border-collapse:
-        collapse;
-
-    font-size: 12px;
-
-}
-
-th,
-td {
-
-    border:
-        1px solid
-        #777;
-
-    padding: 6px;
-
-}
-
-th {
-
-    width: 35%;
-
-    text-align: left;
-
-}
-
-.amount {
-
-    font-size: 16px;
-
-    font-weight: bold;
-
-    text-align: right;
-
-    margin-top: 10px;
-
-}
-
-.signatures {
-
-    display: flex;
-
-    justify-content:
-        space-between;
-
-    margin-top: 35mm;
-
-    font-size: 11px;
-
-}
-
-@media print {
-
-    body {
-        width: 148mm;
-    }
-
-    .receipt {
-        page-break-after: avoid;
-    }
-
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="receipt">
-
-    <div class="header">
-
-        <h2>
-            Abdullah Hat Islamia Fazil (Degree) Madrasah
-        </h2>
-
-        <h3>
-            আব্দুল্লাহ্ হাট ইসলামীয়া ফাজিল (ডিগ্রী) মাদ্রাসা
-        </h3>
-
-        <p>
-            নাটেশ্বর, সোনাইমুড়ী, নোয়াখালী
-        </p>
-
-    </div>
-
-
-    <div class="receipt-title">
-        💰 আয় গ্রহণের রসিদ
-    </div>
-
-
-    <div class="info">
-
-        <span>
-            রসিদ নং:
-            <b>${safe(item.receiptNo)}</b>
-        </span>
-
-        <span>
-            সন:
-            <b>${safe(item.year)}</b>
-        </span>
-
-    </div>
-
-
-    <table>
-
-        <tr>
-
-            <th>মাস</th>
-
-            <td>
-                ${safe(item.month)}
-            </td>
-
-        </tr>
-
-
-        <tr>
-
-            <th>আয়ের খাত</th>
-
-            <td>
-                ${safe(item.category)}
-            </td>
-
-        </tr>
-
-
-        ${studentPart}
-
-
-        <tr>
-
-            <th>টাকার পরিমাণ</th>
-
-            <td>
-                ${safe(item.amount)} টাকা
-            </td>
-
-        </tr>
-
-    </table>
-
-
-    <div class="amount">
-
-        মোট গ্রহণ:
-        ${safe(item.amount)}
-        টাকা
-
-    </div>
-
-
-    <div class="signatures">
-
-        <span>
-            গ্রহণকারীর স্বাক্ষর
-            <br><br>
-            __________________
-        </span>
-
-        <span>
-            প্রদানকারীর স্বাক্ষর
-            <br><br>
-            __________________
-        </span>
-
-    </div>
-
-</div>
-
-</body>
-
-</html>
-
-            `);
-
-
-            win.document.close();
-
-            win.focus();
-
-
-            setTimeout(function () {
-
-                win.print();
-
-                /*
-                 * কিছু ব্রাউজারে print dialog
-                 * শেষ হওয়ার আগেই close করলে সমস্যা হয়।
-                 * তাই সরাসরি close করছি না।
-                 */
-
-            }, 500);
-
-        };
-
-
-    /* =====================================================
-       7. PAGE LOAD
+       11. WAIT UNTIL PAGE IS READY
     ===================================================== */
 
     if (
@@ -1161,22 +1467,12 @@ th {
 
         document.addEventListener(
             "DOMContentLoaded",
-            function () {
-
-                setTimeout(
-                    attachIncomeFixEvents,
-                    300
-                );
-
-            }
+            attachIncomeFixEvents
         );
 
     } else {
 
-        setTimeout(
-            attachIncomeFixEvents,
-            300
-        );
+        attachIncomeFixEvents();
 
     }
 
