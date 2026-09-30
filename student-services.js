@@ -1,29 +1,15 @@
 /* =========================================================
    ABDULLAH HAT ISLAMIA FAZIL (DEGREE) MADRASAH
    STUDENT SERVICES
-   ---------------------------------------------------------
-   ID CARD
-   ADMIT CARD
-   CERTIFICATE
-   TRANSFER CERTIFICATE
-   GUARDIAN SMS
-   DUE TRACKING
-   NOTIFICATION
    ========================================================= */
 
 (function () {
 
     "use strict";
 
-
-    /* =====================================================
-       BASIC CONFIGURATION
-    ===================================================== */
-
     const STUDENT_KEY = "madrasah_students";
     const DUE_KEY = "madrasah_dues";
     const NOTICE_KEY = "madrasah_notifications";
-
 
     const CLASS_LIST_FALLBACK = {
 
@@ -72,13 +58,10 @@
 
         } catch (e) {}
 
-
         try {
 
             const data =
-                localStorage.getItem(
-                    STUDENT_KEY
-                );
+                localStorage.getItem(STUDENT_KEY);
 
             if (!data) return [];
 
@@ -103,9 +86,7 @@
         try {
 
             const data =
-                localStorage.getItem(
-                    DUE_KEY
-                );
+                localStorage.getItem(DUE_KEY);
 
             if (!data) return [];
 
@@ -140,9 +121,7 @@
         try {
 
             const data =
-                localStorage.getItem(
-                    NOTICE_KEY
-                );
+                localStorage.getItem(NOTICE_KEY);
 
             if (!data) return [];
 
@@ -242,24 +221,26 @@
 
                 if (Array.isArray(parsed)) {
 
-                    years = parsed.map(function (item) {
+                    years = parsed.map(
+                        function (item) {
 
-                        if (
-                            typeof item ===
-                            "object"
-                        ) {
+                            if (
+                                typeof item ===
+                                "object"
+                            ) {
 
-                            return (
-                                item.year ||
-                                item.value ||
-                                ""
-                            );
+                                return (
+                                    item.year ||
+                                    item.value ||
+                                    ""
+                                );
+
+                            }
+
+                            return item;
 
                         }
-
-                        return item;
-
-                    });
+                    );
 
                 }
 
@@ -279,27 +260,24 @@
 
         }
 
-
         return years;
 
     }
 
 
     /* =====================================================
-       CREATE OVERLAY
+       OVERLAY
     ===================================================== */
 
     function createOverlay() {
 
         closeService();
 
-
         const div =
             document.createElement("div");
 
         div.id =
             "studentServicesOverlay";
-
 
         div.innerHTML = `
 
@@ -319,12 +297,9 @@
 
         `;
 
-
         document.body.appendChild(div);
 
-
         injectStyle();
-
 
         return document.getElementById(
             "studentServicesContent"
@@ -497,8 +472,7 @@
 
             .service-full {
 
-                grid-column:
-                    1 / -1;
+                grid-column:1 / -1;
 
             }
 
@@ -932,13 +906,15 @@
 
 
         if (
-            currentService ===
-            "idcard"
+            currentService === "idcard"
         ) {
 
             output.innerHTML += `
 
-                <div style="text-align:center;margin-top:15px;">
+                <div style="
+                    text-align:center;
+                    margin-top:15px;
+                ">
 
                     <button
                         type="button"
@@ -956,14 +932,15 @@
 
 
         if (
-            currentService ===
-            "certificate"
+            currentService === "certificate"
         ) {
 
             output.innerHTML += `
 
-                <div class="service-form"
-                     style="margin-top:15px;">
+                <div
+                    class="service-form"
+                    style="margin-top:15px;"
+                >
 
                     <select
                         id="certificateType"
@@ -1009,14 +986,15 @@
 
 
         if (
-            currentService ===
-            "tc"
+            currentService === "tc"
         ) {
 
             output.innerHTML += `
 
-                <div class="service-form"
-                     style="margin-top:15px;">
+                <div
+                    class="service-form"
+                    style="margin-top:15px;"
+                >
 
                     <input
                         type="date"
@@ -1052,14 +1030,15 @@
 
 
         if (
-            currentService ===
-            "guardian"
+            currentService === "guardian"
         ) {
 
             output.innerHTML += `
 
-                <div class="service-form"
-                     style="margin-top:15px;">
+                <div
+                    class="service-form"
+                    style="margin-top:15px;"
+                >
 
                     <input
                         type="text"
@@ -1106,8 +1085,7 @@
 
 
         if (
-            currentService ===
-            "due"
+            currentService === "due"
         ) {
 
             renderDueForm();
@@ -1118,18 +1096,16 @@
 
 
     /* =====================================================
-       1. ID CARD
+       ID CARD
     ===================================================== */
 
     window.openIDCard =
     function () {
 
-        currentService =
-            "idcard";
+        currentService = "idcard";
 
         const content =
             createOverlay();
-
 
         content.innerHTML =
             studentSearchForm(
@@ -1191,12 +1167,11 @@
                 <div class="header">
 
                     <h2>
-                        عبدالله হাট ইসলামীয়া
+                        আব্দুল্লাহ্ হাট ইসলামীয়া ফাজিল (ডিগ্রী) মাদ্রাসা
                     </h2>
 
                     <h3>
-                        Abdullah Hat Islamia
-                        Fazil (Degree) Madrasah
+                        Abdullah Hat Islamia Fazil (Degree) Madrasah
                     </h3>
 
                     <div>
@@ -1288,7 +1263,7 @@
 
 
     /* =====================================================
-       2. ADMIT CARD
+       ADMIT CARD
     ===================================================== */
 
     window.openAdmitCard =
@@ -1309,8 +1284,10 @@
             )}
 
 
-            <div class="service-form"
-                 style="margin-top:15px;">
+            <div
+                class="service-form"
+                style="margin-top:15px;"
+            >
 
                 <select
                     id="admitExam"
@@ -1350,6 +1327,15 @@
                     </option>
 
                 </select>
+
+
+                <button
+                    type="button"
+                    class="service-button service-primary service-full"
+                    onclick="printAdmitCard()"
+                >
+                    🖨️ Admit Card প্রিন্ট
+                </button>
 
             </div>
 
@@ -1400,13 +1386,11 @@
                 <div class="header">
 
                     <h2>
-                        عبدالله হাট ইসলামীয়া
-                        ফাজিল (ডিগ্রী) মাদ্রাসা
+                        আব্দুল্লাহ্ হাট ইসলামীয়া ফাজিল (ডিগ্রী) মাদ্রাসা
                     </h2>
 
                     <h3>
-                        Abdullah Hat Islamia
-                        Fazil (Degree) Madrasah
+                        Abdullah Hat Islamia Fazil (Degree) Madrasah
                     </h3>
 
                     <div>
@@ -1494,7 +1478,7 @@
 
 
     /* =====================================================
-       3. CERTIFICATE
+       CERTIFICATE
     ===================================================== */
 
     window.openCertificate =
@@ -1558,19 +1542,15 @@
                 <div class="certificate-border">
 
                     <h2>
-                        عبدالله হাট ইসলামীয়া
-                        ফাজিল (ডিগ্রী) মাদ্রাসা
+                        আব্দুল্লাহ্ হাট ইসলামীয়া ফাজিল (ডিগ্রী) মাদ্রাসা
                     </h2>
 
                     <h3>
-                        Abdullah Hat Islamia
-                        Fazil (Degree) Madrasah
+                        Abdullah Hat Islamia Fazil (Degree) Madrasah
                     </h3>
 
                     <div>
-                        নাটেশ্বর,
-                        সোনাইমুড়ী,
-                        নোয়াখালী
+                        নাটেশ্বর, সোনাইমুড়ী, নোয়াখালী
                     </div>
 
 
@@ -1662,7 +1642,7 @@
 
 
     /* =====================================================
-       4. TRANSFER CERTIFICATE
+       TRANSFER CERTIFICATE
     ===================================================== */
 
     window.openTC =
@@ -1727,18 +1707,15 @@
                 <div class="tc-border">
 
                     <h2>
-                        عبدالله হাট ইসলামীয়া
-                        ফাজিল (ডিগ্রী) মাদ্রাসা
+                        আব্দুল্লাহ্ হাট ইসলামীয়া ফাজিল (ডিগ্রী) মাদ্রাসা
                     </h2>
 
                     <h3>
-                        Abdullah Hat Islamia
-                        Fazil (Degree) Madrasah
+                        Abdullah Hat Islamia Fazil (Degree) Madrasah
                     </h3>
 
                     <div>
-                        নাটেশ্বর, সোনাইমুড়ী,
-                        নোয়াখালী
+                        নাটেশ্বর, সোনাইমুড়ী, নোয়াখালী
                     </div>
 
 
@@ -1822,7 +1799,9 @@
 
                         <span>
                             তারিখ:
-                            ${esc(date || today())}
+                            ${esc(
+                                date || today()
+                            )}
                         </span>
 
                         <span>
@@ -1841,7 +1820,7 @@
 
 
     /* =====================================================
-       5. GUARDIAN SMS
+       GUARDIAN SMS
     ===================================================== */
 
     window.openGuardianSMS =
@@ -1970,7 +1949,7 @@
 
 
     /* =====================================================
-       6. DUE TRACKING
+       DUE TRACKING
     ===================================================== */
 
     window.openDueTracking =
@@ -2194,21 +2173,13 @@
 
                 return (
 
-                    String(
-                        item.year
-                    ) ===
-                    String(
-                        currentStudent.year
-                    )
+                    String(item.year) ===
+                    String(currentStudent.year)
 
                     &&
 
-                    String(
-                        item.studentId
-                    ) ===
-                    String(
-                        currentStudent.studentId
-                    )
+                    String(item.studentId) ===
+                    String(currentStudent.studentId)
 
                 );
 
@@ -2333,19 +2304,15 @@
         });
 
 
-        html += `
-            </table>
-        `;
+        html += `</table>`;
 
-
-        output.innerHTML =
-            html;
+        output.innerHTML = html;
 
     }
 
 
     /* =====================================================
-       7. NOTIFICATION
+       NOTIFICATION
     ===================================================== */
 
     window.openNotification =
@@ -2403,9 +2370,10 @@
             </div>
 
 
-            <div id="notificationList"
-                 style="margin-top:20px;">
-            </div>
+            <div
+                id="notificationList"
+                style="margin-top:20px;"
+            ></div>
 
         `;
 
@@ -2551,7 +2519,9 @@
                         </small>
 
 
-                        <div style="margin-top:10px;">
+                        <div
+                            style="margin-top:10px;"
+                        >
 
                             <button
                                 type="button"
@@ -2595,7 +2565,6 @@
 
         saveNotifications(data);
 
-
         renderNotifications();
 
     };
@@ -2637,7 +2606,7 @@
                 <meta charset="UTF-8">
 
                 <title>
-                    Abdullah Hat Islamia
+                    Abdullah Hat Islamia Fazil (Degree) Madrasah
                 </title>
 
                 <style>
@@ -2673,6 +2642,14 @@
                         padding-bottom:10px;
 
                         margin-bottom:15px;
+
+                    }
+
+
+                    .header h2,
+                    .header h3 {
+
+                        margin:4px 0;
 
                     }
 
